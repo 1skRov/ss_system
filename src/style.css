@@ -1,0 +1,48 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-size: 18px;
+}
+
+@import 'tailwindcss';
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "bluetheme";
+  color-scheme: light;
+  --color-primary: #081F5C;             /* Главный цвет */
+  --color-primary-content: #F9FCFF;     /* Текст на главном цвете */
+
+  --color-secondary: #334EAC;            /* Вторичный цвет */
+
+  --color-accent: #7086D1;              /* Акцентный цвет */
+  
+  --color-neutral: #334EAC;              /* Нейтральный цвет */
+
+  --color-base-100: #F9FCFF;            /* Основной фон */
+  --color-base-200: #E7F1FF;            /* Фон чуть темнее */
+  --color-base-300: #D0E3FF;            /* Фон еще темнее */
+  --color-base-content: #081F5C;        /* Основной цвет текста */
+  
+  --color-info: #3abff8;
+  --color-success: #36d399;
+  --color-warning: #fbbd23;
+  --color-error: #f87272;
+
+  --radius-box: 1rem;      /* for cards and other big elements */
+  --radius-btn: 0.5rem;    /* for buttons */
+  --radius-badge: 1.9rem;  /* for badges */
+
+  --animation-btn: 0.25s;
+  --btn-text-case: uppercase;
+}
