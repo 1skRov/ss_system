@@ -1,5 +1,6 @@
 <script setup>
 import TrashIcon from "@/assets/icons/TrashIcon.vue";
+import {ref} from "vue";
 
 const tableData = [
   {id: 1, name: "Хлебо-булочное изделие", count: 12, price: 100, discount: 10, total: 1080},
@@ -14,6 +15,20 @@ const tableData = [
   {id: 10, name: "Картофель", count: 15, price: 20, discount: 0, total: 300},
   {id: 11, name: "Сахар", count: 4, price: 60, discount: 5, total: 220},
 ];
+
+const selectedRows = ref([]);
+
+function toggleRow(id) {
+  if (selectedRows.value.includes(id)) {
+    selectedRows.value = selectedRows.value.filter(rowId => rowId !== id);
+  } else {
+    selectedRows.value.push(id);
+  }
+}
+
+function isSelected(id) {
+  return selectedRows.value.includes(id);
+}
 </script>
 
 <template>
@@ -26,7 +41,7 @@ const tableData = [
       </button>
     </div>
     <div class="rounded-box border border-base-content/20 bg-base-100 overflow-y-auto">
-      <table class="table table-zebra">
+      <table class="table">
         <thead>
         <tr>
           <th>
@@ -43,7 +58,7 @@ const tableData = [
         </tr>
         </thead>
         <tbody>
-        <tr v-for="item in tableData" :key="item.id">
+        <tr v-for="item in tableData" :key="item.id" @click="toggleRow(item.id)" :class="{ 'bg-base-200': isSelected(item.id) }">
           <th>
             <label>
               <input type="checkbox" class="checkbox"/>
