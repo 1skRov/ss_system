@@ -39,6 +39,16 @@ function toggleAllRows() {
   }
 }
 
+function deleteSelectedRows() {
+  tableData.value = tableData.value.filter(item => !selectedRows.value.includes(item.id));
+  selectedRows.value = [];
+}
+
+function deleteRow(id) {
+  tableData.value = tableData.value.filter(item => item.id !== id);
+  selectedRows.value = selectedRows.value.filter(rowId => rowId !== id);
+}
+
 watch(selectedRows, (val) => {
   allSelected.value = val.length === tableData.length && tableData.length > 0;
 });
@@ -47,8 +57,12 @@ watch(selectedRows, (val) => {
 <template>
   <div class="w-full h-full flex flex-col gap-2">
     <div class="flex items-center justify-between h-10 min-h-10">
-      <p class="text-base">Выбрано - {{ tableData.length }}</p>
-      <button class="btn btn-error text-base text-red-100">
+      <p class="text-base">Выбрано - {{ selectedRows.length }}</p>
+      <button
+          class="btn btn-error text-base text-red-100"
+          @click="deleteSelectedRows"
+          :disabled="selectedRows.length === 0"
+      >
         <trash-icon></trash-icon>
         Удалить
       </button>
@@ -108,7 +122,7 @@ watch(selectedRows, (val) => {
             </div>
           </td>
           <th>
-            <button class="px-4 py-3 rounded-lg text-base text-red-600 bg-red-100">
+            <button class="px-4 py-3 rounded-lg text-base text-red-600 bg-red-100" @click.stop="deleteRow(item.id)">
               <trash-icon></trash-icon>
             </button>
           </th>
