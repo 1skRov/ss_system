@@ -58,10 +58,12 @@ function isSelected(id) {
         </tr>
         </thead>
         <tbody>
-        <tr v-for="item in tableData" :key="item.id" @click="toggleRow(item.id)" :class="{ 'bg-base-200': isSelected(item.id) }">
+        <tr v-for="item in tableData" :key="item.id" @click="toggleRow(item.id)"
+            :class="{ 'bg-base-200': isSelected(item.id) }">
           <th>
             <label>
-              <input type="checkbox" class="checkbox"/>
+              <input type="checkbox" class="checkbox" :checked="isSelected(item.id)"
+                     @click.stop="toggleRow(item.id)"/>
             </label>
           </th>
           <td>
@@ -86,7 +88,9 @@ function isSelected(id) {
             </div>
           </td>
           <th>
-            <button class="px-4 py-3 rounded-lg text-base text-red-600 bg-red-100"><trash-icon></trash-icon></button>
+            <button class="px-4 py-3 rounded-lg text-base text-red-600 bg-red-100">
+              <trash-icon></trash-icon>
+            </button>
           </th>
         </tr>
         </tbody>
