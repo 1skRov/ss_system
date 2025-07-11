@@ -1,6 +1,6 @@
 <script setup>
 import TrashIcon from "@/assets/icons/TrashIcon.vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 
 const tableData = [
   {id: 1, name: "Хлебо-булочное изделие", count: 12, price: 100, discount: 10, total: 1080},
@@ -17,6 +17,7 @@ const tableData = [
 ];
 
 const selectedRows = ref([]);
+const allSelected = ref(false);
 
 function toggleRow(id) {
   if (selectedRows.value.includes(id)) {
@@ -29,6 +30,18 @@ function toggleRow(id) {
 function isSelected(id) {
   return selectedRows.value.includes(id);
 }
+
+function toggleAllRows() {
+  if (allSelected.value) {
+    selectedRows.value = tableData.map(item => item.id);
+  } else {
+    selectedRows.value = [];
+  }
+}
+
+watch(selectedRows, (val) => {
+  allSelected.value = val.length === tableData.length && tableData.length > 0;
+});
 </script>
 
 <template>
@@ -46,7 +59,12 @@ function isSelected(id) {
         <tr>
           <th>
             <label>
-              <input type="checkbox" class="checkbox"/>
+              <input
+                  type="checkbox"
+                  class="checkbox"
+                  v-model="allSelected"
+                  @change="toggleAllRows"
+              />
             </label>
           </th>
           <th>Название</th>
@@ -58,7 +76,9 @@ function isSelected(id) {
         </tr>
         </thead>
         <tbody>
-        <tr v-for="item in tableData" :key="item.id" @click="toggleRow(item.id)"
+        <tr v-for="item in tableData"
+            :key="item.id"
+            @click="toggleRow(item.id)"
             :class="{ 'bg-base-200': isSelected(item.id) }">
           <th>
             <label>
