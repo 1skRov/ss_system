@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-base-300 p-2 rounded-t-lg shadow-lg flex flex-col gap-2 transition-all duration-300">
+  <div class="w-full bg-base-300 px-3 py-4 rounded-t-lg shadow-lg flex flex-col gap-2 transition-all duration-300">
     <div class="flex w-full gap-2">
       <button class="btn btn-secondary btn-sm flex-grow text-lg" @click="toggleLanguage">
         <GlobeIcon></GlobeIcon>
