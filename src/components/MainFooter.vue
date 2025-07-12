@@ -1,45 +1,56 @@
 <template>
-    <footer class="footer sm:footer-horizontal bg-neutral text-neutral-content grid-rows-2 p-10">
-  <nav>
-    <h6 class="footer-title">Services</h6>
-    <a class="link link-hover">Branding</a>
-    <a class="link link-hover">Design</a>
-    <a class="link link-hover">Marketing</a>
-    <a class="link link-hover">Advertisement</a>
-  </nav>
-  <nav>
-    <h6 class="footer-title">Company</h6>
-    <a class="link link-hover">About us</a>
-    <a class="link link-hover">Contact</a>
-    <a class="link link-hover">Jobs</a>
-    <a class="link link-hover">Press kit</a>
-  </nav>
-  <nav>
-    <h6 class="footer-title">Legal</h6>
-    <a class="link link-hover">Terms of use</a>
-    <a class="link link-hover">Privacy policy</a>
-    <a class="link link-hover">Cookie policy</a>
-  </nav>
-  <nav>
-    <h6 class="footer-title">Social</h6>
-    <a class="link link-hover">Twitter</a>
-    <a class="link link-hover">Instagram</a>
-    <a class="link link-hover">Facebook</a>
-    <a class="link link-hover">GitHub</a>
-  </nav>
-  <nav>
-    <h6 class="footer-title">Explore</h6>
-    <a class="link link-hover">Features</a>
-    <a class="link link-hover">Enterprise</a>
-    <a class="link link-hover">Security</a>
-    <a class="link link-hover">Pricing</a>
-  </nav>
-  <nav>
-    <h6 class="footer-title">Apps</h6>
-    <a class="link link-hover">Mac</a>
-    <a class="link link-hover">Windows</a>
-    <a class="link link-hover">iPhone</a>
-    <a class="link link-hover">Android</a>
-  </nav>
-</footer>
+  <footer class="bg-base-300 p-2 footer flex justify-between">
+    <div class="footer-add-buttons"></div>
+    <div class="footer-pay-panel h-full flex flex-col">
+      <div class="total-panel w-full h-full bg-base-100 p-3 rounded-lg flex flex-col gap-3">
+        <div class="flex justify-between">
+          <h1>Итого</h1>
+          <h1>123</h1>
+        </div>
+        <div class="flex justify-between">
+          <p>Внесено</p>
+          <p>123</p>
+        </div>
+        <div class="flex justify-between">
+          <p>Сдача</p>
+          <p>123</p>
+        </div>
+        <div class="flex justify-between mt-2">
+          <p>Общий чек</p>
+          <p>1234</p>
+        </div>
+      </div>
+      <button class="w-full btn btn-success text-3xl pay-button">
+        Оплатить
+      </button>
+    </div>
+  </footer>
 </template>
+<style lang="scss" scoped>
+.footer {
+  min-height: 26vh;
+
+  .footer-pay-panel {
+    min-width: 250px;
+    width: 35%;
+
+    .total-panel {
+      h1 {
+        font-size: 32px;
+        font-weight: bold;
+      }
+      p {
+        font-size: 24px;
+      }
+    }
+
+    .pay-button {
+      min-height: 70px;
+    }
+  }
+
+}
+</style>
+<script setup>
+import ArrowUpTrayIcon from "@/assets/icons/ArrowUpTrayIcon.vue";
+</script>
