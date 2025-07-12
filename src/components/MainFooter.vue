@@ -1,9 +1,19 @@
 <template>
   <footer class="bg-base-300 p-2 footer flex justify-between">
-    <div class="footer-add-buttons"></div>
+    <div class="footer-add-buttons flex fex-col flex-wrap justify-between h-full">
+      <button class="w-full btn btn-secondary text-3xl add-button-footer font-medium">
+        Закрыть текущий заказ
+      </button>
+      <button class="w-full btn btn-secondary text-3xl add-button-footer font-medium">
+        Добавить в отложку
+      </button>
+      <button class="w-full btn btn-secondary text-3xl add-button-footer font-medium">
+        Быстрые товары
+      </button>
+    </div>
     <div class="footer-pay-panel h-full flex flex-col">
       <div class="total-panel w-full h-full bg-base-100 p-3 rounded-lg flex flex-col gap-3">
-        <div class="flex justify-between">
+        <div class="flex justify-between mb-2">
           <h1>Итого</h1>
           <h1>123</h1>
         </div>
@@ -30,6 +40,15 @@
 .footer {
   min-height: 26vh;
 
+  .footer-add-buttons {
+    min-width: 250px;
+    width: 30%;
+
+    .add-button-footer {
+      min-height: 70px;
+    }
+  }
+
   .footer-pay-panel {
     min-width: 250px;
     width: 35%;
@@ -39,6 +58,7 @@
         font-size: 32px;
         font-weight: bold;
       }
+
       p {
         font-size: 24px;
       }
