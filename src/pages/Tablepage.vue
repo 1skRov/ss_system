@@ -3,22 +3,58 @@ import TrashIcon from "@/assets/icons/TrashIcon.vue";
 import NumPad from "@/widjets/NumPad.vue";
 import {ref, watch} from "vue";
 
-const tableData = [
-  {id: 1, name: "Хлебо-булочное изделие", count: 12, price: 100, discount: 10, total: 1080},
-  {id: 2, name: "Молоко", count: 5, price: 80, discount: 0, total: 400},
-  {id: 3, name: "Сыр", count: 2, price: 350, discount: 50, total: 600},
-  {id: 4, name: "Яблоки", count: 10, price: 30, discount: 5, total: 250},
-  {id: 5, name: "Масло сливочное", count: 1, price: 200, discount: 20, total: 180},
-  {id: 6, name: "Куриные яйца", count: 30, price: 12, discount: 0, total: 360},
-  {id: 7, name: "Гречневая крупа", count: 3, price: 90, discount: 10, total: 240},
-  {id: 8, name: "Колбаса варёная", count: 2, price: 270, discount: 30, total: 480},
-  {id: 9, name: "Томаты", count: 8, price: 45, discount: 5, total: 320},
-  {id: 10, name: "Картофель", count: 15, price: 20, discount: 0, total: 300},
-  {id: 11, name: "Сахар", count: 4, price: 60, discount: 5, total: 220},
-];
+const tableData = ref([
+  {id: 1, name: "Хлебо-булочное изделие", count: 12, price: 100, discount: 10, discountType: 'percent', total: 1080},
+  {id: 2, name: "Молоко", count: 5, price: 80, discount: 0, discountType: 'percent', total: 400},
+  {id: 3, name: "Сыр", count: 2, price: 350, discount: 50, discountType: 'fixed', total: 650},
+  {id: 4, name: "Яблоки", count: 10, price: 30, discount: 5, discountType: 'percent', total: 285},
+  {id: 5, name: "Масло сливочное", count: 1, price: 200, discount: 20, discountType: 'percent', total: 160},
+  {id: 6, name: "Куриные яйца", count: 30, price: 12, discount: 0, discountType: 'percent', total: 360},
+  {id: 7, name: "Гречневая крупа", count: 3, price: 90, discount: 10, discountType: 'percent', total: 243},
+  {id: 8, name: "Колбаса варёная", count: 2, price: 270, discount: 30, discountType: 'fixed', total: 510},
+  {id: 9, name: "Томаты", count: 8, price: 45, discount: 5, discountType: 'percent', total: 342},
+  {id: 10, name: "Картофель", count: 15, price: 20, discount: 0, discountType: 'percent', total: 300},
+  {id: 11, name: "Сахар", count: 4, price: 60, discount: 5, discountType: 'percent', total: 228},
+]);
 
 const selectedRows = ref([]);
 const allSelected = ref(false);
+
+function closeDropdown() {
+  if (document.activeElement) {
+    document.activeElement.blur();
+  }
+}
+
+function recalculateTotal(row) {
+  const subtotal = row.price * row.count;
+  if (row.discountType === 'percent') {
+    row.total = subtotal - (subtotal * row.discount / 100);
+  } else {
+    row.total = subtotal - row.discount;
+  }
+}
+
+function handleUpdate({value, discountType}, rowId, field) {
+  const row = tableData.value.find(item => item.id === rowId);
+  if (!row) return;
+
+  if (field === 'total') {
+    row.total = value;
+  } else {
+    row[field] = value;
+    if (field === 'discount') {
+      row.discountType = discountType;
+    }
+    recalculateTotal(row);
+  }
+
+  closeDropdown();
+}
+
+function handleCancel() {
+  closeDropdown();
+}
 
 function toggleRow(id) {
   if (selectedRows.value.includes(id)) {
@@ -34,7 +70,7 @@ function isSelected(id) {
 
 function toggleAllRows() {
   if (allSelected.value) {
-    selectedRows.value = tableData.map(item => item.id);
+    selectedRows.value = tableData.value.map(item => item.id);
   } else {
     selectedRows.value = [];
   }
@@ -51,8 +87,12 @@ function deleteRow(id) {
 }
 
 watch(selectedRows, (val) => {
-  allSelected.value = val.length === tableData.length && tableData.length > 0;
+  allSelected.value = val.length === tableData.value.length && tableData.value.length > 0;
 });
+
+watch(tableData, () => {
+  allSelected.value = selectedRows.value.length === tableData.value.length && tableData.value.length > 0;
+}, {deep: true});
 </script>
 
 <template>
@@ -64,7 +104,7 @@ watch(selectedRows, (val) => {
           @click="deleteSelectedRows"
           :disabled="selectedRows.length === 0"
       >
-        <trash-icon></trash-icon>
+        <trash-icon/>
         Удалить
       </button>
     </div>
@@ -74,12 +114,7 @@ watch(selectedRows, (val) => {
         <tr>
           <th>
             <label>
-              <input
-                  type="checkbox"
-                  class="checkbox"
-                  v-model="allSelected"
-                  @change="toggleAllRows"
-              />
+              <input type="checkbox" class="checkbox" v-model="allSelected" @change="toggleAllRows"/>
             </label>
           </th>
           <th>Название</th>
@@ -91,47 +126,77 @@ watch(selectedRows, (val) => {
         </tr>
         </thead>
         <tbody>
-        <tr v-for="item in tableData"
-            :key="item.id"
-            :class="{ 'bg-base-200': isSelected(item.id) }">
+        <tr v-for="item in tableData" :key="item.id" :class="{ 'bg-base-200': isSelected(item.id) }" class="text-lg">
           <th>
             <label>
-              <input type="checkbox" class="checkbox" :checked="isSelected(item.id)"
-                     @click.stop="toggleRow(item.id)"/>
+              <input type="checkbox" class="checkbox" :checked="isSelected(item.id)" @click.stop="toggleRow(item.id)"/>
             </label>
           </th>
-          <td @click="toggleRow(item.id)">
-            <span class="text-lg">{{ item.name }}</span>
+          <td @click="toggleRow(item.id)" class="min-w-[200px] cursor-pointer">
+            {{ item.name }}
           </td>
+
           <td class="p-0">
-            <div class="dropdown dropdown-right w-full">
-              <label tabindex="0" role="button" class="w-full h-full p-4 flex items-center cursor-pointer">
-                <span class="text-lg">{{ item.count }}</span>
-              </label>
-              <div tabindex="0" class="dropdown-content z-[1]">
-                <NumPad/>
+            <div class="dropdown dropdown-left w-full">
+              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center cursor-pointer">
+                {{ item.count }}
+              </div>
+              <div class="dropdown-content z-[1]">
+                <NumPad
+                    :initialValue="item.count"
+                    field="count"
+                    @confirm="handleUpdate($event, item.id, 'count')"
+                    @cancel="handleCancel"
+                />
               </div>
             </div>
           </td>
+
           <td>
-            <div class="flex items-center gap-2">
-              <span class="text-lg">{{ item.price }}</span>
+            <div>
+              {{ item.price.toFixed(2) }}
             </div>
           </td>
-          <td>
-            <div class="flex items-center gap-2 text-lg">
-              <div class="badge badge-warning">%</div>
-              <span>{{ item.discount }}</span>
+
+          <td class="p-0">
+            <div class="dropdown dropdown-left w-full">
+              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center cursor-pointer gap-2">
+                <div :class="['badge', item.discountType === 'percent' ? 'badge-warning' : 'badge-info']">
+                  {{ item.discountType === 'percent' ? '%' : '₸' }}
+                </div>
+                {{ item.discount }}
+              </div>
+              <div class="dropdown-content z-[1]">
+                <NumPad
+                    :initialValue="item.discount"
+                    :initialDiscountType="item.discountType"
+                    field="discount"
+                    @confirm="handleUpdate($event, item.id, 'discount')"
+                    @cancel="handleCancel"
+                />
+              </div>
             </div>
           </td>
-          <td>
-            <div class="flex items-center gap-2">
-              <span class="text-lg">{{ item.total }}</span>
+
+          <td class="p-0">
+            <div class="dropdown dropdown-left w-full">
+              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center cursor-pointer">
+                {{ item.total.toFixed(2) }}
+              </div>
+              <div class="dropdown-content z-[1]">
+                <NumPad
+                    :initialValue="item.total"
+                    field="total"
+                    @confirm="handleUpdate($event, item.id, 'total')"
+                    @cancel="handleCancel"
+                />
+              </div>
             </div>
           </td>
+
           <th>
-            <button class="px-4 py-3 rounded-lg text-base text-red-600 bg-red-100" @click.stop="deleteRow(item.id)">
-              <trash-icon></trash-icon>
+            <button class="btn btn-ghost btn-square" @click.stop="deleteRow(item.id)">
+              <trash-icon class="text-red-500"/>
             </button>
           </th>
         </tr>
@@ -140,4 +205,3 @@ watch(selectedRows, (val) => {
     </div>
   </div>
 </template>
-<style scoped lang="scss"></style>
