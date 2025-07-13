@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-base-200 flex justify-between items-center p-2">
+  <div class="bg-base-300 flex justify-between items-center p-2">
     <ul class="menu lg:menu-horizontal rounded-box p-0">
       <li>
         <router-link to="/table-page" class="flex items-center" active-class="bg-secondary text-white font-medium">

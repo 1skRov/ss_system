@@ -113,8 +113,8 @@ watch(selectedRows, (val) => {
           </td>
           <td>
             <div class="flex items-center gap-2 text-lg">
-              <span class="min-w-[70px]">{{ item.discount }}</span>
               <div class="badge badge-warning">%</div>
+              <span>{{ item.discount }}</span>
             </div>
           </td>
           <td>
