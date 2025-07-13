@@ -96,7 +96,6 @@ watch(tableData, () => {
 </script>
 
 <template>
-    <num-pad/>
   <div class="w-full h-full flex flex-col gap-2">
     <div class="flex items-center justify-between h-10 min-h-10">
       <p class="text-base">Выбрано - {{ selectedRows.length }}</p>
