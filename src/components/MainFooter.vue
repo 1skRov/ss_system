@@ -1,13 +1,13 @@
 <template>
   <footer class="bg-base-300 p-2 footer flex justify-between">
     <div class="footer-add-buttons flex fex-col flex-wrap justify-between h-full">
-      <button class="w-full btn btn-secondary text-3xl add-button-footer font-medium">
+      <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium">
         Закрыть текущий заказ
       </button>
-      <button class="w-full btn btn-secondary text-3xl add-button-footer font-medium">
+      <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium">
         Добавить в отложку
       </button>
-      <button class="w-full btn btn-secondary text-3xl add-button-footer font-medium">
+      <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium">
         Быстрые товары
       </button>
     </div>

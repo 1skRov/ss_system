@@ -1,5 +1,6 @@
 <script setup>
 import TrashIcon from "@/assets/icons/TrashIcon.vue";
+import NumPad from "@/widjets/NumPad.vue";
 import {ref, watch} from "vue";
 
 const tableData = [
@@ -92,7 +93,6 @@ watch(selectedRows, (val) => {
         <tbody>
         <tr v-for="item in tableData"
             :key="item.id"
-            @click="toggleRow(item.id)"
             :class="{ 'bg-base-200': isSelected(item.id) }">
           <th>
             <label>
@@ -100,11 +100,18 @@ watch(selectedRows, (val) => {
                      @click.stop="toggleRow(item.id)"/>
             </label>
           </th>
-          <td>
+          <td @click="toggleRow(item.id)">
             <span class="text-lg">{{ item.name }}</span>
           </td>
-          <td>
-            <span class="text-lg">{{ item.count }}</span>
+          <td class="p-0">
+            <div class="dropdown dropdown-right w-full">
+              <label tabindex="0" role="button" class="w-full h-full p-4 flex items-center cursor-pointer">
+                <span class="text-lg">{{ item.count }}</span>
+              </label>
+              <div tabindex="0" class="dropdown-content z-[1]">
+                <NumPad/>
+              </div>
+            </div>
           </td>
           <td>
             <div class="flex items-center gap-2">
@@ -133,3 +140,4 @@ watch(selectedRows, (val) => {
     </div>
   </div>
 </template>
+<style scoped lang="scss"></style>
