@@ -132,13 +132,13 @@ watch(tableData, () => {
               <input type="checkbox" class="checkbox" :checked="isSelected(item.id)" @click.stop="toggleRow(item.id)"/>
             </label>
           </th>
-          <td @click="toggleRow(item.id)" class="min-w-[200px] cursor-pointer">
+          <td @click="toggleRow(item.id)" class="min-w-[200px] ">
             {{ item.name }}
           </td>
 
           <td class="p-0">
             <div class="dropdown dropdown-left w-full">
-              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center cursor-pointer">
+              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center ">
                 {{ item.count }}
               </div>
               <div class="dropdown-content z-[1]">
@@ -160,11 +160,11 @@ watch(tableData, () => {
 
           <td class="p-0">
             <div class="dropdown dropdown-left w-full">
-              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center cursor-pointer gap-2">
-                <div :class="['badge', item.discountType === 'percent' ? 'badge-warning' : 'badge-info']">
+              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center justify-between  gap-2">
+                {{ item.discount }}
+                <div :class="['badge', item.discountType === 'percent' ? 'badge-warning' : 'badge-info']" v-show="item.discount > 0">
                   {{ item.discountType === 'percent' ? '%' : '₸' }}
                 </div>
-                {{ item.discount }}
               </div>
               <div class="dropdown-content z-[1]">
                 <NumPad
@@ -180,7 +180,7 @@ watch(tableData, () => {
 
           <td class="p-0">
             <div class="dropdown dropdown-left w-full">
-              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center cursor-pointer">
+              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center ">
                 {{ item.total.toFixed(2) }}
               </div>
               <div class="dropdown-content z-[1]">
