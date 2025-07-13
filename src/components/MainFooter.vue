@@ -12,7 +12,7 @@
       </button>
     </div>
     <div class="footer-pay-panel h-full flex flex-col">
-      <div class="total-panel w-full h-full bg-base-100 p-3 rounded-lg flex flex-col gap-3">
+      <div class="total-panel w-full h-full bg-base-100 p-3 rounded flex flex-col gap-3">
         <div class="flex justify-between mb-2">
           <h1>Итого</h1>
           <h1>123</h1>
