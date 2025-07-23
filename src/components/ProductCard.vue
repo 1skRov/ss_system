@@ -26,7 +26,7 @@ function decrement() {
       <span class="text-gray-600 text-sm">458₸</span>
       <div class="card-actions w-full">
         <template v-if="!added">
-          <button class="btn btn-secondary w-full text-white font-semibold" @click="added = true">
+          <button class="btn btn-secondary w-full text-white font-semibold text-lg" @click="added = true">
             Добавить
           </button>
         </template>
