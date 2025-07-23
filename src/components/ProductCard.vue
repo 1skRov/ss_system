@@ -3,15 +3,18 @@
 </script>
 
 <template>
-  <div class="w-44 rounded border border-gray-200 max-h-44 min-h-44 h-full overflow-hidden">
-    <div class="w-full h-21 border-0 border-b border-gray-200">
-      <img src="@/assets/images/product1.jpg" alt="product" class="w-full h-full object-cover"/>
-    </div>
-    <div class="px-2 py-1 flex-1">
-      <div class="flex flex-col justify-between">
-        <span class="text-base font-medium">Lorem ipsum dolor.</span>
-        <span class="text-sm text-gray-600">1234 ₸</span>
-        <button class="btn btn-secondary btn-sm w-full text-white font-semibold text-base">Добавить</button>
+  <div class="card bg-base-100 w-54 max-h-64 border border-base-300 rounded-lg">
+    <figure class="px-1.5 pt-1.5">
+      <img
+          src="@/assets/images/product1.jpg"
+          alt="Shoes"
+          class="rounded-xl" />
+    </figure>
+    <div class="card-body items-center text-center p-1.5 flex flex-col">
+      <span class="card-title">Card Title</span>
+      <span class="text-gray-600 text-sm">458₸</span>
+      <div class="card-actions w-full">
+        <button class="btn btn-secondary w-full text-white font-semibold">Buy Now</button>
       </div>
     </div>
   </div>

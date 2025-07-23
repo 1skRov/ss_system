@@ -6,7 +6,7 @@ const count = 50;
 <template>
   <div class="w-full h-full flex flex-col">
     <div class="content h-full w-full">
-      <div class="grid grid-cols-4 gap-4" style="width: 65vw" >
+      <div class="grid grid-cols-3 gap-3" style="width: 65vw" >
         <ProductCard v-for="c in count" :key="c"></ProductCard>
       </div>
     </div>
