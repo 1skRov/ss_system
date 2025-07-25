@@ -104,7 +104,7 @@ watch(tableData, () => {
     </div>
     <div class="drawer-side">
       <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-      <div style="width: 55vw" class="bg-base-100 min-h-full px-3 py-4">
+      <div style="width: 70vw" class="bg-base-100 min-h-full px-3 py-4">
         <EditDrawer></EditDrawer>
       </div>
     </div>
