@@ -1,7 +1,9 @@
 <script setup>
 import QuickItems from "@/widjets/QuickItems.vue";
 import {ref} from "vue";
+import PaymentDrawer from "@/widjets/PaymentDrawer.vue";
 const quickItems = ref(false);
+const payDrawer = ref(false);
 </script>
 <template>
   <footer class="bg-base-300 p-2 footer flex justify-between">
@@ -12,9 +14,20 @@ const quickItems = ref(false);
       <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium">
         Добавить в отложку
       </button>
-      <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium" @click="quickItems = true">
-        Быстрые товары
-      </button>
+      <div class="drawer drawer-end">
+        <input id="quick-item-drawer" type="checkbox" class="drawer-toggle" v-model="quickItems"/>
+        <div class="drawer-content">
+          <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium" @click="quickItems = true">
+            Быстрые товары
+          </button>
+        </div>
+        <div class="drawer-side" @click.self="quickItems = false">
+          <label for="quick-item-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+          <div style="width: 70vw" class="bg-base-100 min-h-full">
+            <QuickItems></QuickItems>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="footer-pay-panel h-full flex flex-col">
       <div class="total-panel w-full h-full bg-base-100 p-3 rounded flex flex-col gap-3">
@@ -35,22 +48,22 @@ const quickItems = ref(false);
           <p>1234</p>
         </div>
       </div>
-      <button class="w-full btn btn-success text-3xl pay-button">
-        Оплатить
-      </button>
-    </div>
-  </footer>
-  <div class="drawer drawer-end">
-    <input id="quick-item-drawer" type="checkbox" class="drawer-toggle" v-model="quickItems"/>
-    <div class="drawer-content">
-    </div>
-    <div class="drawer-side" @click.self="quickItems = false">
-      <label for="quick-item-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-      <div style="width: 70vw" class="bg-base-100 min-h-full">
-        <QuickItems></QuickItems>
+      <div class="drawer drawer-end">
+        <input id="payment-drawer" type="checkbox" class="drawer-toggle" v-model="payDrawer"/>
+        <div class="drawer-content">
+          <button class="w-full btn btn-success text-3xl pay-button" @click="payDrawer = true">
+            Оплатить
+          </button>
+        </div>
+        <div class="drawer-side" @click.self="payDrawer = false">
+          <label for="payment-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+          <div style="width: 70vw" class="bg-base-100 min-h-full">
+            <PaymentDrawer/>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </footer>
 </template>
 <style lang="scss" scoped>
 .footer {
