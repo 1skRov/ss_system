@@ -1,18 +1,18 @@
 <template>
-  <div class="w-full bg-base-300 px-3 py-4 rounded-t-lg shadow-lg flex flex-col gap-2 transition-all duration-300">
+  <div class="w-full bg-base-200 p-3 rounded-t-lg shadow-lg flex flex-col gap-2 transition-all duration-300">
     <div class="flex w-full gap-2">
-      <button class="btn btn-secondary btn-sm flex-grow text-lg" @click="toggleLanguage">
+      <button class="btn btn-primary btn-sm flex-grow text-lg" @click="toggleLanguage">
         <GlobeIcon></GlobeIcon>
         {{ currentLanguage.toUpperCase() }}
       </button>
-      <button class="btn btn-ghost btn-sm flex-grow" @click="onClear">Очистить</button>
-      <button class="btn btn-error btn-sm flex-grow" @click="onClose">Закрыть</button>
+      <button class="btn btn-secondary text-lg btn-sm flex-grow" @click="onClear">Очистить поле</button>
+      <button class="btn btn-error btn-sm flex-grow text-lg text-white" @click="onClose">Закрыть</button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
       <button
           v-for="key in processedNumberRow"
           :key="key"
-          class="btn btn-base-100 flex-grow text-primary font-bold text-2xl py-2 px-1 min-h-14"
+          class="btn bg-white border border-base-300 text-black flex-grow font-bold text-2xl py-2 px-1 min-h-14"
           @click="onKeyPress(key)"
       >
         {{ key }}
@@ -22,7 +22,7 @@
       <button
           v-for="key in processedQwertyRow"
           :key="key"
-          class="btn btn-base-100 flex-grow text-primary font-bold text-2xl py-2 px-1 min-h-14"
+          class="btn bg-white border border-base-300 flex-grow font-bold text-2xl py-2 px-1 min-h-14"
           @click="onKeyPress(key)"
       >
         {{ key }}
@@ -32,7 +32,7 @@
       <button
           v-for="key in processedAsdfRow"
           :key="key"
-          class="btn btn-base-100 flex-grow text-primary font-bold text-2xl py-2 px-1 min-h-14"
+          class="btn bg-white border border-base-300 flex-grow font-bold text-2xl py-2 px-1 min-h-14"
           @click="onKeyPress(key)"
       >
         {{ key }}
@@ -42,7 +42,7 @@
       <button
           v-for="key in processedZxcvRow"
           :key="key"
-          class="btn btn-base-100 flex-grow text-primary font-bold text-2xl py-2 px-1 min-h-14"
+          class="btn bg-white border border-base-300 flex-grow font-bold text-2xl py-2 px-1 min-h-14"
           @click="onKeyPress(key)"
       >
         {{ key }}

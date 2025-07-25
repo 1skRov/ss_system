@@ -1,29 +1,66 @@
 @import 'tailwindcss';
+/*@plugin "daisyui";*/
+/*@plugin "daisyui/theme" {*/
+/*    name: "corporate";*/
+/*    default: false;*/
+/*    prefersdark: false;*/
+/*    color-scheme: "light";*/
+/*    --color-base-100: oklch(100% 0 0);*/
+/*    --color-base-200: oklch(93% 0 0);*/
+/*    --color-base-300: oklch(86% 0 0);*/
+/*    --color-base-content: oklch(22.389% 0.031 278.072);*/
+/*    --color-primary: oklch(58% 0.158 241.966);*/
+/*    --color-primary-content: oklch(100% 0 0);*/
+/*    --color-secondary: oklch(55% 0.046 257.417);*/
+/*    --color-secondary-content: oklch(100% 0 0);*/
+/*    --color-accent: oklch(60% 0.118 184.704);*/
+/*    --color-accent-content: oklch(100% 0 0);*/
+/*    --color-neutral: oklch(0% 0 0);*/
+/*    --color-neutral-content: oklch(100% 0 0);*/
+/*    --color-info: oklch(60% 0.126 221.723);*/
+/*    --color-info-content: oklch(100% 0 0);*/
+/*    --color-success: oklch(62% 0.194 149.214);*/
+/*    --color-success-content: oklch(100% 0 0);*/
+/*    --color-warning: oklch(85% 0.199 91.936);*/
+/*    --color-warning-content: oklch(0% 0 0);*/
+/*    --color-error: oklch(70% 0.191 22.216);*/
+/*    --color-error-content: oklch(0% 0 0);*/
+/*    --radius-selector: 0.25rem;*/
+/*    --radius-field: 0.25rem;*/
+/*    --radius-box: 0.25rem;*/
+/*    --size-selector: 0.3125rem;*/
+/*    --size-field: 0.25rem;*/
+/*    --border: 1px;*/
+/*    --depth: 1;*/
+/*    --noise: 0;*/
+/*}*/
+
+
 @plugin "daisyui";
 @plugin "daisyui/theme" {
-    name: "corporate";
+    name: "bluetheme";
     default: false;
     prefersdark: false;
     color-scheme: "light";
-    --color-base-100: oklch(100% 0 0);
-    --color-base-200: oklch(93% 0 0);
-    --color-base-300: oklch(86% 0 0);
-    --color-base-content: oklch(22.389% 0.031 278.072);
-    --color-primary: oklch(58% 0.158 241.966);
-    --color-primary-content: oklch(100% 0 0);
-    --color-secondary: oklch(55% 0.046 257.417);
-    --color-secondary-content: oklch(100% 0 0);
-    --color-accent: oklch(60% 0.118 184.704);
+    --color-base-100: #F9FCFF;
+    --color-base-200: #E7F1FF;
+    --color-base-300: #D0E3FF;
+    --color-base-content: #081F5C;
+    --color-primary: #081F5C;
+    --color-primary-content: #F9FCFF;
+    --color-secondary: #334EAC;
+    --color-secondary-content: #F9FCFF;
+    --color-accent: #7086D1;
     --color-accent-content: oklch(100% 0 0);
-    --color-neutral: oklch(0% 0 0);
+    --color-neutral: #334EAC;
     --color-neutral-content: oklch(100% 0 0);
-    --color-info: oklch(60% 0.126 221.723);
+    --color-info: #3abff8;
     --color-info-content: oklch(100% 0 0);
     --color-success: oklch(62% 0.194 149.214);
     --color-success-content: oklch(100% 0 0);
-    --color-warning: oklch(85% 0.199 91.936);
+    --color-warning: #fbbd23;
     --color-warning-content: oklch(0% 0 0);
-    --color-error: oklch(70% 0.191 22.216);
+    --color-error: #f87272;
     --color-error-content: oklch(0% 0 0);
     --radius-selector: 0.25rem;
     --radius-field: 0.25rem;
@@ -34,35 +71,3 @@
     --depth: 1;
     --noise: 0;
 }
-
-
-/*@plugin "daisyui";*/
-/*@plugin "daisyui/theme" {*/
-/*  name: "bluetheme";*/
-/*  color-scheme: light;*/
-/*  --color-primary: #081F5C;             !* Главный цвет *!*/
-/*  --color-primary-content: #F9FCFF;     !* Текст на главном цвете *!*/
-
-/*  --color-secondary: #334EAC;            !* Вторичный цвет *!*/
-
-/*  --color-accent: #7086D1;              !* Акцентный цвет *!*/
-/*  */
-/*  --color-neutral: #334EAC;              !* Нейтральный цвет *!*/
-
-/*  --color-base-100: #F9FCFF;            !* Основной фон *!*/
-/*  --color-base-200: #E7F1FF;            !* Фон чуть темнее *!*/
-/*  --color-base-300: #D0E3FF;            !* Фон еще темнее *!*/
-/*  --color-base-content: #081F5C;        !* Основной цвет текста *!*/
-/*  */
-/*  --color-info: #3abff8;*/
-/*  --color-success: #36d399;*/
-/*  --color-warning: #fbbd23;*/
-/*  --color-error: #f87272;*/
-
-/*  --radius-box: 1rem;      !* for cards and other big elements *!*/
-/*  --radius-btn: 0.5rem;    !* for buttons *!*/
-/*  --radius-badge: 1.9rem;  !* for badges *!*/
-
-/*  --animation-btn: 0.25s;*/
-/*  --btn-text-case: uppercase;*/
-/*}*/

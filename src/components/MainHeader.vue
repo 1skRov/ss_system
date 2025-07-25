@@ -1,14 +1,14 @@
 <template>
-  <div class="bg-base-300 flex justify-between items-center p-2">
-    <ul class="menu lg:menu-horizontal rounded-box p-0">
+  <div class="border-b border-0 border-base-300 flex justify-between items-center px-2 py-1">
+    <ul class="menu menu-horizontal rounded-box p-0">
       <li>
-        <router-link to="/table-page" class="flex items-center" active-class="bg-secondary text-white font-medium">
+        <router-link to="/table-page" class="flex items-center" active-class="bg-base-300 text-black font-medium">
           <ListIcon/>
           <span class="text-lg ml-1">Таблица</span>
         </router-link>
       </li>
       <li>
-        <router-link to="/catalog" class="flex items-center" active-class="bg-secondary text-white font-medium">
+        <router-link to="/catalog" class="flex items-center" active-class="bg-base-300 text-black font-medium">
           <CatalogIcon/>
           <span class="text-lg ml-1">Каталог</span>
         </router-link>

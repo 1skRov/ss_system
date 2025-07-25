@@ -2,6 +2,7 @@
 import TrashIcon from "@/assets/icons/TrashIcon.vue";
 import NumPad from "@/widjets/NumPad.vue";
 import {ref, watch} from "vue";
+import EditDrawer from "@/widjets/EditDrawer.vue";
 
 const tableData = ref([
   {id: 1, name: "Хлебо-булочное изделие", count: 12, price: 100, discount: 10, discountType: 'percent', total: 1080},
@@ -103,9 +104,8 @@ watch(tableData, () => {
     </div>
     <div class="drawer-side">
       <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-      <div style="width: 55vw" class="bg-base-100 min-h-full">
-        <p class="text-xs">Название товара</p>
-        <h2>Хлебо-булочное изделие</h2>
+      <div style="width: 55vw" class="bg-base-100 min-h-full px-3 py-4">
+        <EditDrawer></EditDrawer>
       </div>
     </div>
   </div>
