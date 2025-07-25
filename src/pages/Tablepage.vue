@@ -1,8 +1,8 @@
 <script setup>
 import TrashIcon from "@/assets/icons/TrashIcon.vue";
-import NumPad from "@/widjets/NumPad.vue";
 import {ref, watch} from "vue";
 import EditDrawer from "@/widjets/EditDrawer.vue";
+import EditIcin from "@/assets/icons/EditIcin.vue";
 
 const tableData = ref([
   {id: 1, name: "Хлебо-булочное изделие", count: 12, price: 100, discount: 10, discountType: 'percent', total: 1080},
@@ -20,6 +20,7 @@ const tableData = ref([
 
 const selectedRows = ref([]);
 const allSelected = ref(false);
+const drawerOpen = ref(false);
 
 function closeDropdown() {
   if (document.activeElement) {
@@ -34,27 +35,6 @@ function recalculateTotal(row) {
   } else {
     row.total = subtotal - row.discount;
   }
-}
-
-function handleUpdate({value, discountType}, rowId, field) {
-  const row = tableData.value.find(item => item.id === rowId);
-  if (!row) return;
-
-  if (field === 'total') {
-    row.total = value;
-  } else {
-    row[field] = value;
-    if (field === 'discount') {
-      row.discountType = discountType;
-    }
-    recalculateTotal(row);
-  }
-
-  closeDropdown();
-}
-
-function handleCancel() {
-  closeDropdown();
 }
 
 function toggleRow(id) {
@@ -98,11 +78,10 @@ watch(tableData, () => {
 
 <template>
   <div class="drawer drawer-end">
-    <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+    <input id="my-drawer-4" type="checkbox" class="drawer-toggle" v-model="drawerOpen"/>
     <div class="drawer-content">
-      <label for="my-drawer-4" class="drawer-button btn btn-primary">Open drawer</label>
     </div>
-    <div class="drawer-side">
+    <div class="drawer-side" @click.self="drawerOpen = false">
       <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
       <div style="width: 70vw" class="bg-base-100 min-h-full px-3 py-4">
         <EditDrawer></EditDrawer>
@@ -148,68 +127,31 @@ watch(tableData, () => {
           <td @click="toggleRow(item.id)" class="min-w-[200px] ">
             {{ item.name }}
           </td>
-
-          <td class="p-0">
-            <div class="dropdown dropdown-left w-full">
-              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center ">
-                {{ item.count }}
-              </div>
-              <div class="dropdown-content z-[1]">
-                <NumPad
-                    :initialValue="item.count"
-                    field="count"
-                    @confirm="handleUpdate($event, item.id, 'count')"
-                    @cancel="handleCancel"
-                />
-              </div>
-            </div>
-          </td>
-
           <td>
-            <div>
-              {{ item.price.toFixed(2) }}
-            </div>
+            {{ item.count }}
           </td>
-
-          <td class="p-0">
-            <div class="dropdown dropdown-left w-full">
-              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center justify-between  gap-2">
-                {{ item.discount }}
-                <div :class="['badge', item.discountType === 'percent' ? 'badge-warning' : 'badge-info']" v-show="item.discount > 0">
-                  {{ item.discountType === 'percent' ? '%' : '₸' }}
-                </div>
-              </div>
-              <div class="dropdown-content z-[1]">
-                <NumPad
-                    :initialValue="item.discount"
-                    :initialDiscountType="item.discountType"
-                    field="discount"
-                    @confirm="handleUpdate($event, item.id, 'discount')"
-                    @cancel="handleCancel"
-                />
+          <td>
+            {{ item.price.toFixed(2) }}
+          </td>
+          <td>
+            <div class="flex items-center justify-between gap-2">
+              {{ item.discount }}
+              <div :class="['badge', item.discountType === 'percent' ? 'badge-warning' : 'badge-info']"
+                   v-show="item.discount > 0">
+                {{ item.discountType === 'percent' ? '%' : '₸' }}
               </div>
             </div>
           </td>
-
-          <td class="p-0">
-            <div class="dropdown dropdown-left w-full">
-              <div tabindex="0" role="button" class="w-full h-full p-4 flex items-center ">
-                {{ item.total.toFixed(2) }}
-              </div>
-              <div class="dropdown-content z-[1]">
-                <NumPad
-                    :initialValue="item.total"
-                    field="total"
-                    @confirm="handleUpdate($event, item.id, 'total')"
-                    @cancel="handleCancel"
-                />
-              </div>
-            </div>
+          <td>
+            {{ item.total.toFixed(2) }}
           </td>
-
           <th>
-            <button class="btn btn-ghost btn-square" @click.stop="deleteRow(item.id)">
-              <trash-icon class="text-red-500"/>
+            <div class="flex"></div>
+            <button class="btn btn-error" @click.stop="deleteRow(item.id)">
+              <trash-icon class="text-white"/>
+            </button>
+            <button class="btn btn-info ml-2" @click="drawerOpen = true">
+              <edit-icin class="text-white"/>
             </button>
           </th>
         </tr>
