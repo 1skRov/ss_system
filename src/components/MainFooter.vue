@@ -1,13 +1,18 @@
+<script setup>
+import QuickItems from "@/widjets/QuickItems.vue";
+import {ref} from "vue";
+const quickItems = ref(false);
+</script>
 <template>
   <footer class="bg-base-300 p-2 footer flex justify-between">
     <div class="footer-add-buttons flex fex-col flex-wrap justify-between h-full">
       <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium">
-        Закрыть текущий заказ
+        Закрыть заказ
       </button>
       <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium">
         Добавить в отложку
       </button>
-      <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium">
+      <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium" @click="quickItems = true">
         Быстрые товары
       </button>
     </div>
@@ -35,14 +40,25 @@
       </button>
     </div>
   </footer>
+  <div class="drawer drawer-end">
+    <input id="quick-item-drawer" type="checkbox" class="drawer-toggle" v-model="quickItems"/>
+    <div class="drawer-content">
+    </div>
+    <div class="drawer-side" @click.self="quickItems = false">
+      <label for="quick-item-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+      <div style="width: 70vw" class="bg-base-100 min-h-full">
+        <QuickItems></QuickItems>
+      </div>
+    </div>
+  </div>
 </template>
 <style lang="scss" scoped>
 .footer {
   min-height: 26vh;
 
   .footer-add-buttons {
-    min-width: 250px;
-    width: 30%;
+    min-width: 300px;
+    width: 35%;
 
     .add-button-footer {
       min-height: 70px;
@@ -71,6 +87,3 @@
 
 }
 </style>
-<script setup>
-import ArrowUpTrayIcon from "@/assets/icons/ArrowUpTrayIcon.vue";
-</script>

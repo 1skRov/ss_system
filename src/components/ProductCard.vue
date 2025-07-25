@@ -32,9 +32,9 @@ function decrement() {
         </template>
         <template v-else>
           <div class="flex items-center justify-between w-full">
-            <button class="btn text-lg" @click="decrement">-</button>
-            <p class="mx-2 w-1/3 border border-base-300 rounded text-lg font-semibold py-1">{{ count }}</p>
-            <button class="btn text-lg" @click="increment">+</button>
+            <button class="btn text-xl" @click="decrement">-</button>
+            <p class="mx-2 w-1/3 border border-base-300 rounded text-lg font-semibold py-2">{{ count }}</p>
+            <button class="btn text-xl" @click="increment">+</button>
           </div>
         </template>
       </div>
