@@ -5,7 +5,8 @@
         <MagnifyingGLassIcon/>
         <input type="search" required placeholder="Поиск"/>
       </label>
-      <button class="btn btn-neutral btn-sm" style="border-radius: 0 0.25rem 0.25rem 0" onclick="my_modal_4.showModal()">Поиск
+      <button class="btn btn-neutral btn-sm" style="border-radius: 0 0.25rem 0.25rem 0"
+              onclick="my_modal_4.showModal()">Поиск
       </button>
     </div>
     <ul class="menu menu-horizontal rounded-box p-0 mx-auto">
@@ -44,12 +45,12 @@
       </ul>
     </div>
   </div>
-  <dialog id="my_modal_4" class="modal w-full h-full">
+  <dialog id="my_modal_4" class="modal w-full h-full" ref="modal">
     <div class="modal-box search-modal-box">
       <form method="dialog">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
       </form>
-      <SearchDrawer/>
+      <SearchDrawer @close="closeModal"/>
     </div>
   </dialog>
 </template>
@@ -60,6 +61,15 @@ import LogoutIcon from "@/assets/icons/LogoutIcon.vue";
 import CircleIcon from "@/assets/icons/CircleIcon.vue";
 import MagnifyingGLassIcon from "@/assets/icons/MagnifyingGLassIcon.vue";
 import SearchDrawer from "@/widjets/SearchDrawer.vue";
+import {ref} from "vue";
+
+const modal = ref(null);
+
+function closeModal() {
+  if (modal.value) {
+    modal.value.close();
+  }
+}
 </script>
 <style scoped lang="scss">
 .search-modal-box {

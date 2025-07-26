@@ -2,6 +2,11 @@
 
 import {ref} from "vue";
 import LoginKeyboard from "@/widjets/LoginKeyboard.vue";
+const emit = defineEmits(['close']);
+
+function handleClose() {
+  emit('close');
+}
 
 </script>
 
@@ -132,7 +137,7 @@ import LoginKeyboard from "@/widjets/LoginKeyboard.vue";
       </div>
     </div>
     <div class="flex w-full items-end">
-      <LoginKeyboard/>
+      <LoginKeyboard @close="handleClose"/>
     </div>
   </div>
 </template>
