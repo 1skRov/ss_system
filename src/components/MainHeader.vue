@@ -1,6 +1,13 @@
 <template>
-  <div class="border-b border-0 border-base-300 flex justify-between items-center px-2 py-1">
-    <ul class="menu menu-horizontal rounded-box p-0">
+  <div class="border-b border-0 border-base-300 flex items-center px-2 py-1">
+    <div class="flex">
+      <label class="input" style="border-radius: 0.25rem 0 0 0.25rem">
+        <MagnifyingGLassIcon/>
+        <input type="search" required placeholder="Поиск" />
+      </label>
+      <button class="btn btn-neutral" style="border-radius: 0 0.25rem 0.25rem 0">Поиск</button>
+    </div>
+    <ul class="menu menu-horizontal rounded-box p-0 mx-auto">
       <li>
         <router-link to="/table-page" class="flex items-center" active-class="bg-base-300 text-black font-medium">
           <ListIcon/>
@@ -42,4 +49,5 @@ import CatalogIcon from "@/assets/icons/Catalog.vue";
 import ListIcon from "@/assets/icons/List.vue";
 import LogoutIcon from "@/assets/icons/LogoutIcon.vue";
 import CircleIcon from "@/assets/icons/CircleIcon.vue";
+import MagnifyingGLassIcon from "@/assets/icons/MagnifyingGLassIcon.vue";
 </script>
