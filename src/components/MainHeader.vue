@@ -1,11 +1,12 @@
 <template>
   <div class="border-b border-0 border-base-300 flex items-center px-2 py-1">
     <div class="flex">
-      <label class="input" style="border-radius: 0.25rem 0 0 0.25rem">
+      <label class="input input-sm" style="border-radius: 0.25rem 0 0 0.25rem">
         <MagnifyingGLassIcon/>
-        <input type="search" required placeholder="Поиск" />
+        <input type="search" required placeholder="Поиск"/>
       </label>
-      <button class="btn btn-neutral" style="border-radius: 0 0.25rem 0.25rem 0">Поиск</button>
+      <button class="btn btn-neutral btn-sm" style="border-radius: 0 0.25rem 0.25rem 0" onclick="my_modal_4.showModal()">Поиск
+      </button>
     </div>
     <ul class="menu menu-horizontal rounded-box p-0 mx-auto">
       <li>
@@ -43,6 +44,14 @@
       </ul>
     </div>
   </div>
+  <dialog id="my_modal_4" class="modal w-full h-full">
+    <div class="modal-box search-modal-box">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <SearchDrawer/>
+    </div>
+  </dialog>
 </template>
 <script setup>
 import CatalogIcon from "@/assets/icons/Catalog.vue";
@@ -50,4 +59,16 @@ import ListIcon from "@/assets/icons/List.vue";
 import LogoutIcon from "@/assets/icons/LogoutIcon.vue";
 import CircleIcon from "@/assets/icons/CircleIcon.vue";
 import MagnifyingGLassIcon from "@/assets/icons/MagnifyingGLassIcon.vue";
+import SearchDrawer from "@/widjets/SearchDrawer.vue";
 </script>
+<style scoped lang="scss">
+.search-modal-box {
+  width: 98vw !important;
+  height: 98vh !important;
+  max-width: 98vw !important;
+  max-height: 98vh !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+</style>
