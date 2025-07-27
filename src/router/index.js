@@ -16,6 +16,11 @@ const routes = [
         path: 'catalog',
         name: 'Catalog',
         component: () => import('@/pages/CatalogPage.vue'),
+      },
+      {
+        path: 'deferred-products',
+        name: 'DeferredProducts',
+        component: () => import('@/pages/DeferredProducts.vue'),
       }
     ]
   },

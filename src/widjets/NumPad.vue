@@ -16,7 +16,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['confirm', 'cancel', 'discountTypeChange']);
+const emit = defineEmits(['confirm', 'cancel', 'discountTypeChange', 'input']);
 
 const displayValue = ref('');
 const discountType = ref('percent');
@@ -37,6 +37,7 @@ function confirm() {
 
 function clear() {
   displayValue.value = '0';
+  emit('input', displayValue.value); // <-- Добавить сюда
 }
 
 function append(char) {
@@ -46,6 +47,7 @@ function append(char) {
   } else {
     displayValue.value += char;
   }
+  emit('input', displayValue.value); // <-- Добавить сюда
 }
 
 function backspace() {
@@ -53,6 +55,7 @@ function backspace() {
   if (displayValue.value === '') {
     displayValue.value = '0';
   }
+  emit('input', displayValue.value); // <-- Добавить сюда
 }
 </script>
 

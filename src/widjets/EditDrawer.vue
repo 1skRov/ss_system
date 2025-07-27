@@ -39,7 +39,6 @@ function recalculateTotal() {
 
 function updateFromNumPad(value) {
   editedItem.value[activeField.value] = parseFloat(value) || 0;
-  recalculateTotal();
 }
 
 function updateDiscountType(type) {
@@ -75,7 +74,7 @@ watch(() => [editedItem.value.count, editedItem.value.price, editedItem.value.di
     </div>
     <div class="flex justify-between">
       <NumPad :initialValue="editedItem[activeField]" :field="activeField"
-        :initialDiscountType="editedItem.discountType" @confirm="updateFromNumPad"
+        :initialDiscountType="editedItem.discountType" @input="updateFromNumPad"
         @discountTypeChange="updateDiscountType" />
       <div class="flex flex-col justify-between w-full ml-4">
         <div class="flex flex-col">
@@ -96,8 +95,8 @@ watch(() => [editedItem.value.count, editedItem.value.price, editedItem.value.di
         <div class="flex flex-col">
           <span class="text-base mb-1 font-medium">Итоговая стоимость</span>
           <input type="number" class="input w-full" :class="{ 'input-primary': activeField === 'total' }"
-            placeholder="Введите итоговую стоимость" v-model.number="editedItem.total" @focus="setActiveField('total')"
-            readonly />
+            placeholder="Введите итоговую стоимость" v-model.number="editedItem.total"
+            @focus="setActiveField('total')" />
         </div>
       </div>
     </div>
