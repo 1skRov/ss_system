@@ -1,27 +1,29 @@
 <script setup>
 import TrashIcon from "@/assets/icons/TrashIcon.vue";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import EditDrawer from "@/widjets/EditDrawer.vue";
 import EditIcon from "@/assets/icons/EditIcin.vue";
+import { useCartStore } from '@/stores/cart';
 
-const tableData = ref([
-  { id: 1, name: "Хлебо-булочное изделие", count: 12, price: 100, discount: 10, discountType: 'percent', total: 1080 },
-  { id: 2, name: "Молоко", count: 5, price: 80, discount: 0, discountType: 'percent', total: 400 },
-  { id: 3, name: "Сыр", count: 2, price: 350, discount: 50, discountType: 'fixed', total: 650 },
-  { id: 4, name: "Яблоки", count: 10, price: 30, discount: 5, discountType: 'percent', total: 285 },
-  { id: 5, name: "Масло сливочное", count: 1, price: 200, discount: 20, discountType: 'percent', total: 160 },
-  { id: 6, name: "Куриные яйца", count: 30, price: 12, discount: 0, discountType: 'percent', total: 360 },
-  { id: 7, name: "Гречневая крупа", count: 3, price: 90, discount: 10, discountType: 'percent', total: 243 },
-  { id: 8, name: "Колбаса варёная", count: 2, price: 270, discount: 30, discountType: 'fixed', total: 510 },
-  { id: 9, name: "Томаты", count: 8, price: 45, discount: 5, discountType: 'percent', total: 342 },
-  { id: 10, name: "Картофель", count: 15, price: 20, discount: 0, discountType: 'percent', total: 300 },
-  { id: 11, name: "Сахар", count: 4, price: 60, discount: 5, discountType: 'percent', total: 228 },
-]);
+const cartStore = useCartStore();
+const tableData = computed(() => cartStore.products);
 
 const selectedRows = ref([]);
-const allSelected = ref(false);
 const drawerOpen = ref(false);
 const editingItem = ref(null);
+
+const allSelected = computed({
+  get: () => {
+    return tableData.value.length > 0 && selectedRows.value.length === tableData.value.length;
+  },
+  set: (value) => {
+    if (value) {
+      selectedRows.value = tableData.value.map(item => item.id);
+    } else {
+      selectedRows.value = [];
+    }
+  }
+});
 
 function toggleRow(id) {
   if (selectedRows.value.includes(id)) {
@@ -35,35 +37,18 @@ function isSelected(id) {
   return selectedRows.value.includes(id);
 }
 
-function toggleAllRows() {
-  if (allSelected.value) {
-    selectedRows.value = tableData.value.map(item => item.id);
-  } else {
-    selectedRows.value = [];
-  }
-}
-
 function deleteSelectedRows() {
-  tableData.value = tableData.value.filter(item => !selectedRows.value.includes(item.id));
+  cartStore.deleteSelectedProducts(selectedRows.value);
   selectedRows.value = [];
 }
 
 function deleteRow(id) {
-  tableData.value = tableData.value.filter(item => item.id !== id);
+  cartStore.deleteProduct(id);
   selectedRows.value = selectedRows.value.filter(rowId => rowId !== id);
 }
 
-watch(selectedRows, (val) => {
-  allSelected.value = val.length === tableData.value.length && tableData.value.length > 0;
-});
-
-watch(tableData, () => {
-  allSelected.value = selectedRows.value.length === tableData.value.length && tableData.value.length > 0;
-}, { deep: true });
-
-
 function openEditDrawer(item) {
-  editingItem.value = { ...item }; // Создаем копию для редактирования
+  editingItem.value = { ...item };
   drawerOpen.value = true;
 }
 
@@ -73,9 +58,9 @@ function closeDrawer() {
 }
 
 function saveItem(updatedItem) {
-  const index = tableData.value.findIndex(item => item.id === updatedItem.id);
+  const index = cartStore.rawProducts.findIndex(item => item.id === updatedItem.id);
   if (index !== -1) {
-    tableData.value[index] = updatedItem;
+    cartStore.rawProducts[index] = updatedItem;
   }
   closeDrawer();
 }
@@ -109,7 +94,7 @@ function saveItem(updatedItem) {
           <tr>
             <th>
               <label>
-                <input type="checkbox" class="checkbox" v-model="allSelected" @change="toggleAllRows" />
+                <input type="checkbox" class="checkbox" v-model="allSelected" />
               </label>
             </th>
             <th>Название</th>
@@ -132,7 +117,7 @@ function saveItem(updatedItem) {
               {{ item.name }}
             </td>
             <td>
-              {{ item.count }}
+              {{ item.quantity }}
             </td>
             <td>
               {{ item.price.toFixed(2) }}
