@@ -2,7 +2,20 @@
 import {ref} from 'vue'
 import ProductCard from "@/components/ProductCard.vue"
 
-const count = 50
+const count = 50;
+import axios from 'axios';
+
+axios.get('https://demo.eldor.kz/api/kassa2/95/new/', {
+  withCredentials: true, // важно, чтобы отправлялись cookies
+  headers: {
+    'Cookie': 'PYCKET_ID=2|1:0|10:17535...твоя кука...',
+    'User-Agent': navigator.userAgent
+  }
+}).then(response => {
+  console.log('Ответ:', response.data);
+}).catch(error => {
+  console.error('Ошибка:', error);
+});
 </script>
 
 <template>

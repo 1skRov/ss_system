@@ -1,5 +1,6 @@
 <script setup>
 import {ref} from 'vue';
+import http from '@/api/http';
 import LoginKeyboard from '../widjets/LoginKeyboard.vue';
 
 const emit = defineEmits(['login-success']);
@@ -49,15 +50,21 @@ const showNotification = (message, type = 'success', duration = 3000) => {
   }, duration);
 };
 
-const handleLogin = () => {
-  if (login.value === 'admin' && password.value === '12345') {
-    showNotification('Успешный вход! Перенаправление...', 'success');
-    setTimeout(() => {
+const handleLogin = async () => {
+  notification.value = {show: false, message: '', type: 'success'};
+  try {
+    const params = new URLSearchParams();
+    params.append('login', login.value);
+    params.append('password', password.value);
+
+    await http.post('/api/login', params);
+    if (document.cookie.includes('PYCKET_ID')) {
       emit('login-success');
-    }, 1500);
-  } else {
-    showNotification('Неверное имя пользователя или пароль!', 'error');
-    password.value = '';
+    } else {
+      notification.value = {show: true, message: 'Ошибка авторизации', type: 'error'};
+    }
+  } catch (e) {
+    notification.value = {show: true, message: 'Ошибка запроса', type: 'error'};
   }
 };
 </script>
