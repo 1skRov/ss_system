@@ -73,7 +73,6 @@ import SearchDrawer from "@/widjets/SearchDrawer.vue";
 import { ref } from "vue";
 import Bars4Icon from "../assets/icons/Bars4Icon.vue";
 import { useAuthStore } from '@/store/authStore';
-import ThemeSwitcher from "@/components/ThemeSwitcher.vue";
 
 const modal = ref(null);
 const searchQuery = ref('');

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import LoginKeyboard from '../widjets/LoginKeyboard.vue';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore } from '@/stores/authStore';
 
 const authStore = useAuthStore();
 
