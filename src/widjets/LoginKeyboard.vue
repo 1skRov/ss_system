@@ -1,59 +1,40 @@
 <template>
-  <div class="w-full bg-base-200 p-3 rounded-t-lg shadow-lg flex flex-col gap-2 transition-all duration-300">
+  <div class="w-full bg-base-200 p-3 rounded-t-lg-lg flex flex-col gap-2 transition-all duration-300">
     <div class="flex w-full gap-2">
-      <button class="btn btn-primary btn-sm flex-grow text-lg" @click="toggleLanguage">
+      <button class="btn btn-primary btn-sm keyboardButton" @click="toggleLanguage">
         <GlobeIcon></GlobeIcon>
         {{ currentLanguage.toUpperCase() }}
       </button>
-      <button class="btn btn-secondary text-lg btn-sm flex-grow" @click="onClear">Очистить поле</button>
-      <button class="btn btn-error btn-sm flex-grow text-lg text-white" @click="onClose">Закрыть</button>
+      <button class="btn btn-primary btn-sm keyboardButton" @click="onClear">Очистить поле</button>
+      <button class="btn btn-error btn-sm keyboardButton" @click="onClose">Закрыть</button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button
-          v-for="key in processedNumberRow"
-          :key="key"
-          class="btn bg-white border border-base-300 text-black flex-grow font-bold text-2xl py-2 px-1 min-h-14"
-          @click="onKeyPress(key)"
-      >
+      <button v-for="key in processedNumberRow" :key="key" class="btn border border-base-300 numberButton"
+        @click="onKeyPress(key)">
         {{ key }}
       </button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button
-          v-for="key in processedQwertyRow"
-          :key="key"
-          class="btn bg-white border border-base-300 flex-grow font-bold text-2xl py-2 px-1 min-h-14"
-          @click="onKeyPress(key)"
-      >
+      <button v-for="key in processedQwertyRow" :key="key" class="btn border border-base-300 numberButton"
+        @click="onKeyPress(key)">
         {{ key }}
       </button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button
-          v-for="key in processedAsdfRow"
-          :key="key"
-          class="btn bg-white border border-base-300 flex-grow font-bold text-2xl py-2 px-1 min-h-14"
-          @click="onKeyPress(key)"
-      >
+      <button v-for="key in processedAsdfRow" :key="key" class="btn border border-base-300 numberButton"
+        @click="onKeyPress(key)">
         {{ key }}
       </button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button
-          v-for="key in processedZxcvRow"
-          :key="key"
-          class="btn bg-white border border-base-300 flex-grow font-bold text-2xl py-2 px-1 min-h-14"
-          @click="onKeyPress(key)"
-      >
+      <button v-for="key in processedZxcvRow" :key="key" class="btn border border-base-300 numberButton"
+        @click="onKeyPress(key)">
         {{ key }}
       </button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button
-          class="btn btn-secondary flex-grow-[2] font-bold text-lg"
-          :class="{'btn-active': isCaps}"
-          @click="toggleCaps"
-      >
+      <button class="btn btn-secondary flex-grow-[2] font-bold text-lg" :class="{ 'btn-active': isCaps }"
+        @click="toggleCaps">
         <ArrowLongUpIcon></ArrowLongUpIcon> Caps
       </button>
       <button class="btn btn-primary flex-grow-[5] font-bold text-lg" @click="onKeyPress(' ')">
@@ -67,7 +48,7 @@
 </template>
 
 <script setup>
-import {ref, computed} from 'vue';
+import { ref, computed } from 'vue';
 import GlobeIcon from "@/assets/icons/GlobeIcon.vue";
 import ArrowLongUpIcon from "@/assets/icons/ArrowLongUpIcon.vue";
 import Backspaceicon from "@/assets/icons/Backspaceicon.vue";
@@ -137,13 +118,18 @@ const onClose = () => {
 };
 </script>
 
-<style scoped>
-.btn {
-  min-width: 28px;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+<style scoped lang="scss">
+.keyboardButton {
+  flex-grow: 1;
+  font-size: 22px;
 }
 
-.btn:active {
-  transform: scale(0.95);
+.numberButton {
+  flex-grow: 1;
+  font-size: 22px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 1.5rem;
+  min-height: 3.5rem;
 }
 </style>
