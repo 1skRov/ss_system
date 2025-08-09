@@ -49,6 +49,7 @@ function handleQuantityUpdate({ id, quantity }) {
   cartStore.updateProductQuantity(id, quantity);
 }
 
+const count = 50;
 </script>
 
 <template>
