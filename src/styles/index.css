@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 /*@plugin "daisyui";*/
 /*@plugin "daisyui/theme" {*/
 /*    name: "corporate";*/
@@ -35,39 +35,38 @@
 /*    --noise: 0;*/
 /*}*/
 
-
 @plugin "daisyui";
 @plugin "daisyui/theme" {
-    name: "bluetheme";
-    default: false;
-    prefersdark: false;
-    color-scheme: "light";
-    --color-base-100: #F9FCFF;
-    --color-base-200: #E7F1FF;
-    --color-base-300: #D0E3FF;
-    --color-base-content: #081F5C;
-    --color-primary: #081F5C;
-    --color-primary-content: #F9FCFF;
-    --color-secondary: #334EAC;
-    --color-secondary-content: #F9FCFF;
-    --color-accent: #7086D1;
-    --color-accent-content: oklch(100% 0 0);
-    --color-neutral: #334EAC;
-    --color-neutral-content: oklch(100% 0 0);
-    --color-info: #3abff8;
-    --color-info-content: oklch(100% 0 0);
-    --color-success: oklch(62% 0.194 149.214);
-    --color-success-content: oklch(100% 0 0);
-    --color-warning: #fbbd23;
-    --color-warning-content: oklch(0% 0 0);
-    --color-error: #f87272;
-    --color-error-content: oklch(0% 0 0);
-    --radius-selector: 0.25rem;
-    --radius-field: 0.25rem;
-    --radius-box: 0.25rem;
-    --size-selector: 0.3125rem;
-    --size-field: 0.3125rem;
-    --border: 1px;
-    --depth: 1;
-    --noise: 0;
+  name: "bluetheme";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: #f9fcff;
+  --color-base-200: #e7f1ff;
+  --color-base-300: #d0e3ff;
+  --color-base-content: #081f5c;
+  --color-primary: #081f5c;
+  --color-primary-content: #f9fcff;
+  --color-secondary: #334eac;
+  --color-secondary-content: #f9fcff;
+  --color-accent: #7086d1;
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: #334eac;
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: #3abff8;
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(62% 0.194 149.214);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: #fbbd23;
+  --color-warning-content: oklch(0% 0 0);
+  --color-error: #f87272;
+  --color-error-content: oklch(0% 0 0);
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.3125rem;
+  --size-field: 0.3125rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
 }

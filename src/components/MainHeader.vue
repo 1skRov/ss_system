@@ -3,7 +3,8 @@
     <div class="flex">
       <label class="input input-sm" style="border-radius: 0.25rem 0 0 0.25rem">
         <MagnifyingGLassIcon />
-        <input type="search" required placeholder="Поиск" />
+        <input type="text" v-model="searchQuery" @keydown.enter="handleSearch"
+          placeholder="Введите код и нажмите Enter" />
       </label>
       <button class="btn btn-neutral btn-sm" style="border-radius: 0 0.25rem 0.25rem 0"
         onclick="my_modal_4.showModal()">Поиск
@@ -70,9 +71,17 @@ import MagnifyingGLassIcon from "@/assets/icons/MagnifyingGLassIcon.vue";
 import SearchDrawer from "@/widjets/SearchDrawer.vue";
 import { ref } from "vue";
 import Bars4Icon from "../assets/icons/Bars4Icon.vue";
+import { useAuthStore } from '@/store/authStore';
 
 const modal = ref(null);
+const searchQuery = ref('');
+const authStore = useAuthStore();
 
+const handleSearch = async () => {
+  if (searchQuery.value.trim() !== '') {
+    await authStore.getCatalog(searchQuery.value);
+  }
+};
 function closeModal() {
   if (modal.value) {
     modal.value.close();
