@@ -62,45 +62,39 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col justify-end items-center bg-base-100">
-
+  <div class="w-full h-full flex flex-col items-center bg-base-100">
     <div class="toast toast-top toast-center z-50">
       <div v-if="notification.show" class="alert alert-error">
         <span>{{ notification.message }}</span>
       </div>
     </div>
-
-    <div class="flex-grow flex flex-col justify-center items-center p-4 w-full max-w-sm">
-      <h1 class="text-4xl font-bold mb-8 text-primary">Вход в систему</h1>
-      <div class="form-control w-full">
-        <label class="label">
-          <span class="label-text">Имя пользователя</span>
-        </label>
-        <input type="text" v-model="login" @focus="setActiveInput('login')"
-          class="input input-bordered w-full text-lg" />
+    <div class="flex-grow flex flex-col justify-center items-center max-w-md w-full">
+      <h1 class="text-3xl font-bold mb-4 text-primary">Вход в систему</h1>
+      <div :class="['w-full', showKeyboard ? 'flex gap-2 items-end' : '']">
+        <div class="form-control w-full">
+          <label class="label">Имя пользователя</label>
+          <input type="text" v-model="login" @focus="setActiveInput('login')"
+            class="input input-sm input-bordered w-full text-lg" />
+        </div>
+        <div class="form-control w-full mt-2">
+          <label class="label">Пароль</label>
+          <input type="password" v-model="password" @focus="setActiveInput('password')"
+            class="input input-bordered w-full text-lg input-sm" />
+        </div>
       </div>
-      <div class="form-control w-full mt-4">
-        <label class="label">
-          <span class="label-text">Пароль</span>
-        </label>
-        <input type="password" v-model="password" @focus="setActiveInput('password')"
-          class="input input-bordered w-full text-lg" />
-      </div>
-      <button class="btn btn-primary w-full mt-8" @click="handleLogin" :disabled="authStore.isLoading">
+      <button class="btn btn-sm btn-primary mt-5 text-lg w-full" @click="handleLogin" :disabled="authStore.isLoading">
         <span v-if="authStore.isLoading" class="loading loading-spinner"></span>
         <span v-else>Войти</span>
       </button>
     </div>
-
     <div class="w-full" v-if="showKeyboard">
       <LoginKeyboard @key-press="handleKeyPress" @clear="handleClear" @close="handleClose" />
     </div>
   </div>
 </template>
 
-<style scoped>
-input[readonly] {
-  cursor: text;
-  background-color: white;
+<style scoped lang="scss">
+.label {
+  font-size: 0.9rem;
 }
 </style>
