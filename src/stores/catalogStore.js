@@ -5,6 +5,7 @@ export const useCatalogStore = defineStore("catalog", {
     categories: [],
     products: [],
     error: null,
+    isLoadingProducts: false,
   }),
 
   actions: {
@@ -18,12 +19,16 @@ export const useCatalogStore = defineStore("catalog", {
       }
     },
 
-    async fetchProducts(category) {
+    async fetchProducts(categoryId) {
+      this.isLoadingProducts = true;
+      this.products = [];
       try {
-        const response = await catalogService.getProducts(category);
-        this.products = response.data || [];
+        const response = await catalogService.getProducts(categoryId);
+        this.products = response.data?.items || [];
       } catch (e) {
         this.error = e.message || "Произошла ошибка при получении продуктов.";
+      } finally {
+        this.isLoadingProducts = false;
       }
     },
   },

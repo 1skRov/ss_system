@@ -1,4 +1,7 @@
 <script setup>
+import Image from '@/assets/icons/Image.vue';
+import plusIcon from '@/assets/icons/plusIcon.vue';
+import minusIcon from '@/assets/icons/MinusIcon.vue';
 import { ref, watch, computed } from 'vue';
 
 const props = defineProps({
@@ -6,33 +9,9 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  initialQuantity: {
-    type: Number,
-    default: 0
-  }
 });
 
-const emit = defineEmits(['update:quantity']);
 const VITE_API_BASE_URL = 'https://demo.eldor.kz';
-
-const quantity = ref(props.initialQuantity);
-
-const step = props.item.delimiter || 1;
-
-function increaseQuantity() {
-  quantity.value += step;
-}
-
-function decreaseQuantity() {
-  const newQuantity = quantity.value - step;
-  if (newQuantity >= 0) {
-    quantity.value = newQuantity;
-  }
-}
-
-watch(quantity, (newQuantity) => {
-  emit('update:quantity', { id: props.item._id, quantity: newQuantity });
-});
 
 const imageUrl = computed(() => {
   if (props.item.photo) {
@@ -40,28 +19,31 @@ const imageUrl = computed(() => {
   }
   return 'https://via.placeholder.com/150';
 });
-
 </script>
 
 <template>
-  <div class="card bg-base-100 w-54 max-h-64 border border-base-300 rounded-lg">
-    <figure class="px-1.5 pt-1.5">
-      <img :src="imageUrl" :alt="item.title" class="rounded" />
-    </figure>
-    <div class="card-body items-center text-center p-1.5 flex flex-col">
-      <span class="card-title">{{ item.title }}</span>
-      <span class="text-gray-600 text-sm">{{ item.sale_cost }}₸</span>
-      <div class="card-actions w-full">
-        <!-- <template v-if="!added">
-          <button class="btn btn-secondary w-full text-white font-semibold text-lg" @click="setAdded">
-            Добавить
-          </button>
-        </template> -->
-        <div class="flex items-center justify-between w-full">
-          <button class="btn text-xl" @click="decreaseQuantity" :disabled="quantity === 0">-</button>
-          <p class="mx-2 w-1/3 border border-base-300 rounded text-lg font-semibold py-2">{{ quantity }}</p>
-          <button class="btn text-xl" @click="increaseQuantity">+</button>
-        </div>
+  <div class="p-1 border border-base-300 rounded-lg flex gap-2">
+    <div class="flex items-center justify-center bg-base-200 rounded overflow-hidden"
+      style="min-width:130px; width: 30%; min-height: 130px; height: 130px;">
+      <img v-if="item.photo" :src="imageUrl" :alt="item.title" class="w-full h-full object-fill" />
+      <Image v-else class="text-neutral" />
+    </div>
+    <div class="flex flex-col justify-between w-full pr-2 overflow-hidden">
+      <div class="w-full">
+        <p class="text-lg font-medium truncate">{{ item.title }}</p>
+        <p class="text-neutral text-sm flex justify-between w-full">
+          <span>Цена: {{ item.sale_cost }}₸</span>
+          <span>Количество: {{ item.amount }}</span>
+        </p>
+      </div>
+      <div class="flex w-full gap-2">
+        <button class="btn btn-sm btn-secondary w-1/4">
+          <minusIcon></minusIcon>
+        </button>
+        <input type="text" class="input input-sm text-center text-lg font-medium" :value="item.delimiter"></input>
+        <button class="btn btn-sm btn-secondary w-1/4">
+          <plusIcon></plusIcon>
+        </button>
       </div>
     </div>
   </div>
