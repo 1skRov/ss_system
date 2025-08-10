@@ -6,8 +6,7 @@
         <input type="text" v-model="searchQuery" @keydown.enter="handleSearch"
           placeholder="Введите код и нажмите Enter" />
       </label>
-      <button class="btn btn-neutral btn-sm" style="border-radius: 0 0.25rem 0.25rem 0"
-        onclick="my_modal_4.showModal()">Поиск
+      <button class="btn btn-neutral btn-sm" style="border-radius: 0 0.25rem 0.25rem 0" @click="openModal">Поиск
       </button>
     </div>
     <ul class="menu menu-horizontal rounded-box p-0 mx-auto">
@@ -57,7 +56,7 @@
   <dialog id="my_modal_4" class="modal w-full h-full" ref="modal">
     <div class="modal-box search-modal-box">
       <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-4xl">✕</button>
       </form>
       <SearchDrawer @close="closeModal" />
     </div>
@@ -69,7 +68,7 @@ import ListIcon from "@/assets/icons/List.vue";
 import LogoutIcon from "@/assets/icons/LogoutIcon.vue";
 import CircleIcon from "@/assets/icons/CircleIcon.vue";
 import MagnifyingGLassIcon from "@/assets/icons/MagnifyingGLassIcon.vue";
-// import SearchDrawer from "@/widjets/SearchDrawer.vue";
+import SearchDrawer from "@/widjets/SearchDrawer.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
@@ -86,6 +85,11 @@ function handleLogout() {
 function closeModal() {
   if (modal.value) {
     modal.value.close();
+  }
+}
+function openModal() {
+  if (modal.value) {
+    modal.value.showModal();
   }
 }
 </script>
