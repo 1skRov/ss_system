@@ -3,11 +3,13 @@ import router from '@/router';
 import authService from '@/services/authService';
 
 export const useAuthStore = defineStore('auth', {
-    // Состояние
     state: () => ({
         isAuthenticated: false,
         isLoading: false,
         error: null,
+        first_name: '',
+        last_name: '',
+        login: '',
     }),
 
     actions: {
@@ -18,13 +20,13 @@ export const useAuthStore = defineStore('auth', {
 
             try {
                 const response = await authService.login(login, password);
-
                 const token = response.data?.user?.token;
-                console.log('Login response:', token);
-
 
                 if (token) {
                     localStorage.setItem('x-api-token', token);
+                    this.first_name = response.data?.user?.first_name || '';
+                    this.last_name = response.data?.user?.last_name || '';
+                    this.login = response.data?.user?.login || '';
                     this.isAuthenticated = true;
                     await router.push('/');
                     return true;
@@ -37,24 +39,6 @@ export const useAuthStore = defineStore('auth', {
                 return false;
             } finally {
                 this.isLoading = false;
-            }
-        },
-        async getProducts(category) {
-            try {
-                const response = await authService.getProducts(category);
-                return response.data;
-            } catch (e) {
-                this.error = e.message || 'Произошла ошибка при получении продуктов.';
-                return null;
-            }
-        },
-        async getCategories() {
-            try {
-                const response = await authService.getCategories();
-                return response.data;
-            } catch (e) {
-                this.error = e.message || 'Произошла ошибка при получении категорий.';
-                return [];
             }
         },
 
