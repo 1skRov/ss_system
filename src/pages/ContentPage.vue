@@ -7,10 +7,8 @@ import MainFooter from "@/components/MainFooter.vue";
     <div class="p-2 w-full flex-1 overflow-y-auto">
       <router-view></router-view>
     </div>
-    <MainFooter/>
+    <MainFooter />
   </div>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

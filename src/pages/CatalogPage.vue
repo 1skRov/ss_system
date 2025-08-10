@@ -1,62 +1,21 @@
 <script setup>
-import { useCatalogStore } from '@/stores/catalog';
-import { useCartStore } from '@/stores/cart';
-import { useAuthStore } from '@/store/authStore';
+import { useCatalogStore } from '@/stores/catalogStore';
 import ProductCard from "@/components/ProductCard.vue";
 import { ref, onMounted } from 'vue';
 
 const catalogStore = useCatalogStore();
-const cartStore = useCartStore();
-const authStore = useAuthStore();
 
-const categories = ref([]);
-const selectedCategory = ref('Все');
-const products = ref([]);
-const isLoadingProducts = ref(false);
-
-onMounted(async () => {
-  const response = await authStore.getCategories();
-  if (response && response.items) {
-    categories.value = [{ _id: 'all', title: 'Все' }, ...response.items];
-  }
+onMounted(() => {
+  catalogStore.fetchCategories();
 });
 
-async function selectCategory(category) {
-  selectedCategory.value = category.title;
-
-  if (category._id === 'all') {
-    products.value = [];
-    return;
-  }
-
-  isLoadingProducts.value = true;
-  try {
-    const response = await authStore.getProducts(category._id);
-    if (response && response.items) {
-      products.value = response.items;
-    } else {
-      products.value = [];
-    }
-  } catch (error) {
-    console.error("Ошибка при загрузке продуктов:", error);
-    products.value = [];
-  } finally {
-    isLoadingProducts.value = false;
-  }
-}
-
-function handleQuantityUpdate({ id, quantity }) {
-  cartStore.updateProductQuantity(id, quantity);
-}
-
-const count = 50;
 </script>
 
 <template>
   <div class="w-full h-full flex flex-col">
     <div class="content h-full w-full">
       <div class="filter flex w-full justify-start items-center overflow-x-auto flex-nowrap pb-4 gap-2">
-        <button v-for="category in categories" :key="category._id" class="btn"
+        <button v-for="category in catalogStore.categories" :key="category._id" class="btn btn-sm"
           :class="{ 'btn-active': selectedCategory === category.title }" @click="selectCategory(category)">
           {{ category.title }}
         </button>
