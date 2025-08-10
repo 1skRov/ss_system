@@ -1,9 +1,11 @@
 <script setup>
+import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import LoginKeyboard from '../widjets/LoginKeyboard.vue';
+import LoginKeyboard from '@/widjets/LoginKeyboard.vue';
 import { useAuthStore } from '@/stores/authStore';
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 const login = ref('');
 const password = ref('');
@@ -22,7 +24,9 @@ const showNotification = (message, duration = 3000) => {
 const handleLogin = async () => {
   const success = await authStore.login(login.value, password.value);
 
-  if (!success && authStore.error) {
+  if (success) {
+    router.push('/');
+  } else if (authStore.error) {
     showNotification(authStore.error);
     password.value = '';
   }

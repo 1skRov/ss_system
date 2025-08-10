@@ -1,25 +1,11 @@
 <script setup>
-import QuickItems from "@/widjets/QuickItems.vue";
+// import QuickItems from "@/widjets/QuickItems.vue";
 import { ref } from "vue";
 import PaymentDrawer from "@/widjets/PaymentDrawer.vue";
-import { useDeferredStore } from '@/stores/deferred';
-import { useCartStore } from '@/stores/cart';
 
 const quickItems = ref(false);
 const payDrawer = ref(false);
-const deferredStore = useDeferredStore();
-const cartStore = useCartStore();
 
-const deferCurrentOrder = () => {
-  if (cartStore.products.length > 0) {
-    deferredStore.deferOrder(cartStore.products);
-    cartStore.clearCart();
-    // Maybe navigate to the deferred products page or show a notification
-  } else {
-    // Handle case where cart is empty
-    alert("Корзина пуста!");
-  }
-};
 </script>
 <template>
   <footer class="bg-base-300 p-2 footer flex justify-between">

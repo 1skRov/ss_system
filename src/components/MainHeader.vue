@@ -39,14 +39,14 @@
       </div>
       <ul tabindex="0" class="dropdown-content z-[1] menu p-3 shadow bg-base-100 rounded-box w-52 mt-2 text-lg">
         <li>
-          <router-link to="/login" class="flex items-center">
+          <a @click="handleLogout" class="flex items-center gap-2">
             <logout-icon></logout-icon>
             <span>Выйти</span>
-          </router-link>
+          </a>
         </li>
         <ThemeSwitcher />
         <li>
-          <router-link to="/colors" class="flex items-center">
+          <router-link to="/colors" class="flex items-center gap-2">
             <circle-icon></circle-icon>
             <span>Цвета</span>
           </router-link>
@@ -69,20 +69,20 @@ import ListIcon from "@/assets/icons/List.vue";
 import LogoutIcon from "@/assets/icons/LogoutIcon.vue";
 import CircleIcon from "@/assets/icons/CircleIcon.vue";
 import MagnifyingGLassIcon from "@/assets/icons/MagnifyingGLassIcon.vue";
-import SearchDrawer from "@/widjets/SearchDrawer.vue";
+// import SearchDrawer from "@/widjets/SearchDrawer.vue";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
 import Bars4Icon from "../assets/icons/Bars4Icon.vue";
-import { useAuthStore } from '@/store/authStore';
 
 const modal = ref(null);
-const searchQuery = ref('');
+const router = useRouter();
 const authStore = useAuthStore();
 
-const handleSearch = async () => {
-  if (searchQuery.value.trim() !== '') {
-    await authStore.getCatalog(searchQuery.value);
-  }
-};
+function handleLogout() {
+  authStore.logout();
+  router.push('/login');
+}
 function closeModal() {
   if (modal.value) {
     modal.value.close();

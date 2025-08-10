@@ -3,10 +3,8 @@ import TrashIcon from "@/assets/icons/TrashIcon.vue";
 import { ref, watch, computed } from "vue";
 import EditDrawer from "@/widjets/EditDrawer.vue";
 import EditIcon from "@/assets/icons/EditIcin.vue";
-import { useCartStore } from '@/stores/cart';
 
-const cartStore = useCartStore();
-const tableData = computed(() => cartStore.products);
+const tableData = computed(() => "");
 
 const selectedRows = ref([]);
 const drawerOpen = ref(false);
@@ -55,14 +53,6 @@ function openEditDrawer(item) {
 function closeDrawer() {
   drawerOpen.value = false;
   editingItem.value = null;
-}
-
-function saveItem(updatedItem) {
-  const index = cartStore.rawProducts.findIndex(item => item.id === updatedItem.id);
-  if (index !== -1) {
-    cartStore.rawProducts[index] = updatedItem;
-  }
-  closeDrawer();
 }
 
 </script>
