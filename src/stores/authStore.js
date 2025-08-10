@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import authService from "@/services/authService";
+import { useFilialStore } from "./filialStore";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -40,6 +41,8 @@ export const useAuthStore = defineStore("auth", {
     },
 
     logout() {
+      const filialStore = useFilialStore();
+      filialStore.resetSelection();
       localStorage.removeItem("x-api-token");
       this.isAuthenticated = false;
       this.first_name = "";

@@ -3,8 +3,10 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import LoginKeyboard from '@/widjets/LoginKeyboard.vue';
 import { useAuthStore } from '@/stores/authStore';
+import { useFilialStore } from '@/stores/filialStore';
 
 const authStore = useAuthStore();
+const filialStore = useFilialStore();
 const router = useRouter();
 
 const login = ref('');
@@ -25,6 +27,7 @@ const handleLogin = async () => {
   const success = await authStore.login(login.value, password.value);
 
   if (success) {
+    await filialStore.fetchPlaces();
     router.push('/');
   } else if (authStore.error) {
     showNotification(authStore.error);
