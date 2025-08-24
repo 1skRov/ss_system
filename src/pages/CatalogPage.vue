@@ -25,7 +25,7 @@ onMounted(async () => {
   <div class="content h-full w-full">
     <div class="filter flex w-full justify-start items-center overflow-x-auto flex-nowrap pb-4 gap-2">
       <button v-for="category in catalogStore.categories" :key="category._id" class="btn btn-sm"
-        style="font-size: 16px;" :class="{ 'btn-active': selectedCategory === category.title }"
+        style="font-size: 16px;" :class="{ 'btn-active': selectedCategory === category._id }"
         @click="selectCategory(category)">
         {{ category.title }}
       </button>

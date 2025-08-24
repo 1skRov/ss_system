@@ -1,47 +1,50 @@
 <template>
   <div class="w-full bg-base-200 p-3 rounded-t-lg-lg flex flex-col gap-2 transition-all duration-300">
     <div class="flex w-full gap-2">
-      <button class="btn btn-primary btn-sm keyboardButton" @click="toggleLanguage">
+      <button class="btn btn-primary btn-sm keyboardButton" @pointerdown="onPointerPress($event, 'TOGGLE_LANG')">
         <GlobeIcon></GlobeIcon>
         {{ currentLanguage.toUpperCase() }}
       </button>
-      <button class="btn btn-primary btn-sm keyboardButton" @click="onClear">Очистить поле</button>
-      <button class="btn btn-error btn-sm keyboardButton" @click="onClose">Закрыть</button>
+      <button class="btn btn-primary btn-sm keyboardButton" @pointerdown="onPointerPress($event, 'CLEAR')">Очистить
+        поле</button>
+      <button class="btn btn-error btn-sm keyboardButton"
+        @pointerdown="onPointerPress($event, 'CLOSE')">Закрыть</button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button v-for="key in processedNumberRow" :key="key" class="btn border border-base-300 numberButton"
-        @click="onKeyPress(key)">
+      <button v-for="key in processedNumberRow" :key="`num-${key}`" type="button"
+        class="btn border border-base-300 numberButton" @pointerdown="onPointerPress($event, key)">{{ key }}</button>
+    </div>
+    <div class="flex w-full gap-1 sm:gap-2">
+      <button v-for="key in processedQwertyRow" :key="`q-${key}`" type="button"
+        class="btn border border-base-300 numberButton" @pointerdown="onPointerPress($event, key)">
         {{ key }}
       </button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button v-for="key in processedQwertyRow" :key="key" class="btn border border-base-300 numberButton"
-        @click="onKeyPress(key)">
+      <button v-for="key in processedAsdfRow" :key="`a-${key}`" type="button"
+        class="btn border border-base-300 numberButton" @pointerdown="onPointerPress($event, key)">
         {{ key }}
       </button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button v-for="key in processedAsdfRow" :key="key" class="btn border border-base-300 numberButton"
-        @click="onKeyPress(key)">
+      <button v-for="key in processedZxcvRow" :key="`z-${key}`" type="button"
+        class="btn border border-base-300 numberButton" @pointerdown="onPointerPress($event, key)">
         {{ key }}
       </button>
     </div>
     <div class="flex w-full gap-1 sm:gap-2">
-      <button v-for="key in processedZxcvRow" :key="key" class="btn border border-base-300 numberButton"
-        @click="onKeyPress(key)">
-        {{ key }}
+      <button type="button" class="btn btn-secondary flex-grow-[2] font-bold text-lg" :class="{ 'btn-active': isCaps }"
+        @pointerdown="onPointerPress($event, 'TOGGLE_CAPS')">
+        <ArrowLongUpIcon /> Caps
       </button>
-    </div>
-    <div class="flex w-full gap-1 sm:gap-2">
-      <button class="btn btn-secondary flex-grow-[2] font-bold text-lg" :class="{ 'btn-active': isCaps }"
-        @click="toggleCaps">
-        <ArrowLongUpIcon></ArrowLongUpIcon> Caps
-      </button>
-      <button class="btn btn-primary flex-grow-[5] font-bold text-lg" @click="onKeyPress(' ')">
+      <button type="button" class="btn btn-primary flex-grow-[5] font-bold text-lg"
+        @pointerdown="onPointerPress($event, ' ')">
         Пробел
       </button>
-      <button class="btn btn-secondary flex-grow-[2] font-bold text-lg" @click="onKeyPress('BACKSPACE')">
-        <Backspaceicon></Backspaceicon>
+
+      <button type="button" class="btn btn-secondary flex-grow-[2] font-bold text-lg"
+        @pointerdown="onPointerPress($event, 'BACKSPACE')">
+        <Backspaceicon />
       </button>
     </div>
   </div>
@@ -56,6 +59,8 @@ import Backspaceicon from "@/assets/icons/Backspaceicon.vue";
 const currentLanguage = ref('ru');
 const isCaps = ref(false);
 const emit = defineEmits(['key-press', 'clear', 'close']);
+const lastFireAt = ref(0);
+const FIRE_GAP = 180;
 
 const layouts = {
   numbers: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -80,6 +85,30 @@ const layouts = {
     zxcv: ['Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю'],
   }
 };
+
+function onPointerPress(e, payload) {
+  e.preventDefault();
+  const now = performance.now();
+  if (now - lastFireAt.value < FIRE_GAP) return;
+  lastFireAt.value = now;
+
+  switch (payload) {
+    case 'TOGGLE_LANG':
+      toggleLanguage();
+      break;
+    case 'TOGGLE_CAPS':
+      toggleCaps();
+      break;
+    case 'CLEAR':
+      onClear();
+      break;
+    case 'CLOSE':
+      onClose();
+      break;
+    default:
+      onKeyPress(payload);
+  }
+}
 
 const processedNumberRow = computed(() => layouts.numbers);
 

@@ -51,6 +51,7 @@ body {
 button,
 .btn {
     transition: background-color 0.2s ease, transform 0.1s ease;
+    touch-action: manipulation;
 
     &:active {
         transform: scale(0.98);
