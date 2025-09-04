@@ -2,16 +2,13 @@ import http from "@/api/http";
 
 class FilialService {
   getPlaces() {
-    const token = localStorage.getItem("x-api-token");
-    return http.post(
-      "/mobile/places",
-      {},
-      {
-        headers: {
-          "X-Api-Token": token,
-        },
-      }
-    );
+    return http.post("/mobile/places", {});
+  }
+  getEmployees() {
+    return http.post("/mobile/waiters", {});
+  }
+  getClients() {
+    return http.post("/mobile/clients", {});
   }
 }
 

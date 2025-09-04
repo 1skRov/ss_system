@@ -8,17 +8,18 @@ const localSelectedFilialId = ref(null);
 const localSelectedKassaId = ref(null);
 
 const kassasForSelectedFilial = computed(() => {
-    if (!localSelectedFilialId.value) return [];
-    return filialStore.kassas.filter(kassa => kassa.stock_id === localSelectedFilialId.value);
+    if (localSelectedFilialId.value == null) return [];
+    const fid = Number(localSelectedFilialId.value);
+    return filialStore.kassas.filter(k => Number(k.stock_id) === fid);
 });
 
 watch(localSelectedFilialId, () => {
     localSelectedKassaId.value = null;
 });
 
-const canConfirm = computed(() => {
-    return localSelectedFilialId.value && localSelectedKassaId.value;
-});
+const canConfirm = computed(() =>
+    !!localSelectedFilialId.value && !!localSelectedKassaId.value
+);
 
 function confirmSelection() {
     if (canConfirm.value) {
@@ -29,30 +30,48 @@ function confirmSelection() {
 
 <template>
     <dialog id="filial_modal" class="modal modal-open">
-        <div class="modal-box">
-            <h3 class="font-bold text-lg mb-5">Выберите филиал и кассу</h3>
-            <div class="form-control w-full flex justify-between">
-                <label class="label">
-                    <span class="label-text">Филиал</span>
+        <div class="modal-box w-1/2">
+            <h3 class="font-bold text-lg mb-5">Для продолжения работы, выберите филиал и кассу</h3>
+            <div class="form-control w-full flex flex-col gap-0.5">
+                <label class="label text-sm">
+                    <span class="label-text">Выберите филиал из списка</span>
                 </label>
-                <select class="select select-bordered select-sm" v-model="localSelectedFilialId">
-                    <option disabled :value="null">Выберите филиал</option>
-                    <option v-for="filial in filialStore.filials" :key="filial._id" :value="filial._id">
+                <select class="select select-bordered select-sm w-full" v-model="localSelectedFilialId">
+                    <option disabled :value="null" class="text-base">Выберите филиал</option>
+                    <option v-for="filial in filialStore.filials" :key="filial._id" :value="Number(filial._id)"
+                        class="text-base">
                         {{ filial.title }}
                     </option>
                 </select>
             </div>
 
-            <div class="form-control w-full mt-4 flex justify-between">
+            <div class="form-control w-full mt-4 flex flex-col gap-0.5">
                 <label class="label">
-                    <span class="label-text">Касса</span>
+                    <span class="label-text">Выберите кассу из списка</span>
                 </label>
-                <select class="select select-bordered select-sm" v-model="localSelectedKassaId"
+                <select class="select select-bordered select-sm w-full" v-model="localSelectedKassaId"
                     :disabled="!localSelectedFilialId">
-                    <option disabled :value="null">Выберите кассу</option>
-                    <option v-for="kassa in kassasForSelectedFilial" :key="kassa._id" :value="kassa._id">
+                    <option disabled :value="null" class="text-base">Выберите кассу</option>
+                    <option v-for="kassa in kassasForSelectedFilial" :key="kassa._id" :value="Number(kassa._id)"
+                        class="text-base">
                         {{ kassa.title }}
                     </option>
+                </select>
+            </div>
+            <div class="form-control w-full mt-4 flex flex-col gap-0.5">
+                <label class="label">
+                    <span class="label-text">Выберите сотрудника из списка</span>
+                </label>
+                <select class="select select-bordered select-sm w-full">
+                    <option disabled :value="null" class="text-base">Выберите сотрудника</option>
+                </select>
+            </div>
+            <div class="form-control w-full mt-4 flex flex-col gap-0.5">
+                <label class="label">
+                    <span class="label-text">Выберите клиента из списка</span>
+                </label>
+                <select class="select select-bordered select-sm w-full">
+                    <option disabled :value="null" class="text-base">Выберите клиента</option>
                 </select>
             </div>
 
@@ -64,8 +83,4 @@ function confirmSelection() {
         </div>
     </dialog>
 </template>
-<style lang="scss" scoped>
-.label {
-    font-size: 20px;
-}
-</style>
+<style lang="scss" scoped></style>

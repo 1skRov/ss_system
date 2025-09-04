@@ -39,9 +39,9 @@
   --color-error-content: #ffffff;
 
   /* Скругления */
-  --radius-selector: 1rem;
-  --radius-field: 1rem;
-  --radius-box: 1rem;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
 
   /* Размеры */
   --size-selector: 0.5rem;

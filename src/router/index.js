@@ -43,14 +43,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  const isAuthenticated = localStorage.getItem("x-api-token");
-
-  if (to.name !== "Login" && !isAuthenticated) {
-    authStore.logout();
-    next({ name: "Login" });
-  } else {
-    next();
-  }
+  const requiresAuth = to.matched.some((r) => r.meta?.requiresAuth);
+  const hasToken = !!localStorage.getItem("x-api-token");
+  if (requiresAuth && !hasToken) next({ name: "Login" });
+  else next();
 });
 export default router;

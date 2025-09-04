@@ -3,8 +3,8 @@ import filialService from "@/services/filialService";
 
 export const useFilialStore = defineStore("filial", {
   state: () => ({
-    filials: [], // Для place_types
-    kassas: [], // Для places
+    filials: [],
+    kassas: [],
     error: null,
     needsSelection: false,
     selectedFilialId: null,
@@ -37,10 +37,28 @@ export const useFilialStore = defineStore("filial", {
     checkExistingSelection() {
       const filialId = localStorage.getItem("selectedFilialId");
       const kassaId = localStorage.getItem("selectedKassaId");
-      if (filialId && kassaId) {
+
+      if (!filialId || !kassaId) {
+        this.needsSelection = true;
+        return;
+      }
+
+      const hasFilial = this.filials.some(
+        (f) => String(f._id) === String(filialId)
+      );
+      const hasKassa = this.kassas.some(
+        (k) =>
+          String(k._id) === String(kassaId) &&
+          String(k.stock_id) === String(filialId)
+      );
+
+      if (hasFilial && hasKassa) {
         this.selectedFilialId = filialId;
         this.selectedKassaId = kassaId;
         this.needsSelection = false;
+      } else {
+        this.resetSelection();
+        this.needsSelection = true;
       }
     },
 
