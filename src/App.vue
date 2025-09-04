@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted } from 'vue'
-import { useFilialStore } from '@/stores/filialStore'
-import FilialSelectionModal from './widjets/FilialSelectionModal.vue'
+import { onMounted } from "vue";
+import { useFilialStore } from "@/stores/filialStore";
+import FilialSelectionModal from "./widjets/FilialSelectionModal.vue";
 const filialStore = useFilialStore();
 onMounted(async () => {
   await filialStore.fetchPlaces();
