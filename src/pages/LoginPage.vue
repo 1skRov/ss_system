@@ -1,28 +1,50 @@
 <script setup>
+import { ref, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
 import LoginKeyboard from '@/widjets/LoginKeyboard.vue';
 import { useAuthStore } from '@/stores/authStore';
 import { useFilialStore } from '@/stores/filialStore';
-import AlertIcon from '@/assets/icons/AlertIcon.vue';
-
+import InputComponent from '@/components/UiComponents/InputComponent.vue';
+import UserIcon from '@/assets/icons/UserIcon.vue';
+import LockClosedIcon from '@/assets/icons/LockClosedIcon.vue';
 const authStore = useAuthStore();
 const filialStore = useFilialStore();
 const router = useRouter();
-
 const login = ref('');
 const password = ref('');
 const activeInput = ref(null);
 const showKeyboard = ref(false);
 
-const notification = ref({ show: false, message: '', type: 'error' });
+const notification = ref({
+  show: false,
+  type: 'error',
+  title: 'Ошибка',
+  message: ''
+});
 
-const showNotification = (message, duration = 3000) => {
-  notification.value = { show: true, message, type: 'error' };
-  setTimeout(() => {
-    notification.value.show = false;
-  }, duration);
+let notifyTimer = null;
+
+const showNotification = (message, { type = 'error', title, duration = 3000 } = {}) => {
+  if (notifyTimer) clearTimeout(notifyTimer);
+  notification.value = {
+    show: true,
+    type,
+    title: title ?? (type === 'error' ? 'Ошибка' : 'Сообщение'),
+    message
+  };
+  if (duration) {
+    notifyTimer = setTimeout(() => (notification.value.show = false), duration);
+  }
 };
+
+const closeNotification = () => {
+  notification.value.show = false;
+  if (notifyTimer) clearTimeout(notifyTimer);
+};
+
+onUnmounted(() => {
+  if (notifyTimer) clearTimeout(notifyTimer);
+});
 
 const handleLogin = async () => {
   const success = await authStore.login(login.value, password.value);
@@ -31,11 +53,10 @@ const handleLogin = async () => {
     await filialStore.fetchPlaces();
     router.push('/');
   } else if (authStore.error) {
-    showNotification(authStore.error);
+    showNotification(authStore.error, { type: 'error', title: 'Ошибка входа' });
     password.value = '';
   }
 };
-
 
 const setActiveInput = (inputName) => {
   activeInput.value = inputName;
@@ -44,23 +65,15 @@ const setActiveInput = (inputName) => {
 
 const handleKeyPress = (key) => {
   if (!activeInput.value) return;
-
   const target = activeInput.value === 'login' ? login : password;
-
-  if (key === 'BACKSPACE') {
-    target.value = target.value.slice(0, -1);
-  } else {
-    target.value += key;
-  }
+  if (key === 'BACKSPACE') target.value = target.value.slice(0, -1);
+  else target.value += key;
 };
 
 const handleClear = () => {
   if (!activeInput.value) return;
-  if (activeInput.value === 'login') {
-    login.value = '';
-  } else {
-    password.value = '';
-  }
+  if (activeInput.value === 'login') login.value = '';
+  else password.value = '';
 };
 
 const handleClose = () => {
@@ -70,18 +83,37 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col items-center justify-center">
-    <div v-if="notification.show" class="alert alert-danger" role="alert">
-      <div class="alert-icon">
-        <AlertIcon />
+  <div class="flex flex-col items-center justify-center w-full h-full">
+    <div class="flex flex-col justify-center w-full">
+      <p class="text-blue-600 font-bold text-3xl text-center">SSS</p>
+      <p class="text-xs text-blue-600 text-center">Вход в систему</p>
+    </div>
+
+    <div class="flex flex-col gap-3 p-10">
+      <div>
+        <label for="username" class="block text-sm text-gray-500 mb-2">Логин</label>
+        <input-component v-model="login" placeholder="Введите логин" input-type="text">
+          <template #icon>
+            <user-icon class="text-gray-400/70"></user-icon>
+          </template>
+        </input-component>
       </div>
       <div>
-        <h4 class="alert-heading">Ошибка</h4>
-        <div class="alert-description">
-          {{ notification.message }}
-        </div>
+        <label for="username" class="block text-sm text-gray-500 mb-2">Пароль</label>
+        <input-component v-model="password" placeholder="Введите пароль" input-type="password">
+          <template #icon>
+            <lock-closed-icon class="text-gray-400/70"></lock-closed-icon>
+          </template>
+        </input-component>
       </div>
+      <button
+        class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+        Войти
+      </button>
     </div>
+  </div>
+
+  <!-- <div class="w-full h-full flex flex-col items-center justify-center">
     <div class="flex-grow flex flex-col justify-center items-center max-w-md w-full">
       <h1 class="text-3xl font-bold mb-4 text-primary">Вход в систему</h1>
       <div :class="['w-full', showKeyboard ? 'flex gap-2 items-end' : '']">
@@ -104,7 +136,7 @@ const handleClose = () => {
     <div class="w-full" v-if="showKeyboard">
       <LoginKeyboard @key-press="handleKeyPress" @clear="handleClear" @close="handleClose" />
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style scoped lang="scss">

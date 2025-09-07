@@ -1,5 +1,4 @@
 import { createApp } from "vue";
-import "@tabler/core/dist/css/tabler.min.css";
 import "./styles/index.css";
 import "./styles/style.scss";
 import App from "./App.vue";
