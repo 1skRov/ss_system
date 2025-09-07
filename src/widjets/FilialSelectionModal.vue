@@ -1,11 +1,21 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { useFilialStore } from '@/stores/filialStore';
+import { ref, computed, watch, onMounted } from "vue";
+import { useFilialStore } from "@/stores/filialStore";
 
 const filialStore = useFilialStore();
 
-const localSelectedFilialId = ref(null);
-const localSelectedKassaId = ref(null);
+const localSelectedFilialId = ref(filialStore.selectedFilialId ? Number(filialStore.selectedFilialId) : null);
+const localSelectedKassaId = ref(filialStore.selectedKassaId ? Number(filialStore.selectedKassaId) : null);
+const localSelectedEmployeeId = ref(filialStore.selectedEmployeeId ? Number(filialStore.selectedEmployeeId) : null);
+const localSelectedClientId = ref(filialStore.selectedClientId || null);
+
+onMounted(async () => {
+    if (!filialStore.employees.length) await filialStore.fetchEmployees(0);
+    if (!filialStore.clients.length) await filialStore.fetchClients();
+    filialStore.checkExistingSelection();
+    if (filialStore.selectedEmployeeId) localSelectedEmployeeId.value = Number(filialStore.selectedEmployeeId);
+    if (filialStore.selectedClientId) localSelectedClientId.value = Number(filialStore.selectedClientId);
+});
 
 const kassasForSelectedFilial = computed(() => {
     if (localSelectedFilialId.value == null) return [];
@@ -18,20 +28,36 @@ watch(localSelectedFilialId, () => {
 });
 
 const canConfirm = computed(() =>
-    !!localSelectedFilialId.value && !!localSelectedKassaId.value
+    !!localSelectedFilialId.value &&
+    !!localSelectedKassaId.value &&
+    !!localSelectedEmployeeId.value
 );
 
+function fullName(u) {
+    const f = u?.first_name || "";
+    const l = u?.last_name || "";
+    const name = `${f} ${l}`.trim();
+    return name || u?.phone || `ID ${u?._id}`;
+}
+
 function confirmSelection() {
-    if (canConfirm.value) {
-        filialStore.setFilialAndKassa(localSelectedFilialId.value, localSelectedKassaId.value);
-    }
+    if (!canConfirm.value) return;
+
+    filialStore.setFilialAndKassa(
+        Number(localSelectedFilialId.value),
+        Number(localSelectedKassaId.value)
+    );
+
+    filialStore.setEmployee(Number(localSelectedEmployeeId.value));
+
+    filialStore.setClient(localSelectedClientId.value ? Number(localSelectedClientId.value) : null);
 }
 </script>
 
 <template>
     <dialog id="filial_modal" class="modal modal-open">
         <div class="modal-box w-1/2">
-            <h3 class="font-bold text-lg mb-5">Для продолжения работы, выберите филиал и кассу</h3>
+
             <div class="form-control w-full flex flex-col gap-0.5">
                 <label class="label text-sm">
                     <span class="label-text">Выберите филиал из списка</span>
@@ -58,20 +84,29 @@ function confirmSelection() {
                     </option>
                 </select>
             </div>
+
             <div class="form-control w-full mt-4 flex flex-col gap-0.5">
                 <label class="label">
                     <span class="label-text">Выберите сотрудника из списка</span>
                 </label>
-                <select class="select select-bordered select-sm w-full">
+                <select class="select select-bordered select-sm w-full" v-model="localSelectedEmployeeId">
                     <option disabled :value="null" class="text-base">Выберите сотрудника</option>
+                    <option v-for="emp in filialStore.employees" :key="emp._id" :value="Number(emp._id)"
+                        class="text-base">
+                        {{ fullName(emp) }}
+                    </option>
                 </select>
             </div>
+
             <div class="form-control w-full mt-4 flex flex-col gap-0.5">
                 <label class="label">
-                    <span class="label-text">Выберите клиента из списка</span>
+                    <span class="label-text">Выберите клиента из списка (необязательно)</span>
                 </label>
-                <select class="select select-bordered select-sm w-full">
-                    <option disabled :value="null" class="text-base">Выберите клиента</option>
+                <select class="select select-bordered select-sm w-full" v-model="localSelectedClientId">
+                    <option :value="null" class="text-base">Без клиента</option>
+                    <option v-for="cl in filialStore.clients" :key="cl._id" :value="Number(cl._id)" class="text-base">
+                        {{ fullName(cl) }}
+                    </option>
                 </select>
             </div>
 
@@ -83,4 +118,3 @@ function confirmSelection() {
         </div>
     </dialog>
 </template>
-<style lang="scss" scoped></style>

@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import LoginKeyboard from '@/widjets/LoginKeyboard.vue';
 import { useAuthStore } from '@/stores/authStore';
 import { useFilialStore } from '@/stores/filialStore';
+import AlertIcon from '@/assets/icons/AlertIcon.vue';
 
 const authStore = useAuthStore();
 const filialStore = useFilialStore();
@@ -69,10 +70,16 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col items-center bg-base-100">
-    <div class="toast toast-top toast-center z-50">
-      <div v-if="notification.show" class="alert alert-error">
-        <span>{{ notification.message }}</span>
+  <div class="w-full h-full flex flex-col items-center justify-center">
+    <div v-if="notification.show" class="alert alert-danger" role="alert">
+      <div class="alert-icon">
+        <AlertIcon />
+      </div>
+      <div>
+        <h4 class="alert-heading">Ошибка</h4>
+        <div class="alert-description">
+          {{ notification.message }}
+        </div>
       </div>
     </div>
     <div class="flex-grow flex flex-col justify-center items-center max-w-md w-full">

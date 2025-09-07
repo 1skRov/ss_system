@@ -4,8 +4,8 @@ class FilialService {
   getPlaces() {
     return http.post("/mobile/places", {});
   }
-  getEmployees() {
-    return http.post("/mobile/waiters", {});
+  getEmployees(orderId) {
+    return http.post("/mobile/waiters", { order_id: orderId });
   }
   getClients() {
     return http.post("/mobile/clients", {});

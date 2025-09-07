@@ -30,11 +30,6 @@ const routes = [
     name: "Login",
     component: () => import("@/pages/LoginPage.vue"),
   },
-  {
-    path: "/colors",
-    name: "Colors",
-    component: () => import("@/pages/ColorsInfoPage.vue"),
-  },
 ];
 
 const router = createRouter({
