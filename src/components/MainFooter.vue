@@ -1,106 +1,49 @@
-<script setup>
-// import QuickItems from "@/widjets/QuickItems.vue";
-import { ref } from "vue";
-import PaymentDrawer from "@/widjets/PaymentDrawer.vue";
-
-const quickItems = ref(false);
-const payDrawer = ref(false);
-
-</script>
+<script setup></script>
 <template>
-  <footer class="bg-base-300 p-2 footer flex justify-between">
-    <div class="footer-add-buttons flex fex-col flex-wrap justify-between h-full">
-      <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium">
-        Закрыть заказ
-      </button>
-      <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium"
-        @click="deferCurrentOrder">
-        Добавить в отложку
-      </button>
-      <div class="drawer drawer-end">
-        <input id="quick-item-drawer" type="checkbox" class="drawer-toggle" v-model="quickItems" />
-        <div class="drawer-content">
-          <button class="w-full btn btn-secondary text-white text-3xl add-button-footer font-medium"
-            @click="quickItems = true">
-            Быстрые товары
-          </button>
-        </div>
-        <div class="drawer-side" @click.self="quickItems = false">
-          <label for="quick-item-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-          <div style="width: 70vw" class="bg-base-100 min-h-full">
-            <QuickItems @close="quickItems = false"></QuickItems>
-          </div>
-        </div>
-      </div>
+  <footer class="p-2 flex justify-between" style="background-color: #dfe5ff">
+    <div class="flex flex-col gap-2 w-1/3">
+      <button class="button blue-button py-4 px-3">Быстрые товары</button
+      ><button class="button blue-button py-4 px-3" @click="deferCurrentOrder">
+        Добавить в отложку</button
+      ><button class="button blue-button py-4 px-3">Закрыть заказ</button>
     </div>
-    <div class="footer-pay-panel h-full flex flex-col">
-      <div class="total-panel w-full h-full bg-base-100 p-3 rounded flex flex-col gap-3">
-        <div class="flex justify-between mb-2">
-          <h1>Итого</h1>
-          <h1>123</h1>
+    <div class="flex gap-3">
+      <div
+        class="rounded-lg bg-white h-full p-2 flex flex-col justify-around"
+        style="min-height: 150px; width: 400px"
+      >
+        <div class="flex items-center w-full justify-between">
+          <p class="label">Итого</p>
+          <p class="value">123</p>
         </div>
-        <div class="flex justify-between">
-          <p>Внесено</p>
-          <p>123</p>
+        <div class="flex items-center w-full justify-between">
+          <p class="label">Внесено</p>
+          <p class="value">123</p>
         </div>
-        <div class="flex justify-between">
-          <p>Сдача</p>
-          <p>123</p>
+        <div class="flex items-center w-full justify-between">
+          <p class="label">Сдача</p>
+          <p class="value">123</p>
         </div>
-        <div class="flex justify-between mt-2">
-          <p>Общий чек</p>
-          <p>1234</p>
-        </div>
-      </div>
-      <div class="drawer drawer-end">
-        <input id="payment-drawer" type="checkbox" class="drawer-toggle" v-model="payDrawer" />
-        <div class="drawer-content">
-          <button class="w-full btn btn-success text-3xl pay-button" @click="payDrawer = true">
-            Оплатить
-          </button>
-        </div>
-        <div class="drawer-side" @click.self="payDrawer = false">
-          <label for="payment-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-          <div style="width: 70vw" class="bg-base-100 min-h-full">
-            <PaymentDrawer />
-          </div>
+        <div class="flex items-center w-full justify-between">
+          <p class="label">Общий чек</p>
+          <p class="value">1234</p>
         </div>
       </div>
+      <button class="button green-button px-4" style="font-size: 22px">
+        Оплатить
+      </button>
     </div>
   </footer>
 </template>
 <style lang="scss" scoped>
-.footer {
-  min-height: 26vh;
-
-  .footer-add-buttons {
-    min-width: 300px;
-    width: 35%;
-
-    .add-button-footer {
-      min-height: 70px;
-    }
-  }
-
-  .footer-pay-panel {
-    min-width: 250px;
-    width: 35%;
-
-    .total-panel {
-      h1 {
-        font-size: 32px;
-        font-weight: bold;
-      }
-
-      p {
-        font-size: 24px;
-      }
-    }
-
-    .pay-button {
-      min-height: 70px;
-    }
-  }
-
+.label {
+  font-size: 20px;
+  font-weight: 500;
+  color: #000000;
+}
+.value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000000;
 }
 </style>

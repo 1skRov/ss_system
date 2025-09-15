@@ -102,7 +102,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
-import SearchDrawer from '@/widjets/SearchDrawer.vue'
+import SearchDrawer from '@/components/SearchDrawer.vue'
 import InputComponent from '@/components/UiComponents/InputComponent.vue'
 
 import CatalogIcon from '@/assets/icons/Catalog.vue'
