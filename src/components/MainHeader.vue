@@ -15,24 +15,21 @@
     <div
       class="flex overflow-hidden border border-gray-200 rounded-lg py-1 mx-auto"
     >
-      <button class="head-btn">
-        <router-link to="/table-page" class="flex items-center gap-3">
-          <ListIcon />
-          <span>Заказ</span>
-        </router-link>
-      </button>
-      <button class="head-btn">
-        <router-link to="/catalog" class="flex items-center gap-3">
-          <CatalogIcon />
-          <span>Каталог</span>
-        </router-link>
-      </button>
-      <button class="head-btn">
-        <router-link to="/deferred-products" class="flex items-center gap-3">
-          <BarsDownIcon />
-          <span>Отложки</span>
-        </router-link>
-      </button>
+      <router-link to="/table-page" class="head-btn flex items-center gap-3">
+        <ListIcon />
+        <span>Заказ</span>
+      </router-link>
+      <router-link to="/catalog" class="head-btn flex items-center gap-3">
+        <CatalogIcon />
+        <span>Каталог</span>
+      </router-link>
+      <router-link
+        to="/deferred-products"
+        class="head-btn flex items-center gap-3"
+      >
+        <BarsDownIcon />
+        <span>Отложки</span>
+      </router-link>
     </div>
 
     <div class="relative inline-block">
@@ -146,8 +143,10 @@ function openModal() {
   font-size: 1rem;
   font-weight: 500;
   color: black;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
+
+  .router-link-exact-active {
+    background-color: #dfe6f4;
+    color: #4378de;
+  }
 }
 </style>
