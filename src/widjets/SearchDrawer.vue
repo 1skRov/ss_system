@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import LoginKeyboard from './LoginKeyboard.vue';
+import LoginKeyboard from '@/components/LoginKeyboard.vue';
 import { useCatalogStore } from '@/stores/catalogStore';
 import ProductCard from "@/components/ProductCard.vue";
 const catalogStore = useCatalogStore();
