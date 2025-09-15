@@ -4,7 +4,7 @@ import GlobeIcon from '@/assets/icons/GlobeIcon.vue'
 import ArrowLongUpIcon from '@/assets/icons/ArrowLongUpIcon.vue'
 import Backspaceicon from '@/assets/icons/Backspaceicon.vue'
 
-const emit = defineEmits(['key-press', 'clear'])
+const emit = defineEmits(['key-press', 'clear', 'submit'])
 
 const currentLanguage = ref('ru')
 const isCaps = ref(false)
@@ -57,6 +57,9 @@ function fire(payload) {
     case 'CLEAR':
       emit('clear')
       break
+    case 'SUBMIT':
+      emit('submit')
+      break
     default:
       emit('key-press', payload)
   }
@@ -91,7 +94,7 @@ function onUp() {
         type="button"
         class="button light-button"
         :class="{ 'is-pressed': pressedKey === key }"
-        @pointerdown.stop="onDown(key)"
+        @pointerdown.stop.prevent="onDown(key)"
         @pointerup="onUp"
         @pointerleave="onUp"
         @pointercancel="onUp"
@@ -108,7 +111,7 @@ function onUp() {
         type="button"
         class="button light-button"
         :class="{ 'is-pressed': pressedKey === key }"
-        @pointerdown.stop="onDown(key)"
+        @pointerdown.stop.prevent="onDown(key)"
         @pointerup="onUp"
         @pointerleave="onUp"
         @pointercancel="onUp"
@@ -125,7 +128,7 @@ function onUp() {
         type="button"
         class="button light-button"
         :class="{ 'is-pressed': pressedKey === key }"
-        @pointerdown.stop="onDown(key)"
+        @pointerdown.stop.prevent="onDown(key)"
         @pointerup="onUp"
         @pointerleave="onUp"
         @pointercancel="onUp"
@@ -142,7 +145,7 @@ function onUp() {
         type="button"
         class="button light-button"
         :class="{ 'is-pressed': pressedKey === key }"
-        @pointerdown.stop="onDown(key)"
+        @pointerdown.stop.prevent="onDown(key)"
         @pointerup="onUp"
         @pointerleave="onUp"
         @pointercancel="onUp"
@@ -158,7 +161,7 @@ function onUp() {
           type="button"
           class="button gray-button w-full flex gap-3 justify-center items-center px-5"
           :class="{ 'is-pressed': pressedKey === 'TOGGLE_CAPS' }"
-          @pointerdown.stop="onDown('TOGGLE_CAPS')"
+          @pointerdown.stop.prevent="onDown('TOGGLE_CAPS')"
           @pointerup="onUp"
           @pointerleave="onUp"
           @pointercancel="onUp"
@@ -169,7 +172,7 @@ function onUp() {
           type="button"
           class="button gray-button w-full flex gap-3 justify-center items-center px-5"
           :class="{ 'is-pressed': pressedKey === 'TOGGLE_LANG' }"
-          @pointerdown.stop="onDown('TOGGLE_LANG')"
+          @pointerdown.stop.prevent="onDown('TOGGLE_LANG')"
           @pointerup="onUp"
           @pointerleave="onUp"
           @pointercancel="onUp"
@@ -182,25 +185,37 @@ function onUp() {
         type="button"
         class="button gray-button w-full"
         :class="{ 'is-pressed': pressedKey === ' ' }"
-        @pointerdown.stop="onDown(' ')"
+        @pointerdown.stop.prevent="onDown(' ')"
         @pointerup="onUp"
         @pointerleave="onUp"
         @pointercancel="onUp"
       >
         Пробел
       </button>
-
-      <button
-        type="button"
-        class="button gray-button w-full flex gap-3 justify-center items-center"
-        :class="{ 'is-pressed': pressedKey === 'BACKSPACE' }"
-        @pointerdown.stop="onDown('BACKSPACE')"
-        @pointerup="onUp"
-        @pointerleave="onUp"
-        @pointercancel="onUp"
-      >
-        <Backspaceicon />
-      </button>
+      <div class="w-1/3 flex gap-2">
+        <button
+          type="button"
+          class="button gray-button w-full flex gap-3 justify-center items-center"
+          :class="{ 'is-pressed': pressedKey === 'BACKSPACE' }"
+          @pointerdown.stop.prevent="onDown('BACKSPACE')"
+          @pointerup="onUp"
+          @pointerleave="onUp"
+          @pointercancel="onUp"
+        >
+          <Backspaceicon />
+        </button>
+        <button
+          type="button"
+          class="button green-button w-full flex gap-3 justify-center items-center"
+          :class="{ 'is-pressed': pressedKey === 'SUBMIT' }"
+          @pointerdown.stop.prevent="onDown('SUBMIT')"
+          @pointerup="onUp"
+          @pointerleave="onUp"
+          @pointercancel="onUp"
+        >
+          OK
+        </button>
+      </div>
     </div>
   </div>
 </template>

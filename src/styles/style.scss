@@ -73,11 +73,12 @@ body {
 
 .red-button {
     color: #fff;
-    background-color: #dc2626; // bg-red-600
+    background-color: #fb5a7c;
+}
 
-    &:focus {
-        border-color: #dc2626;
-    }
+.green-button {
+    color: #fff;
+    background-color: #1ab1b0;
 }
 
 .light-button {

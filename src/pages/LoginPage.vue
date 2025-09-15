@@ -106,29 +106,15 @@ const handleClear = () => {
             </template>
           </InputComponent>
         </div>
-
-        <button
-          v-for="key in processedNumberRow"
-          :key="`num-${key}`"
-          type="button"
-          class="button light-button"
-          :class="{ 'is-pressed': pressedKey === key }"
-          :tabindex="-1"
-          @mousedown.prevent
-          @touchstart.prevent
-          @pointerdown.stop.prevent="onDown(key)"
-          @pointerup.prevent="onUp"
-          @touchend.prevent="onUp"
-          @pointerleave="onUp"
-          @pointercancel="onUp"
-        >
-          {{ key }}
-        </button>
       </div>
     </div>
 
     <div class="w-full">
-      <LoginKeyboard @key-press="handleKeyPress" @clear="handleClear" />
+      <LoginKeyboard
+        @key-press="handleKeyPress"
+        @clear="handleClear"
+        @submit="handleLogin"
+      />
     </div>
   </div>
 </template>
