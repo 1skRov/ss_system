@@ -1,141 +1,86 @@
 <script setup>
-import TrashIcon from "@/assets/icons/TrashIcon.vue";
-import { ref, watch, computed } from "vue";
-import EditDrawer from "@/widjets/EditDrawer.vue";
-import EditIcon from "@/assets/icons/EditIcin.vue";
-
-const tableData = computed(() => "");
-
-const selectedRows = ref([]);
-const drawerOpen = ref(false);
-const editingItem = ref(null);
-
-const allSelected = computed({
-  get: () => {
-    return tableData.value.length > 0 && selectedRows.value.length === tableData.value.length;
-  },
-  set: (value) => {
-    if (value) {
-      selectedRows.value = tableData.value.map(item => item.id);
-    } else {
-      selectedRows.value = [];
-    }
-  }
-});
-
-function toggleRow(id) {
-  if (selectedRows.value.includes(id)) {
-    selectedRows.value = selectedRows.value.filter(rowId => rowId !== id);
-  } else {
-    selectedRows.value.push(id);
-  }
-}
-
-function isSelected(id) {
-  return selectedRows.value.includes(id);
-}
-
-function deleteSelectedRows() {
-  cartStore.deleteSelectedProducts(selectedRows.value);
-  selectedRows.value = [];
-}
-
-function deleteRow(id) {
-  cartStore.deleteProduct(id);
-  selectedRows.value = selectedRows.value.filter(rowId => rowId !== id);
-}
-
-function openEditDrawer(item) {
-  editingItem.value = { ...item };
-  drawerOpen.value = true;
-}
-
-function closeDrawer() {
-  drawerOpen.value = false;
-  editingItem.value = null;
-}
-
+import TrashIcon from '@/assets/icons/TrashIcon.vue'
+import Bar3Icon from '@/assets/icons/Bars3Icon.vue'
 </script>
 
 <template>
-  <div class="drawer drawer-end">
-    <input id="my-drawer-4" type="checkbox" class="drawer-toggle" v-model="drawerOpen" />
-    <div class="drawer-content">
-    </div>
-    <div class="drawer-side" @click.self="drawerOpen = false">
-      <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-      <div style="width: 70vw" class="bg-base-100 min-h-full px-3 py-4">
-        <EditDrawer v-if="editingItem" :item="editingItem" @save="saveItem" @cancel="closeDrawer"></EditDrawer>
-      </div>
-    </div>
-  </div>
-  <div class="w-full h-full flex flex-col gap-2">
-    <div class="flex items-center justify-between h-10 min-h-10">
-      <p class="text-base">Выбрано - {{ selectedRows.length }}</p>
-      <button class="btn btn-error text-base text-red-100" @click="deleteSelectedRows"
-        :disabled="selectedRows.length === 0">
-        <trash-icon />
-        Удалить
+  <section class="p-2 w-full h-full">
+    <!-- actions -->
+    <div class="flex items-center justify-between">
+      <button
+        class="border border-blue-200 bg-blue-100 text-blue-800 text-base font-medium rounded-lg flex gap-3 items-center px-3 py-2"
+      >
+        <Bar3Icon />
+        <span>Выбрать все 13 товаров</span>
+      </button>
+      <button
+        class="button red-button text-sm px-3 py-2 flex items-center gap-2"
+      >
+        <trash-icon></trash-icon>Удалить выбранные
       </button>
     </div>
-    <div class="rounded-box border border-base-content/20 bg-base-100 overflow-y-auto">
-      <table class="table">
-        <thead>
+    <!-- table -->
+    <div class="overflow-hidden border border-gray-200 rounded-lg mt-2">
+      <table class="min-w-full divide-y divide-gray-300">
+        <thead class="bg-gray-50">
           <tr>
-            <th>
-              <label>
-                <input type="checkbox" class="checkbox" v-model="allSelected" />
-              </label>
+            <th scope="col" class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                class="text-blue-500 border-gray-300 rounded w-4 h-4"
+              />Название
             </th>
-            <th>Название</th>
-            <th>Количество</th>
-            <th>Цена</th>
-            <th>Скидка</th>
-            <th>Итого</th>
-            <th>Действие</th>
+            <th scope="col">Количество</th>
+            <th scope="col" style="width: 160px">Цена</th>
+            <th scope="col" style="width: 100px">Скидка</th>
+            <th scope="col">Итого</th>
+            <th scope="col" style="width: 90px">Действие</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="item in tableData" :key="item.id" :class="{ 'bg-base-200': isSelected(item.id) }" class="text-lg">
-            <th>
-              <label>
-                <input type="checkbox" class="checkbox" :checked="isSelected(item.id)"
-                  @click.stop="toggleRow(item.id)" />
-              </label>
-            </th>
-            <td @click="toggleRow(item.id)" class="min-w-[200px] ">
-              {{ item.name }}
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr>
+            <td class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                class="text-blue-500 border-gray-300 rounded w-4 h-4"
+              />название 1asdasdasdasda
             </td>
-            <td>
-              {{ item.quantity }}
+            <td class="text-center" style="width: 130px">10</td>
+            <td style="width: 160px">12000</td>
+            <td class="flex items-center justify-center" style="width: 100px">
+              <p
+                class="whitespace-nowrap flex items-center justify-center text-blue-600 bg-blue-100 rounded-full px-2 py-1 font-medium"
+              >
+                5 %
+              </p>
             </td>
-            <td>
-              {{ item.price.toFixed(2) }}
+            <td>15000</td>
+            <td
+              style="width: 90px"
+              class="flex items-center justify-center text-red-500"
+            >
+              <trash-icon></trash-icon>
             </td>
-            <td>
-              <div class="flex items-center justify-between gap-2">
-                {{ item.discount }}
-                <div :class="['badge', item.discountType === 'percent' ? 'badge-warning' : 'badge-info']"
-                  v-show="item.discount > 0">
-                  {{ item.discountType === 'percent' ? '%' : '₸' }}
-                </div>
-              </div>
-            </td>
-            <td>
-              {{ item.total.toFixed(2) }}
-            </td>
-            <th>
-              <div class="flex"></div>
-              <button class="btn btn-error" @click.stop="deleteRow(item.id)">
-                <trash-icon class="text-white" />
-              </button>
-              <button class="btn btn-info ml-2" @click="openEditDrawer(item)">
-                <edit-icon class="text-white" />
-              </button>
-            </th>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
+  </section>
 </template>
+<style scoped lang="scss">
+table {
+  th {
+    padding: 15px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    color: black;
+  }
+  td {
+    padding: 16px;
+    font-size: 0.875rem;
+    white-space: wrap;
+    min-width: 90px;
+  }
+}
+</style>
