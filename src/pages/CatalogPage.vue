@@ -25,17 +25,15 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col h-full w-full">
-    <!-- Категории: не скроллится -->
     <div
-      class="shrink-0 flex items-center overflow-x-auto flex-nowrap pb-4 gap-2"
+      class="shrink-0 flex items-center overflow-x-auto flex-nowrap pb-2 gap-2"
     >
       <button
         v-for="category in catalogStore.categories"
         :key="category._id"
         class="bg-gray-50 border border-gray-300 rounded-lg text-sm whitespace-nowrap px-4 py-2 flex items-center gap-2 font-medium"
         :class="{
-          'bg-indigo-200 text-indigo-800 border-indigo-300 border-2':
-            selectedCategory === category._id,
+          active: selectedCategory === category._id,
         }"
         @click="selectCategory(category)"
       >
@@ -43,19 +41,23 @@ onMounted(async () => {
       </button>
     </div>
 
-    <!-- Основная зона: слева скроллится только список, справа сайдбар фиксированной ширины -->
-    <div class="flex flex-1 min-h-0 w-full">
-      <!-- Список товаров: единственный вертикальный скролл -->
+    <div class="flex flex-1 min-h-0 w-full mt-2">
       <div class="flex-1 min-w-0 overflow-y-auto pr-2">
-        <div class="flex flex-wrap w-full gap-x-1 gap-y-3">
+        <div class="flex flex-wrap w-full gap-3">
           <ProductCard v-for="item in products" :key="item._id" :item="item" />
         </div>
       </div>
-
-      <!-- Сайдбар: не скроллится -->
       <div class="w-[325px] shrink-0 overflow-y-hidden">
         <CatalogSidebar />
       </div>
     </div>
   </div>
 </template>
+<style scoped lang="scss">
+.active {
+  background: #2f6bdc;
+  border: transparent;
+  color: white;
+  font-weight: 600;
+}
+</style>

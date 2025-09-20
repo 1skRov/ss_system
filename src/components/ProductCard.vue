@@ -1,6 +1,6 @@
 <script setup>
 import Image from '@/assets/icons/Image.vue'
-import { ref, watch, computed } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
   item: {
@@ -15,12 +15,54 @@ const imageUrl = computed(() => {
   if (props.item.photo) {
     return `${VITE_API_BASE_URL}${props.item.photo}`
   }
-  return 'https://via.placeholder.com/150'
+  return null
 })
 </script>
 
 <template>
-  <div
+  <article
+    class="min-w-[200px] w-[300px] overflow-hidden rounded-lg p-1.5 bg-white border border-gray-400"
+  >
+    <div class="flex gap-3">
+      <div
+        class="flex items-center w-20 h-20 overflow-hidden bg-gray-100 rounded-md"
+      >
+        <img
+          class="object-cover w-full h-full"
+          v-if="item.photo"
+          :src="imageUrl"
+          :alt="item.title"
+        />
+        <Image v-else class="text-gray-500 w-full h-full" />
+      </div>
+      <p
+        class="flex-1 text-base font-bold uppercase min-h-18 h-18 m-0 overflow-hidden"
+      >
+        {{ item.title }}
+      </p>
+    </div>
+    <div
+      class="flex justify-between items-center text-sm font-medium mt-2 mb-1"
+    >
+      <div class="flex gap-1">
+        <p class="m-0">Цена:</p>
+        <p class="m-0 text-green-700 font-semibold">{{ item.sale_cost }}₸</p>
+      </div>
+      <div class="flex gap-1 items-center">
+        <p class="m-0">Остаток:</p>
+        <p class="m-0 font-semibold" v-if="item.amount > 0">
+          {{ item.amount }}
+        </p>
+        <p
+          class="m-0 font-bold px-2 py-1 bg-yellow-300 text-yellow-900 rounded-lg"
+          v-else
+        >
+          не осталось
+        </p>
+      </div>
+    </div>
+  </article>
+  <!-- <div
     class="max-w-[220px] min-w-[220px] overflow-hidden rounded-lg p-1.5 bg-gray-50 border border-gray-200"
   >
     <div class="relative">
@@ -58,5 +100,5 @@ const imageUrl = computed(() => {
         </button>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
