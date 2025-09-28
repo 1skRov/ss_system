@@ -3,7 +3,7 @@ import TableComponent from './TableComponent.vue'
 </script>
 <template>
   <div
-    class="w-full h-full flex flex-col justify-between px-2 border-0 border-l border-gray-300"
+    class="w-full h-full flex flex-col justify-between px-2 border-0 border-l border-gray-300 bg-white"
   >
     <p class="m-0 mb-2 text-sm">Заказ №2</p>
     <div class="side-body">

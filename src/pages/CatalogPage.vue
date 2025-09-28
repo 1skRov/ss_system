@@ -47,7 +47,7 @@ onMounted(async () => {
           <ProductCard v-for="item in products" :key="item._id" :item="item" />
         </div>
       </div>
-      <div class="w-[400px] shrink-0 overflow-y-hidden">
+      <div class="w-[420px] shrink-0 overflow-y-hidden">
         <CatalogSidebar />
       </div>
     </div>
