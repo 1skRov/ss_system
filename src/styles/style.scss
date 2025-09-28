@@ -42,6 +42,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --blue-color: #604be8;
+  --gray-color: #c3cde4;
+  --black-color: #302d3d;
+  --green-color: #06d6a0;
+  --red-color: #ff595e;
+  --dark-gray-color: #969db6;
+  --yellow-color: #fdc848;
 }
 
 body {
@@ -49,6 +56,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   font-size: 18px;
+  color: var(--black-color);
+  background: #F4F7FF;
 }
 
 .button {
@@ -69,7 +78,7 @@ body {
 
 .blue-button {
   color: #fff;
-  background-color: #2f6bdc;
+  background-color: var(--blue-color);
 }
 
 .purple-button {
@@ -114,6 +123,5 @@ body {
   color: #ffffff;
   background-color: #9198ce;
   border: none;
-  min-height: 4rem;
   font-weight: 600;
 }

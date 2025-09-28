@@ -159,7 +159,7 @@ function onUp() {
       <div class="w-1/3 flex gap-2">
         <button
           type="button"
-          class="button gray-button w-full flex gap-3 justify-center items-center px-5"
+          class="button gray-button w-full flex gap-3 justify-center items-center px-5 py-3"
           :class="{ 'is-pressed': pressedKey === 'TOGGLE_CAPS' }"
           @pointerdown.stop.prevent="onDown('TOGGLE_CAPS')"
           @pointerup="onUp"
@@ -170,7 +170,7 @@ function onUp() {
         </button>
         <button
           type="button"
-          class="button gray-button w-full flex gap-3 justify-center items-center px-5"
+          class="button gray-button w-full flex gap-3 justify-center items-center px-5 py-3"
           :class="{ 'is-pressed': pressedKey === 'TOGGLE_LANG' }"
           @pointerdown.stop.prevent="onDown('TOGGLE_LANG')"
           @pointerup="onUp"
@@ -183,7 +183,7 @@ function onUp() {
 
       <button
         type="button"
-        class="button gray-button w-full"
+        class="button gray-button w-full py-3"
         :class="{ 'is-pressed': pressedKey === ' ' }"
         @pointerdown.stop.prevent="onDown(' ')"
         @pointerup="onUp"
@@ -195,7 +195,7 @@ function onUp() {
       <div class="w-1/3 flex gap-2">
         <button
           type="button"
-          class="button gray-button w-full flex gap-3 justify-center items-center"
+          class="button gray-button w-full flex gap-3 justify-center items-center py-3"
           :class="{ 'is-pressed': pressedKey === 'BACKSPACE' }"
           @pointerdown.stop.prevent="onDown('BACKSPACE')"
           @pointerup="onUp"
@@ -206,7 +206,7 @@ function onUp() {
         </button>
         <button
           type="button"
-          class="button green-button w-full flex gap-3 justify-center items-center"
+          class="button green-button w-full flex gap-3 justify-center items-center py-3"
           :class="{ 'is-pressed': pressedKey === 'SUBMIT' }"
           @pointerdown.stop.prevent="onDown('SUBMIT')"
           @pointerup="onUp"
