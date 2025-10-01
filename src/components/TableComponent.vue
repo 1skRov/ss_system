@@ -32,7 +32,13 @@ const props = defineProps({
                 <input type="checkbox" class="rounded w-4 h-4" />Товар
               </div>
             </th>
-            <th scope="col" style="width: 180px" v-if="hasCount">Количество</th>
+            <th
+              scope="col"
+              style="width: 180px; text-align: start"
+              v-if="hasCount"
+            >
+              Количество
+            </th>
             <th scope="col" style="width: 150px" v-if="hasPrice">Цена</th>
             <th scope="col" style="width: 100px" v-if="hasDiscount">Скидка</th>
             <th scope="col" style="width: 150px">Итого</th>

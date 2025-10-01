@@ -93,7 +93,7 @@ body {
 
 .green-button {
   color: #fff;
-  background-color: #1ab1b0;
+  background-color: var(--green-color);
 }
 
 .light-button {
@@ -121,7 +121,7 @@ body {
 .gray-button {
   width: 100%;
   color: #ffffff;
-  background-color: #9198ce;
+  background-color: var(--gray-color);
   border: none;
   font-weight: 600;
 }
