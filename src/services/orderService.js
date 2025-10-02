@@ -1,13 +1,28 @@
-import http from "@/api/http";
+import http from '@/api/http'
 
 class OrderService {
-  getOrders() {
-    return http.post("/mobile/orders", {
-      params: {
-        action: "get_open_orders",
-      },
-    });
+  createOrder(placeId) {
+    return http.post('/mobile/orders/new', { place_id: placeId })
+  }
+
+  getOrder(orderId) {
+    return http.post(`/mobile/orders/${orderId}`, { action: 'info' })
+  }
+
+  addProductToOrder({ orderId, productId, count }) {
+    return http.post(`/mobile/orders/${orderId}`, {
+      action: 'add_order_item',
+      good_id: productId,
+      amount: count,
+    })
+  }
+
+  removeProductFromOrder({ orderId, productId }) {
+    return http.post(`/mobile/orders/${orderId}`, {
+      action: 'delete_order_item',
+      id: productId,
+    })
   }
 }
 
-export default new OrderService();
+export default new OrderService()

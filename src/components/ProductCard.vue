@@ -1,13 +1,18 @@
 <script setup>
 import Image from '@/assets/icons/Image.vue'
 import { computed } from 'vue'
-
+import { useOrderStore } from '@/stores/orderStore'
+const orderStore = useOrderStore()
 const props = defineProps({
   item: {
     type: Object,
     required: true,
   },
 })
+
+function addToCart() {
+  orderStore.addProduct(props.item, 1)
+}
 
 const VITE_API_BASE_URL = 'https://demo.eldor.kz'
 
@@ -21,6 +26,7 @@ const imageUrl = computed(() => {
 
 <template>
   <article
+    @click="addToCart"
     class="cursor-pointer min-w-[170px] w-[170px] overflow-hidden rounded-lg p-2 bg-white border border-gray-300 flex flex-col"
   >
     <div
