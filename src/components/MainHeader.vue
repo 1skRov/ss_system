@@ -1,41 +1,5 @@
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
-
-import SearchDrawer from '@/components/SearchDrawer.vue'
-import InputComponent from '@/components/UiComponents/InputComponent.vue'
-
-import CatalogIcon from '@/assets/icons/Catalog.vue'
-import ListIcon from '@/assets/icons/List.vue'
-import ChevronDownicon from '@/assets/icons/chevronDownicon.vue'
-import LogoutIcon from '@/assets/icons/LogoutIcon.vue'
-import MagnifyingGLassIcon from '@/assets/icons/MagnifyingGLassIcon.vue'
-import SettingIcon from '@/assets/icons/SettingIcon.vue'
-import BarsDownIcon from '@/assets/icons/BarsArrowDownIcon.vue'
-
-const router = useRouter()
-const authStore = useAuthStore()
-const login = ref('')
-const dropdownOpen = ref(false)
-const modalOpen = ref(false)
-
-function handleLogout() {
-  authStore.logout()
-  router.push('/login')
-  dropdownOpen.value = false
-}
-
-function closeModal() {
-  modalOpen.value = false
-}
-
-function openModal() {
-  modalOpen.value = true
-}
-</script>
 <template>
-  <div class="flex items-center px-2 py-1 justify-between shadow bg-white">
+  <div class="flex items-center px-2 py-1 justify-between shadow-md">
     <div @click="openModal">
       <InputComponent
         v-model="login"
@@ -48,27 +12,20 @@ function openModal() {
       </InputComponent>
     </div>
 
-    <div class="flex overflow-hidden border border-gray-200 rounded-lg mx-auto">
-      <router-link
-        to="/table-page"
-        class="head-btn flex items-center gap-3"
-        :class="{ active: $route.path === '/table-page' }"
-      >
+    <div
+      class="flex overflow-hidden border border-gray-200 rounded-lg py-1 mx-auto"
+    >
+      <router-link to="/table-page" class="head-btn flex items-center gap-3">
         <ListIcon />
         <span>Заказ</span>
       </router-link>
-      <router-link
-        to="/catalog"
-        class="head-btn flex items-center gap-3"
-        :class="{ active: $route.path === '/catalog' }"
-      >
+      <router-link to="/catalog" class="head-btn flex items-center gap-3">
         <CatalogIcon />
         <span>Каталог</span>
       </router-link>
       <router-link
         to="/deferred-products"
         class="head-btn flex items-center gap-3"
-        :class="{ active: $route.path === '/deferred-products' }"
       >
         <BarsDownIcon />
         <span>Отложки</span>
@@ -140,6 +97,44 @@ function openModal() {
   </Transition>
 </template>
 
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+
+import SearchDrawer from '@/components/SearchDrawer.vue'
+import InputComponent from '@/components/UiComponents/InputComponent.vue'
+
+import CatalogIcon from '@/assets/icons/Catalog.vue'
+import ListIcon from '@/assets/icons/List.vue'
+import ChevronDownicon from '@/assets/icons/chevronDownicon.vue'
+import LogoutIcon from '@/assets/icons/LogoutIcon.vue'
+import MagnifyingGLassIcon from '@/assets/icons/MagnifyingGLassIcon.vue'
+import SettingIcon from '@/assets/icons/SettingIcon.vue'
+import BarsDownIcon from '@/assets/icons/BarsArrowDownIcon.vue'
+import XCircleIcon from '@/assets/icons/XCircleIcon.vue'
+
+const router = useRouter()
+const authStore = useAuthStore()
+const login = ref('')
+const dropdownOpen = ref(false)
+const modalOpen = ref(false)
+
+function handleLogout() {
+  authStore.logout()
+  router.push('/login')
+  dropdownOpen.value = false
+}
+
+function closeModal() {
+  modalOpen.value = false
+}
+
+function openModal() {
+  modalOpen.value = true
+}
+</script>
+
 <style scoped lang="scss">
 .head-btn {
   display: flex;
@@ -149,9 +144,9 @@ function openModal() {
   font-weight: 500;
   color: black;
 
-  &.active {
-    background-color: #f4f7ff;
-    color: var(--blue-color);
+  .router-link-exact-active {
+    background-color: #dfe6f4;
+    color: #4378de;
   }
 }
 </style>
