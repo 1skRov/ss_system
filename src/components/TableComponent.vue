@@ -89,18 +89,4 @@ const props = defineProps({
     </div>
   </section>
 </template>
-<style scoped lang="scss">
-table {
-  th {
-    padding: 8px 4px;
-    font-size: 1rem;
-    font-weight: 500;
-  }
-  td {
-    height: 50px;
-    padding: 0 4px;
-    font-size: 0.875rem;
-    min-width: 90px;
-  }
-}
-</style>
+<style scoped></style>
