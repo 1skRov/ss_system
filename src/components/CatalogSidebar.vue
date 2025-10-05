@@ -1,56 +1,53 @@
-<script setup>
-import TableComponent from './TableComponent.vue'
-</script>
+<script setup></script>
 <template>
   <div
     class="w-full h-full flex flex-col justify-between px-2 border-0 border-l border-gray-300 bg-white"
   >
-    <p class="m-0 mb-2 text-sm">Заказ №2</p>
-    <div class="side-body">
-      <table-component
-        :has-discount="false"
-        :has-price="false"
-        :has-count="false"
-      ></table-component>
-    </div>
-    <div class="flex flex-col gap-2 border-0 border-t border-gray-300">
-      <div class="flex w-full justify-between items-center font-bold text-base">
-        <p class="m-0">Итого</p>
-        <p class="m-0 w-1/3 text-center">1200</p>
-      </div>
-      <div class="flex w-full justify-between items-center text-green-600">
-        <p class="m-0 text-sm">Общяя скидка</p>
-        <p
-          class="m-0 py-1.5 text-sm font-bold w-1/3 text-center bg-gray-200 rounded-md"
-        >
-          0%
+    <p class="m-0 mb-2 text-base font-medium">Заказ №2</p>
+    <div class="side-body flex flex-col gap-3 mb-3">
+      <div class="item py-1.5">
+        <p class="w-full truncate text-base text-gray-800">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Incidunt,
+          in.
         </p>
+        <div class="flex items-center justify-between text-lg">
+          <p>2 x 12300 ₸</p>
+          <p class="font-semibold">24600 ₸</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-3 border-0 border-t border-gray-300">
+      <div
+        class="flex w-full justify-between items-center font-bold text-lg mt-3"
+      >
+        <p class="m-0">Итого</p>
+        <p class="m-0 text-right">1200</p>
+      </div>
+      <div class="flex w-full justify-between items-center">
+        <p class="m-0 text-sm">Скидка</p>
+        <button
+          class="rounded-lg px-2 py-1.5 text-white font-medium"
+          style="background: var(--color-gray)"
+        >
+          Добавить
+        </button>
       </div>
       <button
-        class="w-full button blue-button text-white font-semibold rounded-xl py-3"
+        class="w-full text-white font-semibold rounded-lg py-3 mt-3"
+        style="background: var(--color-green)"
       >
         Оплатить
       </button>
     </div>
   </div>
 </template>
-<style scoped lang="scss">
+<style scoped>
 .side-body {
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  .item {
-    display: flex;
-    flex-direction: column;
-    margin-top: 12px;
-    .cost {
-      p {
-        margin: 0;
-      }
-    }
-  }
-  .item + .item {
-    border-top: 1px solid #d1d5dc;
-  }
+}
+.item + .item {
+  border-top: 1px solid var(--color-gray);
 }
 </style>

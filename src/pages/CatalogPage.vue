@@ -53,9 +53,9 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-<style scoped lang="scss">
+<style scoped>
 .active {
-  background: #2f6bdc;
+  background: var(--color-gray);
   border: transparent;
   color: white;
   font-weight: 600;

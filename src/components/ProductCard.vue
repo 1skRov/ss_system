@@ -51,7 +51,9 @@ const imageUrl = computed(() => {
     >
       <span class="truncate text-center">{{ item.title }}</span>
     </div>
-    <div class="text-center text-green-600">{{ item.sale_cost }}₸</div>
+    <div class="text-center font-semibold" style="color: var(--color-green)">
+      {{ item.sale_cost }}₸
+    </div>
     <div style="font-size: 0.8rem; text-align: center">
       <span v-if="item.amount > 0">остаток: {{ item.amount }}</span>
       <span v-else class="text-red-600">нет в наличии</span>
