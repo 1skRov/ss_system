@@ -83,3 +83,10 @@ footer .panel {
 .item .value {
   @apply font-bold text-xl;
 }
+
+table th {
+  @apply h-10 font-medium text-gray-600 uppercase text-sm;
+}
+table td {
+  @apply h-12 text-sm;
+}

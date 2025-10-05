@@ -1,12 +1,12 @@
 <script setup>
-import { useRoute } from "vue-router";
-import { computed } from "vue";
-import MainFooter from "@/components/MainFooter.vue";
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import MainFooter from '@/components/MainFooter.vue'
 
-const route = useRoute();
+const route = useRoute()
 const showFooter = computed(() => {
-  return route.name === 'TablePage';
-});
+  return route.name === 'TablePage'
+})
 </script>
 
 <template>
@@ -18,4 +18,4 @@ const showFooter = computed(() => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped></style>

@@ -24,7 +24,7 @@
         </div>
         <div class="item">
           <p class="label">Скидка</p>
-          <button class="dis-btn">добавить скидку</button>
+          <button class="dis-btn">добавить</button>
         </div>
       </div>
       <button class="pay-btn" style="background: var(--color-green)">
