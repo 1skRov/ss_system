@@ -58,3 +58,28 @@ header .navbar {
 .nav-item.router-link-exact-active {
   background-color: var(--color-gray);
 }
+
+footer .footer-btns {
+  background-color: var(--color-navy-blue);
+  @apply text-white font-bold rounded-lg px-2 min-h-15;
+}
+footer .dis-btn {
+  background-color: var(--color-gray);
+  @apply text-white font-bold rounded-lg p-2;
+}
+footer .pay-btn {
+  @apply text-white font-bold rounded-lg px-4 py-3 text-2xl;
+}
+footer .panel {
+  min-height: 150px;
+  width: 400px;
+}
+.panel .item {
+  @apply flex items-center w-full justify-between;
+}
+.item .label {
+  @apply font-medium;
+}
+.item .value {
+  @apply font-bold text-xl;
+}
