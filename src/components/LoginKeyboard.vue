@@ -84,15 +84,25 @@ function onUp() {
 
 <template>
   <div
-    class="w-full bg-gray-50 p-3 rounded-t-lg flex flex-col gap-2 border-t border-gray-100 select-none"
+    class="w-full bg-gray-100/80 p-3 rounded-t-lg flex flex-col gap-2 border-t border-gray-300 select-none"
   >
     <!-- numbers -->
-    <div class="flex w-full gap-1">
+    <div class="flex justify-between w-full">
+      <button
+        class="num-key text-white font-medium h-16 w-[110px]"
+        style="background: var(--color-gray)"
+        :class="{ 'is-pressed': pressedKey === 'TOGGLE_CAPS' }"
+        @pointerdown.stop.prevent="onDown('TOGGLE_CAPS')"
+        @pointerup="onUp"
+        @pointerleave="onUp"
+        @pointercancel="onUp"
+      >
+        <ArrowLongUpIcon /> Caps
+      </button>
       <button
         v-for="key in processedNumberRow"
         :key="`num-${key}`"
-        type="button"
-        class="button light-button"
+        class="num-key h-16 w-[70px]"
         :class="{ 'is-pressed': pressedKey === key }"
         @pointerdown.stop.prevent="onDown(key)"
         @pointerup="onUp"
@@ -101,15 +111,26 @@ function onUp() {
       >
         {{ key }}
       </button>
+      <button
+        class="num-key text-white font-medium h-16 w-[110px]"
+        style="background: var(--color-gray)"
+        :class="{ 'is-pressed': pressedKey === 'BACKSPACE' }"
+        @pointerdown.stop.prevent="onDown('BACKSPACE')"
+        @pointerup="onUp"
+        @pointerleave="onUp"
+        @pointercancel="onUp"
+      >
+        <Backspaceicon />
+      </button>
     </div>
 
     <!-- qwerty -->
-    <div class="flex w-full gap-1">
+    <div class="flex w-full gap-2 justify-center">
       <button
         v-for="key in processedQwertyRow"
         :key="`q-${key}`"
         type="button"
-        class="button light-button"
+        class="num-key h-16 w-[80px]"
         :class="{ 'is-pressed': pressedKey === key }"
         @pointerdown.stop.prevent="onDown(key)"
         @pointerup="onUp"
@@ -121,12 +142,12 @@ function onUp() {
     </div>
 
     <!-- asdf -->
-    <div class="flex w-full gap-1">
+    <div class="flex w-full gap-2 justify-center">
       <button
         v-for="key in processedAsdfRow"
         :key="`a-${key}`"
         type="button"
-        class="button light-button"
+        class="num-key h-16 w-[80px]"
         :class="{ 'is-pressed': pressedKey === key }"
         @pointerdown.stop.prevent="onDown(key)"
         @pointerup="onUp"
@@ -138,12 +159,12 @@ function onUp() {
     </div>
 
     <!-- zxcv -->
-    <div class="flex w-full gap-1">
+    <div class="flex w-full gap-2 justify-center">
       <button
         v-for="key in processedZxcvRow"
         :key="`z-${key}`"
         type="button"
-        class="button light-button"
+        class="num-key h-16 w-[80px]"
         :class="{ 'is-pressed': pressedKey === key }"
         @pointerdown.stop.prevent="onDown(key)"
         @pointerup="onUp"
@@ -158,19 +179,8 @@ function onUp() {
     <div class="flex w-full gap-2">
       <div class="w-1/3 flex gap-2">
         <button
-          type="button"
-          class="button gray-button w-full flex gap-3 justify-center items-center px-5 py-3"
-          :class="{ 'is-pressed': pressedKey === 'TOGGLE_CAPS' }"
-          @pointerdown.stop.prevent="onDown('TOGGLE_CAPS')"
-          @pointerup="onUp"
-          @pointerleave="onUp"
-          @pointercancel="onUp"
-        >
-          <ArrowLongUpIcon /> Caps
-        </button>
-        <button
-          type="button"
-          class="button gray-button w-full flex gap-3 justify-center items-center px-5 py-3"
+          class="num-key text-white font-medium h-16 w-full"
+          style="background: var(--color-gray)"
           :class="{ 'is-pressed': pressedKey === 'TOGGLE_LANG' }"
           @pointerdown.stop.prevent="onDown('TOGGLE_LANG')"
           @pointerup="onUp"
@@ -182,8 +192,8 @@ function onUp() {
       </div>
 
       <button
-        type="button"
-        class="button gray-button w-full py-3"
+        class="rounded-lg w-full h-16 text-white font-medium"
+        style="background: var(--color-navy-blue)"
         :class="{ 'is-pressed': pressedKey === ' ' }"
         @pointerdown.stop.prevent="onDown(' ')"
         @pointerup="onUp"
@@ -194,19 +204,8 @@ function onUp() {
       </button>
       <div class="w-1/3 flex gap-2">
         <button
-          type="button"
-          class="button gray-button w-full flex gap-3 justify-center items-center py-3"
-          :class="{ 'is-pressed': pressedKey === 'BACKSPACE' }"
-          @pointerdown.stop.prevent="onDown('BACKSPACE')"
-          @pointerup="onUp"
-          @pointerleave="onUp"
-          @pointercancel="onUp"
-        >
-          <Backspaceicon />
-        </button>
-        <button
-          type="button"
-          class="button green-button w-full flex gap-3 justify-center items-center py-3"
+          class="num-key text-white font-medium h-16 w-full"
+          style="background: var(--color-gray)"
           :class="{ 'is-pressed': pressedKey === 'SUBMIT' }"
           @pointerdown.stop.prevent="onDown('SUBMIT')"
           @pointerup="onUp"

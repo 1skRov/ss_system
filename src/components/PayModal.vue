@@ -2,6 +2,11 @@
 import NumPanel from './NumPanel.vue'
 import Toggle4Buttons from './UiComponents/Toggle4Buttons.vue'
 import InputComponent from './UiComponents/InputComponent.vue'
+import { defineEmits } from 'vue'
+const emit = defineEmits(['close'])
+const closeModal = () => {
+  emit('close')
+}
 </script>
 <template>
   <div
@@ -38,25 +43,26 @@ import InputComponent from './UiComponents/InputComponent.vue'
     </div>
     <div class="flex gap-3">
       <button
-        class="py-5 px-8 rounded-md text-white font-medium"
+        @click="closeModal"
+        class="py-5 px-8 rounded-md text-white font-medium w-[200px]"
         style="background: var(--color-black)"
       >
         Отмена
       </button>
       <button
-        class="py-5 px-8 rounded-md text-white font-medium"
+        class="py-5 px-8 rounded-md text-white font-medium w-[200px]"
         style="background: var(--color-gray)"
       >
         Возврат
       </button>
       <button
-        class="py-5 px-8 rounded-md text-white font-medium"
+        class="py-5 px-8 rounded-md text-white font-medium w-[200px]"
         style="background: var(--color-navy-blue)"
       >
         Оплатить и чек
       </button>
       <button
-        class="py-5 px-8 rounded-md text-white font-medium"
+        class="py-5 px-8 rounded-md text-white font-medium w-[200px]"
         style="background: var(--color-green)"
       >
         Оплатить
