@@ -1,4 +1,18 @@
-<script setup></script>
+<script setup>
+import { ref, watch } from 'vue'
+import NumPanel from './NumPanel.vue'
+import DiscountModal from './DiscountModal.vue'
+
+const showModal = ref(false)
+
+const openModal = () => {
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+}
+</script>
 <template>
   <footer class="p-2 flex justify-between border-0 border-t border-gray-300">
     <div class="flex flex-col gap-1 w-1/3">
@@ -24,7 +38,7 @@
         </div>
         <div class="item">
           <p class="label">Скидка</p>
-          <button class="dis-btn">добавить</button>
+          <button class="dis-btn" @click="openModal">добавить</button>
         </div>
       </div>
       <button class="pay-btn" style="background: var(--color-green)">
@@ -32,5 +46,13 @@
       </button>
     </div>
   </footer>
+  <div
+    v-if="showModal"
+    class="fixed inset-0 flex items-center gap-5 justify-center bg-black/70 z-50"
+    @click.self="closeModal"
+  >
+    <DiscountModal @close="closeModal" />
+    <NumPanel />
+  </div>
 </template>
 <style scoped></style>
