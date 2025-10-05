@@ -1,4 +1,18 @@
-<script setup></script>
+<script setup>
+import { ref, watch } from 'vue'
+import NumPanel from './NumPanel.vue'
+import DiscountModal from './DiscountModal.vue'
+
+const showModal = ref(false)
+
+const openModal = () => {
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+}
+</script>
 <template>
   <div
     class="w-full h-full flex flex-col justify-between px-2 border-0 border-l border-gray-300 bg-white"
@@ -26,6 +40,7 @@
       <div class="flex w-full justify-between items-center">
         <p class="m-0 text-sm">Скидка</p>
         <button
+          @click="openModal"
           class="rounded-lg px-2 py-1.5 text-white font-medium"
           style="background: var(--color-gray)"
         >
@@ -39,6 +54,14 @@
         Оплатить
       </button>
     </div>
+  </div>
+  <div
+    v-if="showModal"
+    class="fixed inset-0 flex items-center gap-5 justify-center bg-black/70 z-50"
+    @click.self="closeModal"
+  >
+    <DiscountModal @close="closeModal" />
+    <NumPanel />
   </div>
 </template>
 <style scoped>

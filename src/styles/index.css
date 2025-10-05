@@ -97,3 +97,7 @@ table td {
 .num-key {
   @apply bg-white rounded-xl shadow text-xl flex items-center justify-center active:scale-95 transition-transform;
 }
+
+.toggle {
+  @apply flex flex-col items-center justify-center gap-2 w-[110px] h-[90px] text-base font-medium rounded-md transition-all duration-150;
+}

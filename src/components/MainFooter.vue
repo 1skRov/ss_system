@@ -2,21 +2,40 @@
 import { ref, watch } from 'vue'
 import NumPanel from './NumPanel.vue'
 import DiscountModal from './DiscountModal.vue'
+import QuickItemsModal from './QuickItemsModal.vue'
+import PayModal from './PayModal.vue'
 
 const showModal = ref(false)
+const showQuickItems = ref(false)
+const showPayModal = ref(false)
 
 const openModal = () => {
   showModal.value = true
+}
+const openQuickItems = () => {
+  showQuickItems.value = true
+}
+const openPayModal = () => {
+  showPayModal.value = true
 }
 
 const closeModal = () => {
   showModal.value = false
 }
+
+const closeQuickItems = () => {
+  showQuickItems.value = false
+}
+const closePayModal = () => {
+  showPayModal.value = false
+}
 </script>
 <template>
   <footer class="p-2 flex justify-between border-0 border-t border-gray-300">
     <div class="flex flex-col gap-1 w-1/3">
-      <button class="footer-btns">Быстрые товары</button>
+      <button class="footer-btns" @click="openQuickItems">
+        Быстрые товары
+      </button>
       <button class="footer-btns">Добавить в отложку</button>
       <button class="footer-btns">Закрыть заказ</button>
     </div>
@@ -41,7 +60,11 @@ const closeModal = () => {
           <button class="dis-btn" @click="openModal">добавить</button>
         </div>
       </div>
-      <button class="pay-btn" style="background: var(--color-green)">
+      <button
+        class="pay-btn"
+        style="background: var(--color-green)"
+        @click="openPayModal"
+      >
         Оплатить
       </button>
     </div>
@@ -53,6 +76,20 @@ const closeModal = () => {
   >
     <DiscountModal @close="closeModal" />
     <NumPanel />
+  </div>
+  <div
+    v-if="showQuickItems"
+    class="fixed inset-0 flex items-center gap-5 justify-center bg-black/70 z-50"
+    @click.self="closeQuickItems"
+  >
+    <QuickItemsModal @close="closeQuickItems" />
+  </div>
+  <div
+    v-if="showPayModal"
+    class="fixed inset-0 flex items-center gap-5 justify-center bg-black/70 z-50"
+    @click.self="closePayModal"
+  >
+    <PayModal @close="closePayModal" />
   </div>
 </template>
 <style scoped></style>
