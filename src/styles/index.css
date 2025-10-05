@@ -48,6 +48,9 @@ body {
   @apply m-0 min-w-[320px] min-h-screen;
   font-size: 18px;
 }
+button {
+  @apply active:scale-95 transition-transform;
+}
 header .navbar {
   @apply flex items-center gap-4;
 }
@@ -89,4 +92,8 @@ table th {
 }
 table td {
   @apply h-12 text-sm;
+}
+
+.num-key {
+  @apply bg-white rounded-xl shadow text-xl flex items-center justify-center active:scale-95 transition-transform;
 }
