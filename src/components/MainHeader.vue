@@ -1,79 +1,37 @@
 <template>
-  <div class="flex items-center px-2 py-1 justify-between shadow-md">
-    <div @click="openModal">
-      <InputComponent
-        v-model="login"
-        placeholder="Нажмите для поиска"
-        input-type="text"
-      >
-        <template #icon>
-          <MagnifyingGLassIcon class="text-gray-400/70" />
-        </template>
-      </InputComponent>
+  <header class="flex items-center justify-between px-2 py-1">
+    <div
+      @click="openModal"
+      class="search w-12 h-11 rounded-lg flex items-center justify-center text-white"
+    >
+      <MagnifyingGLassIcon />
     </div>
 
-    <div
-      class="flex overflow-hidden border border-gray-200 rounded-lg py-1 mx-auto"
-    >
-      <router-link to="/table-page" class="head-btn flex items-center gap-3">
+    <div class="navbar">
+      <router-link to="/table-page" class="nav-item">
         <ListIcon />
         <span>Заказ</span>
       </router-link>
-      <router-link to="/catalog" class="head-btn flex items-center gap-3">
+      <router-link to="/catalog" class="nav-item">
         <CatalogIcon />
         <span>Каталог</span>
       </router-link>
-      <router-link
-        to="/deferred-products"
-        class="head-btn flex items-center gap-3"
-      >
+      <router-link to="/deferred-products" class="nav-item">
         <BarsDownIcon />
         <span>Отложки</span>
       </router-link>
     </div>
 
-    <div class="relative inline-block">
-      <button
-        @click="dropdownOpen = !dropdownOpen"
-        class="relative z-10 flex items-center px-2 py-3 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg"
-      >
-        <span class="mx-1">Jane Doe</span>
-        <ChevronDownicon />
-      </button>
+    <button
+      @click="handleLogout"
+      class="flex items-center gap-3 h-11 text-white"
+    >
+      <LogoutIcon />
+      <span class="mx-1">Jane Doe</span>
+    </button>
+  </header>
 
-      <Transition
-        enter-active-class="transition ease-out duration-100"
-        enter-from-class="opacity-0 scale-90"
-        enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition ease-in duration-100"
-        leave-from-class="opacity-100 scale-100"
-        leave-to-class="opacity-0 scale-90"
-      >
-        <div
-          v-if="dropdownOpen"
-          class="absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-lg shadow-xl border border-gray-200"
-        >
-          <div
-            class="flex items-center p-3 text-sm text-gray-800 gap-3 cursor-pointer hover:bg-gray-100"
-            @click="handleLogout"
-          >
-            <logout-icon />
-            <p class="text-base m-0">Выйти</p>
-          </div>
-
-          <div
-            class="flex items-center p-3 text-sm text-gray-800 gap-3 cursor-pointer hover:bg-gray-100"
-            @click="dropdownOpen = false"
-          >
-            <SettingIcon />
-            <p class="m-0 text-base">Настройки</p>
-          </div>
-        </div>
-      </Transition>
-    </div>
-  </div>
-
-  <Transition
+  <!-- <Transition
     enter-active-class="transition duration-300 ease-out"
     enter-from-class="opacity-0"
     enter-to-class="opacity-100"
@@ -94,29 +52,22 @@
         <SearchDrawer @close="closeModal" />
       </div>
     </div>
-  </Transition>
+  </Transition> -->
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
-
 import SearchDrawer from '@/components/SearchDrawer.vue'
-import InputComponent from '@/components/UiComponents/InputComponent.vue'
-
 import CatalogIcon from '@/assets/icons/Catalog.vue'
 import ListIcon from '@/assets/icons/List.vue'
-import ChevronDownicon from '@/assets/icons/chevronDownicon.vue'
 import LogoutIcon from '@/assets/icons/LogoutIcon.vue'
 import MagnifyingGLassIcon from '@/assets/icons/MagnifyingGLassIcon.vue'
-import SettingIcon from '@/assets/icons/SettingIcon.vue'
 import BarsDownIcon from '@/assets/icons/BarsArrowDownIcon.vue'
-import XCircleIcon from '@/assets/icons/XCircleIcon.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const login = ref('')
 const dropdownOpen = ref(false)
 const modalOpen = ref(false)
 
@@ -135,18 +86,11 @@ function openModal() {
 }
 </script>
 
-<style scoped lang="scss">
-.head-btn {
-  display: flex;
-  align-items: center;
-  padding: 8px 16px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: black;
-
-  .router-link-exact-active {
-    background-color: #dfe6f4;
-    color: #4378de;
-  }
+<style scoped>
+header {
+  background-color: var(--color-navy-blue);
+}
+.search {
+  background-color: var(--color-gray);
 }
 </style>

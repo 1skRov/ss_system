@@ -1,75 +1,5 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
 
-:root {
-  --background: #ffffff; /* Белый */
-  --foreground: #09090b; /* Почти черный */
-
-  --card: #ffffff; /* Белый */
-  --card-foreground: #09090b; /* Почти черный */
-
-  --popover: #ffffff; /* Белый */
-  --popover-foreground: #09090b; /* Почти черный */
-
-  --primary: #f97316; /* Главный оранжевый */
-  --primary-foreground: #ffffff; /* Белый текст на оранжевом */
-
-  --secondary: #f4f4f5; /* Светло-серый */
-  --secondary-foreground: #18181b; /* Темно-серый */
-
-  --muted: #f4f4f5; /* Светло-серый */
-  --muted-foreground: #71717a; /* Приглушенный серый */
-
-  --accent: #f4f4f5; /* Светло-серый */
-  --accent-foreground: #18181b; /* Темно-серый */
-
-  --destructive: #ef4444; /* Красный */
-  --destructive-foreground: #ffffff; /* Белый */
-
-  --border: #e4e4e7; /* Серый для границ */
-  --input: #e4e4e7; /* Серый для инпутов */
-  --ring: #fb923c; /* Светло-оранжевый для кольца фокуса */
-
-  --radius: 0.5rem;
-}
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -108,9 +38,23 @@
 
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --color-gray: #7c8b9d;
+  --color-navy-blue: #345879;
+  --color-black: #1c202c;
+  --color-green: #41b79b;
 }
 
 body {
   @apply m-0 min-w-[320px] min-h-screen;
   font-size: 18px;
+}
+header .navbar {
+  @apply flex items-center gap-4;
+}
+.navbar .nav-item {
+  border: 1px solid var(--color-gray);
+  @apply text-white px-3 h-11 rounded-lg flex items-center gap-3;
+}
+.nav-item.router-link-exact-active {
+  background-color: var(--color-gray);
 }
