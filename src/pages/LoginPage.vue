@@ -2,7 +2,6 @@
 import { ref, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import LoginKeyboard from '@/components/LoginKeyboard.vue'
-import AlertBar from '@/components/UiComponents/AlertMsg.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useFilialStore } from '@/stores/filialStore'
 import InputComponent from '@/components/UiComponents/InputComponent.vue'
@@ -60,15 +59,6 @@ const handleClear = () => {
 
 <template>
   <div class="flex flex-col w-full h-full">
-    <transition name="fade" class="w-full absolute top-0 left-0 z-50">
-      <AlertBar
-        v-if="alert.show"
-        :text="alert.text"
-        :bg="alert.bg"
-        @close="alert.show = false"
-      />
-    </transition>
-
     <div class="flex flex-col items-center justify-center flex-1">
       <div class="flex flex-col w-full">
         <p class="text-blue-600 font-bold text-3xl text-center">SSS</p>
