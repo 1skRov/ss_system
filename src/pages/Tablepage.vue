@@ -128,6 +128,13 @@ const rows = ref([
 
 const selectAll = ref(false)
 const showModal = ref(false)
+const activeInput = ref(null)
+const modalData = ref({
+  qty: '',
+  price: '',
+  discount: '',
+  total: '',
+})
 
 watch(selectAll, (value) => {
   rows.value.forEach((row) => (row.checked = value))
@@ -142,12 +149,25 @@ watch(
   { deep: true }
 )
 
-const openModal = () => {
+const openModal = (row) => {
   showModal.value = true
+  modalData.value = {
+    qty: row.qty.toString(),
+    price: row.price.toString(),
+    discount: (row.discount * 100).toString(),
+    total: row.total.toString(),
+  }
 }
 
 const closeModal = () => {
   showModal.value = false
+  activeInput.value = null
+}
+
+const handleNumPanelInput = (value) => {
+  if (activeInput.value) {
+    modalData.value[activeInput.value] = value
+  }
 }
 
 const removeProduct = async (orderItemId) => {
@@ -201,15 +221,15 @@ const removeProduct = async (orderItemId) => {
             </label>
           </td>
 
-          <td class="text-center" @click="openModal">{{ row.qty }}</td>
-          <td class="text-center" @click="openModal">{{ row.price }} ₸</td>
+          <td class="text-center" @click="openModal(row)">{{ row.qty }}</td>
+          <td class="text-center" @click="openModal(row)">{{ row.price }} ₸</td>
           <td
             class="text-center text-orange-500 font-semibold"
-            @click="openModal"
+            @click="openModal(row)"
           >
             {{ Math.round(row.discount * 100) }}%
           </td>
-          <td class="text-center" @click="openModal">{{ row.total }}</td>
+          <td class="text-center" @click="openModal(row)">{{ row.total }}</td>
           <td>
             <div
               class="text-red-500 text-center font-semibold cursor-pointer"
@@ -223,11 +243,22 @@ const removeProduct = async (orderItemId) => {
     </table>
     <div
       v-if="showModal"
-      class="fixed inset-0 flex items-center gap-5 justify-center bg-black/70 z-50"
+      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center"
       @click.self="closeModal"
     >
-      <EditModal @close="closeModal" />
-      <NumPanel />
+      <div
+        class="w-[90vw] h-[90vh] bg-white rounded-lg p-6 flex gap-5 items-center justify-center"
+      >
+        <EditModal
+          v-model="modalData"
+          @focus-input="(input) => (activeInput = input)"
+          @close="closeModal"
+        />
+        <NumPanel
+          v-model="modalData[activeInput]"
+          @input="handleNumPanelInput"
+        />
+      </div>
     </div>
   </article>
 </template>

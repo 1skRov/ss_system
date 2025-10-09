@@ -1,40 +1,60 @@
 <script setup>
-import { defineEmits } from 'vue'
 import InputComponent from './UiComponents/InputComponent.vue'
 import ToggleButtons from './UiComponents/ToggleButtons.vue'
-const emit = defineEmits(['close'])
+
+const props = defineProps({
+  modelValue: Object,
+})
+const emit = defineEmits(['update:modelValue', 'focus-input', 'close'])
+
 const closeModal = () => {
   emit('close')
 }
+
+const focusInput = (inputName) => {
+  emit('focus-input', inputName)
+}
 </script>
 <template>
-  <div class="bg-white rounded-lg p-3 w-120">
-    <h2 class="text-xl font-semibold mb-4 text-center">
-      Изменить товар: Название
-    </h2>
+  <div class="w-120 border border-gray-300 rounded-lg p-3">
+    <h2 class="modal-title">Изменить товар: Название</h2>
     <div class="flex flex-col gap-3">
       <div>
-        <span class="block text-sm text-gray-600 mb-1">Количество товара</span>
-        <InputComponent placeholder="Введите количество товара" />
+        <span class="input-label">Количество товара</span>
+        <InputComponent
+          v-model="modelValue.qty"
+          placeholder="Введите количество товара"
+          @focus="focusInput('qty')"
+        />
       </div>
 
       <div>
-        <span class="block text-sm text-gray-600 mb-1">Цена товара</span>
-        <InputComponent placeholder="Введите цену товара" />
+        <span class="input-label">Цена товара</span>
+        <InputComponent
+          v-model="modelValue.price"
+          placeholder="Введите цену товара"
+          @focus="focusInput('price')"
+        />
       </div>
 
-      <div>
-        <span class="block text-sm text-gray-600 mb-1">Скидка товара</span>
+      <div class="w-full">
+        <span class="input-label">Скидка товара</span>
         <div class="flex justify-between items-center w-full">
-          <InputComponent placeholder="Введите скидку товара" />
+          <InputComponent
+            v-model="modelValue.discount"
+            placeholder="Введите скидку товара"
+            @focus="focusInput('discount')"
+          />
           <ToggleButtons />
         </div>
       </div>
       <div>
-        <span class="block text-sm text-gray-600 mb-1"
-          >Итоговая стоимость товара</span
-        >
-        <InputComponent placeholder="Введите итоговую стоимость товара" />
+        <span class="input-label">Итоговая стоимость товара</span>
+        <InputComponent
+          v-model="modelValue.total"
+          placeholder="Введите итоговую стоимость товара"
+          @focus="focusInput('total')"
+        />
       </div>
     </div>
 

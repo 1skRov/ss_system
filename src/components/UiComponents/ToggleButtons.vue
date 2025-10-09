@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const active = ref('preview')
+const active = ref('tenge')
 
 const toggle = (mode) => {
   active.value = mode
@@ -13,11 +13,11 @@ const toggle = (mode) => {
     <button
       class="px-5 py-2 text-base font-medium rounded-md transition-all duration-150"
       :class="
-        active === 'preview'
+        active === 'percentage'
           ? 'bg-white shadow-sm'
           : 'text-gray-500 hover:text-gray-700'
       "
-      @click="toggle('preview')"
+      @click="toggle('percentage')"
     >
       %
     </button>
@@ -25,11 +25,11 @@ const toggle = (mode) => {
     <button
       class="px-5 py-2 text-base font-medium rounded-md transition-all duration-150"
       :class="
-        active === 'html'
+        active === 'tenge'
           ? 'bg-white shadow-sm text-gray-900'
           : 'text-gray-500 hover:text-gray-700'
       "
-      @click="toggle('html')"
+      @click="toggle('tenge')"
     >
       ₸
     </button>
