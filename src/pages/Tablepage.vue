@@ -1,7 +1,10 @@
 <script setup>
 import { ref, watch } from 'vue'
+import { useOrderStore } from '@/stores/orderStore'
 import EditModal from '@/components/EditModal.vue'
 import NumPanel from '@/components/NumPanel.vue'
+
+const orderStore = useOrderStore()
 
 const rows = ref([
   {
@@ -146,6 +149,14 @@ const openModal = () => {
 const closeModal = () => {
   showModal.value = false
 }
+
+const removeProduct = async (orderItemId) => {
+  try {
+    await orderStore.removeProduct(orderItemId)
+  } catch (error) {
+    console.error('Ошибка при удалении продукта:', error.message)
+  }
+}
 </script>
 
 <template>
@@ -202,7 +213,7 @@ const closeModal = () => {
           <td>
             <div
               class="text-red-500 text-center font-semibold cursor-pointer"
-              @click="null"
+              @click="removeProduct(row.id)"
             >
               Удалить
             </div>
