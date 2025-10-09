@@ -1,11 +1,19 @@
 <script setup>
 import NumPanel from './NumPanel.vue'
-import Toggle4Buttons from './UiComponents/Toggle4Buttons.vue'
+import TogglePaymentTypeButtons from './UiComponents/TogglePaymentTypeButtons.vue'
 import InputComponent from './UiComponents/InputComponent.vue'
-import { defineEmits } from 'vue'
+import { ref } from 'vue'
+
+const selectedPaymentType = ref(null)
 const emit = defineEmits(['close'])
+
 const closeModal = () => {
   emit('close')
+}
+
+const handlePaymentTypeSelect = (paymentTypeId) => {
+  selectedPaymentType.value = paymentTypeId
+  console.log('payment_type', paymentTypeId)
 }
 </script>
 <template>
@@ -17,7 +25,7 @@ const closeModal = () => {
         <NumPanel />
       </div>
       <div class="flex flex-col gap-4">
-        <Toggle4Buttons />
+        <TogglePaymentTypeButtons @select="handlePaymentTypeSelect" />
         <InputComponent />
         <div
           class="rounded-md border border-gray-300 text-gray-800 font-medium px-5 py-4"
