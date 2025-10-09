@@ -1,9 +1,11 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useFilialStore } from '@/stores/filialStore'
+import { useOrderStore } from '@/stores/orderStore'
 import Alert from './UiComponents/AlertMsg.vue'
 
 const filialStore = useFilialStore()
+const orderStore = useOrderStore()
 
 const localSelectedFilialId = ref(null)
 const localSelectedKassaId = ref(null)
@@ -64,7 +66,7 @@ async function ensureOptionalsLoaded() {
   }
 }
 
-function confirmSelection() {
+async function confirmSelection() {
   if (!canConfirm.value) {
     alert.value = {
       bg: 'error',
@@ -84,6 +86,17 @@ function confirmSelection() {
   filialStore.setClient(
     localSelectedClientId.value ? Number(localSelectedClientId.value) : null
   )
+
+  try {
+    const placeId = Number(localSelectedFilialId.value)
+    await orderStore.createOrder(placeId)
+  } catch (error) {
+    alert.value = {
+      bg: 'error',
+      title: 'Ошибка при создании заказа',
+      description: error.message || 'Не удалось создать заказ.',
+    }
+  }
 }
 </script>
 

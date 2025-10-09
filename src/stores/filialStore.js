@@ -41,6 +41,7 @@ export const useFilialStore = defineStore('filial', {
     },
 
     async fetchPlaces() {
+      if (this.filials.length && this.kassas.length) return
       try {
         const { data } = await filialService.getPlaces()
         this.filials = data?.place_types || []
