@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useFilialStore } from '@/stores/filialStore'
+import Alert from './UiComponents/AlertMsg.vue'
 
 const filialStore = useFilialStore()
 
@@ -9,14 +10,39 @@ const localSelectedKassaId = ref(null)
 const localSelectedEmployeeId = ref(null)
 const localSelectedClientId = ref(null)
 
-const kassasForSelectedFilial = computed(() => {
-  if (localSelectedFilialId.value == null) return []
-  const fid = Number(localSelectedFilialId.value)
-  return filialStore.kassas.filter((k) => Number(k.stock_id) === fid)
+const alert = ref(null)
+
+onMounted(async () => {
+  await filialStore.initSelectionFlow()
+
+  if (filialStore.selectedFilialId)
+    localSelectedFilialId.value = Number(filialStore.selectedFilialId)
+  if (filialStore.selectedKassaId)
+    localSelectedKassaId.value = Number(filialStore.selectedKassaId)
+  if (filialStore.selectedEmployeeId)
+    localSelectedEmployeeId.value = Number(filialStore.selectedEmployeeId)
+  if (filialStore.selectedClientId)
+    localSelectedClientId.value = Number(filialStore.selectedClientId)
+
+  await ensureOptionalsLoaded()
 })
 
 watch(localSelectedFilialId, () => {
   localSelectedKassaId.value = null
+})
+
+watch(alert, (newValue) => {
+  if (newValue) {
+    setTimeout(() => {
+      alert.value = null
+    }, 3000)
+  }
+})
+
+const kassasForSelectedFilial = computed(() => {
+  if (localSelectedFilialId.value == null) return []
+  const fid = Number(localSelectedFilialId.value)
+  return filialStore.kassas.filter((k) => Number(k.stock_id) === fid)
 })
 
 const canConfirm = computed(
@@ -38,23 +64,16 @@ async function ensureOptionalsLoaded() {
   }
 }
 
-onMounted(async () => {
-  await filialStore.initSelectionFlow()
-
-  if (filialStore.selectedFilialId)
-    localSelectedFilialId.value = Number(filialStore.selectedFilialId)
-  if (filialStore.selectedKassaId)
-    localSelectedKassaId.value = Number(filialStore.selectedKassaId)
-  if (filialStore.selectedEmployeeId)
-    localSelectedEmployeeId.value = Number(filialStore.selectedEmployeeId)
-  if (filialStore.selectedClientId)
-    localSelectedClientId.value = Number(filialStore.selectedClientId)
-
-  await ensureOptionalsLoaded()
-})
-
 function confirmSelection() {
-  if (!canConfirm.value) return
+  if (!canConfirm.value) {
+    alert.value = {
+      bg: 'error',
+      title: 'Не все поля заполнены',
+      description: 'Пожалуйста, выберите филиал и кассу для продолжения.',
+    }
+    return
+  }
+
   filialStore.setFilialAndKassa(
     Number(localSelectedFilialId.value),
     Number(localSelectedKassaId.value)
@@ -69,120 +88,129 @@ function confirmSelection() {
 </script>
 
 <template>
-  <Transition name="fade-scale">
-    <div
-      v-if="filialStore.needsSelection"
-      aria-labelledby="modal-title"
-      role="dialog"
-      aria-modal="true"
-      class="fixed inset-0 z-50 flex items-center justify-center"
-    >
-      <div class="absolute inset-0 bg-black/60"></div>
+  <div
+    v-if="filialStore.needsSelection"
+    class="fixed inset-0 z-50 flex items-center justify-center"
+  >
+    <div class="absolute inset-0 bg-black/80"></div>
+    <div class="mt-4">
+      <Alert
+        v-if="alert"
+        :bg="alert.bg"
+        :title="alert.title"
+        :description="alert.description"
+        @close="alert = null"
+        class="absolute top-0 left-0 right-0 w-1/2 mx-auto"
+      />
+    </div>
+    <div class="relative w-full max-w-2xl mx-4 rounded-lg bg-white px-6 py-5">
+      <h3 class="text-xl font-semibold">
+        Выберите филиал и кассу, чтобы продолжить
+      </h3>
 
-      <div class="relative w-full max-w-2xl mx-4 rounded-lg bg-white">
-        <div class="px-6 py-5">
-          <h3 id="modal-title" class="text-xl font-semibold text-black">
-            Выберите филиал и кассу, чтобы продолжить
-          </h3>
-
-          <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="w-full">
-              <label class="block text-sm font-medium text-gray-700 mb-1"
-                >Филиал</label
-              >
-              <select
-                v-model="localSelectedFilialId"
-                class="block w-full rounded-lg border border-gray-300 bg-white p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                autofocus
-              >
-                <option :value="null" disabled>Выберите филиал</option>
-                <option
-                  v-for="filial in filialStore.filials"
-                  :key="filial._id"
-                  :value="Number(filial._id)"
-                >
-                  {{ filial.title }}
-                </option>
-              </select>
-            </div>
-
-            <div class="w-full">
-              <label class="block text-sm font-medium text-gray-700 mb-1"
-                >Касса</label
-              >
-              <select
-                v-model="localSelectedKassaId"
-                :disabled="!localSelectedFilialId"
-                class="block w-full rounded-lg border border-gray-300 bg-white p-3 text-sm disabled:bg-gray-100 disabled:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <option :value="null" disabled>Выберите кассу</option>
-                <option
-                  v-for="k in kassasForSelectedFilial"
-                  :key="k._id"
-                  :value="Number(k._id)"
-                >
-                  {{ k.title }}
-                </option>
-              </select>
-            </div>
-
-            <div class="w-full">
-              <label class="block text-sm font-medium text-gray-700 mb-1"
-                >Сотрудник (необязательно)</label
-              >
-              <select
-                v-model="localSelectedEmployeeId"
-                class="block w-full rounded-lg border border-gray-300 bg-white p-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <option :value="null">Без сотрудника</option>
-                <option
-                  v-for="emp in filialStore.employees"
-                  :key="emp._id"
-                  :value="Number(emp._id)"
-                >
-                  {{ fullName(emp) }}
-                </option>
-              </select>
-            </div>
-
-            <div class="w-full">
-              <label class="block text-sm font-medium text-gray-700 mb-1"
-                >Клиент (необязательно)</label
-              >
-              <select
-                v-model="localSelectedClientId"
-                class="block w-full rounded-lg border border-gray-300 bg-white p-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <option :value="null">Без клиента</option>
-                <option
-                  v-for="cl in filialStore.clients"
-                  :key="cl._id"
-                  :value="Number(cl._id)"
-                >
-                  {{ fullName(cl) }}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div class="mt-6 flex items-center justify-end gap-3">
-            <button
-              type="button"
-              class="button blue-button px-3 py-2"
-              :disabled="!canConfirm"
-              @click="confirmSelection"
+      <div class="mt-5 grid grid-cols-2 gap-4">
+        <div class="w-full">
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Филиал</label
+          >
+          <select
+            v-model="localSelectedFilialId"
+            class="filial-select"
+            autofocus
+          >
+            <option :value="null" disabled>Выберите филиал</option>
+            <option
+              v-for="filial in filialStore.filials"
+              :key="filial._id"
+              :value="Number(filial._id)"
             >
-              Продолжить
-            </button>
+              {{ filial.title }}
+            </option>
+          </select>
+        </div>
 
-            <p v-if="filialStore.error" class="text-sm text-red-600">
-              {{ filialStore.error }}
-            </p>
-          </div>
+        <div class="w-full">
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Касса</label
+          >
+          <select
+            v-model="localSelectedKassaId"
+            :disabled="!localSelectedFilialId"
+            class="filial-select"
+          >
+            <option :value="null" disabled>Выберите кассу</option>
+            <option
+              v-for="k in kassasForSelectedFilial"
+              :key="k._id"
+              :value="Number(k._id)"
+            >
+              {{ k.title }}
+            </option>
+          </select>
+        </div>
+
+        <div class="w-full">
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Сотрудник (необязательно)</label
+          >
+          <select
+            v-model="localSelectedEmployeeId"
+            :disabled="!localSelectedFilialId"
+            class="filial-select"
+          >
+            <option :value="null">Без сотрудника</option>
+            <option
+              v-for="emp in filialStore.employees"
+              :key="emp._id"
+              :value="Number(emp._id)"
+            >
+              {{ fullName(emp) }}
+            </option>
+          </select>
+        </div>
+
+        <div class="w-full">
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Клиент (необязательно)</label
+          >
+          <select
+            v-model="localSelectedClientId"
+            :disabled="!localSelectedFilialId"
+            class="filial-select"
+          >
+            <option :value="null">Без клиента</option>
+            <option
+              v-for="cl in filialStore.clients"
+              :key="cl._id"
+              :value="Number(cl._id)"
+            >
+              {{ fullName(cl) }}
+            </option>
+          </select>
         </div>
       </div>
+
+      <div class="mt-6 flex items-center justify-end">
+        <button
+          class="px-5 py-3 rounded-lg text-white font-medium"
+          style="background: var(--color-navy-blue)"
+          :class="{ 'opacity-50': !canConfirm }"
+          @click="confirmSelection"
+        >
+          Продолжить
+        </button>
+
+        <p v-if="filialStore.error" class="text-sm text-red-600">
+          {{ filialStore.error }}
+        </p>
+      </div>
     </div>
-  </Transition>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.filial-select:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+</style>

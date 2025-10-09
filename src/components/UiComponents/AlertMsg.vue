@@ -1,26 +1,46 @@
 <script setup>
 import BellAlerts from '@/assets/icons/BellAlerts.vue'
-import XCircleIcon from '@/assets/icons/XCircleIcon.vue'
 const props = defineProps({
-  bg: { type: String, default: 'bg-yellow-400' }, // error | warning | info | success
-  text: { type: String, required: true },
+  bg: { type: String, default: 'info' }, // error | warning | info | success
+  title: { type: String, required: true },
+  description: { type: String, required: true },
 })
 const emit = defineEmits(['close'])
+const bgColor = {
+  error: 'bg-red-400',
+  warning: 'bg-yellow-400',
+  info: 'bg-blue-400',
+  success: 'bg-green-400',
+}
+const borderColor = {
+  error: 'border-red-100',
+  warning: 'border-yellow-100',
+  info: 'border-blue-100',
+  success: 'border-green-100',
+}
 </script>
 
 <template>
-  <div class="w-full text-white" :class="bg">
-    <div class="container flex items-center justify-between px-6 py-4 mx-auto">
-      <div class="flex">
+  <div
+    :class="[
+      'border text-sm rounded-lg p-4 text-white',
+      bgColor[bg],
+      borderColor[bg],
+    ]"
+    @click="$emit('close')"
+  >
+    <div class="flex">
+      <div class="shrink-0">
         <BellAlerts />
-        <p class="mx-3">{{ text }}</p>
       </div>
-      <button
-        @click="$emit('close')"
-        class="p-1 transition-colors duration-300 transform rounded-md"
-      >
-        <XCircleIcon />
-      </button>
+      <div class="ms-4">
+        <h3 id="hs-with-description-label" class="text-sm font-semibold">
+          {{ title }}
+        </h3>
+        <div class="mt-1 text-sm text-white">
+          {{ description }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
