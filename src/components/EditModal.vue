@@ -1,11 +1,54 @@
 <script setup>
+import { computed, ref } from 'vue'
+import { useOrderStore } from '@/stores/orderStore'
 import InputComponent from './UiComponents/InputComponent.vue'
 import ToggleButtons from './UiComponents/ToggleButtons.vue'
 
+const orderStore = useOrderStore()
+
 const props = defineProps({
-  modelValue: Object,
+  modelValue: {
+    type: Object,
+    required: true,
+    default: () => ({
+      qty: '',
+      price: '',
+      discount: '',
+      total: '',
+      name: '',
+      orderItemId: null,
+    }),
+  },
 })
 const emit = defineEmits(['update:modelValue', 'focus-input', 'close'])
+
+const qty = computed({
+  get: () => props.modelValue.qty,
+  set: (value) => {
+    emit('update:modelValue', { ...props.modelValue, qty: value })
+  },
+})
+
+const price = computed({
+  get: () => props.modelValue.price,
+  set: (value) => {
+    emit('update:modelValue', { ...props.modelValue, price: value })
+  },
+})
+
+const discount = computed({
+  get: () => props.modelValue.discount,
+  set: (value) => {
+    emit('update:modelValue', { ...props.modelValue, discount: value })
+  },
+})
+
+const total = computed({
+  get: () => props.modelValue.total,
+  set: (value) => {
+    emit('update:modelValue', { ...props.modelValue, total: value })
+  },
+})
 
 const closeModal = () => {
   emit('close')
@@ -14,15 +57,39 @@ const closeModal = () => {
 const focusInput = (inputName) => {
   emit('focus-input', inputName)
 }
+const isLoading = ref(false)
+
+const applyChanges = async () => {
+  if (!props.modelValue?.orderItemId) {
+    console.error('Order item ID не найден')
+    return
+  }
+
+  isLoading.value = true
+  try {
+    const newAmount = parseFloat(qty.value) || 1
+
+    await orderStore.updateItemAmount({
+      orderItemId: props.modelValue.orderItemId,
+      amount: newAmount,
+    })
+
+    closeModal()
+  } catch (error) {
+    console.error('Ошибка при применении изменений:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
 <template>
   <div class="w-120 border border-gray-300 rounded-lg p-3">
-    <h2 class="modal-title">Изменить товар: Название</h2>
+    <h2 class="modal-title">Изменить товар: {{ props.modelValue.name }}</h2>
     <div class="flex flex-col gap-3">
       <div>
         <span class="input-label">Количество товара</span>
         <InputComponent
-          v-model="modelValue.qty"
+          v-model="qty"
           placeholder="Введите количество товара"
           @focus="focusInput('qty')"
         />
@@ -31,7 +98,7 @@ const focusInput = (inputName) => {
       <div>
         <span class="input-label">Цена товара</span>
         <InputComponent
-          v-model="modelValue.price"
+          v-model="price"
           placeholder="Введите цену товара"
           @focus="focusInput('price')"
         />
@@ -41,7 +108,7 @@ const focusInput = (inputName) => {
         <span class="input-label">Скидка товара</span>
         <div class="flex justify-between items-center w-full">
           <InputComponent
-            v-model="modelValue.discount"
+            v-model="discount"
             placeholder="Введите скидку товара"
             @focus="focusInput('discount')"
           />
@@ -51,7 +118,7 @@ const focusInput = (inputName) => {
       <div>
         <span class="input-label">Итоговая стоимость товара</span>
         <InputComponent
-          v-model="modelValue.total"
+          v-model="total"
           placeholder="Введите итоговую стоимость товара"
           @focus="focusInput('total')"
         />
@@ -62,6 +129,7 @@ const focusInput = (inputName) => {
       <button
         class="text-white px-4 py-3 rounded-lg"
         style="background-color: var(--color-black)"
+        :disabled="isLoading"
         @click="closeModal"
       >
         Отмена
@@ -69,9 +137,10 @@ const focusInput = (inputName) => {
       <button
         class="text-white px-4 py-3 rounded-lg"
         style="background-color: var(--color-green)"
-        @click="closeModal"
+        :disabled="isLoading"
+        @click="applyChanges"
       >
-        Применить
+        {{ isLoading ? 'Применение...' : 'Применить' }}
       </button>
     </div>
   </div>

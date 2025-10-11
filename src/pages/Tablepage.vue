@@ -15,20 +15,28 @@ const modalData = ref({
   price: '',
   discount: '',
   total: '',
+  name: '',
+  orderItemId: null,
 })
 
 const rows = computed(() => {
-  return orderData.items.value.map((item) => {
-    return {
-      id: item._id,
-      name: item.good.title || 'Без названия',
-      qty: item.amount || 0,
-      price: item.good.sale_cost || 0,
-      discount: item.discount || 0,
-      total: item.cost,
-      checked: false,
-    }
-  })
+  if (!orderData.items.value || !Array.isArray(orderData.items.value)) {
+    return []
+  }
+
+  return orderData.items.value
+    .filter((item) => item && item._id && item.good)
+    .map((item) => {
+      return {
+        id: item._id,
+        name: item.good.title || 'Без названия',
+        qty: item.amount || 0,
+        price: item.good.sale_cost || 0,
+        discount: item.discount || 0,
+        total: item.cost || 0,
+        checked: false,
+      }
+    })
 })
 
 watch(selectAll, (value) => {
@@ -45,14 +53,15 @@ watch(
 )
 
 const openModal = (row) => {
-  showModal.value = true
   modalData.value = {
     name: row.name,
     qty: row.qty.toString(),
     price: row.price.toString(),
     discount: (row.discount * 100).toString(),
     total: row.total.toString(),
+    orderItemId: row.id,
   }
+  showModal.value = true
 }
 
 const closeModal = () => {

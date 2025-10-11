@@ -23,6 +23,14 @@ class OrderService {
       id: productId,
     })
   }
+
+  setItemAmount({ orderId, productId, amount }) {
+    return http.post(`/mobile/orders/${orderId}`, {
+      action: 'set_item_amount',
+      id: productId,
+      amount,
+    })
+  }
 }
 
 export default new OrderService()

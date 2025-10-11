@@ -10,7 +10,12 @@ const props = defineProps({
   },
 })
 
+const isInStock = computed(() => props.item.amount > 0)
+
 function addToCart() {
+  if (!isInStock.value) {
+    return
+  }
   orderStore.addProduct(props.item, 1)
 }
 
@@ -26,8 +31,12 @@ const imageUrl = computed(() => {
 
 <template>
   <article
+    class="min-w-[170px] w-[170px] overflow-hidden rounded-lg p-2 bg-white border border-gray-300 flex flex-col transition-all duration-200"
+    :class="{
+      'cursor-pointer hover:shadow-md': isInStock,
+      'cursor-not-allowed opacity-60': !isInStock,
+    }"
     @click="addToCart"
-    class="cursor-pointer min-w-[170px] w-[170px] overflow-hidden rounded-lg p-2 bg-white border border-gray-300 flex flex-col"
   >
     <div
       class="flex justify-center items-center w-full min-h-20 overflow-hidden"
@@ -48,10 +57,15 @@ const imageUrl = computed(() => {
     </div>
     <div
       class="flex flex-col gap-2 w-full overflow-hidden text-sm font-semibold"
+      :class="{ 'text-gray-500': !isInStock }"
     >
       <span class="truncate text-center">{{ item.title }}</span>
     </div>
-    <div class="text-center font-semibold" style="color: var(--color-green)">
+    <div
+      class="text-center font-semibold"
+      :class="!isInStock ? 'text-gray-400' : ''"
+      style="color: var(--color-green)"
+    >
       {{ item.sale_cost }}₸
     </div>
     <div style="font-size: 0.8rem; text-align: center">

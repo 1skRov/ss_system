@@ -140,6 +140,39 @@ export const useOrderStore = defineStore('order', {
       }
     },
 
+    async updateItemAmount({ orderItemId, amount }) {
+      if (!this.activeOrderId) return
+      this.isLoading = true
+      this.error = null
+      try {
+        const { data } = await orderService.setItemAmount({
+          orderId: this.activeOrderId,
+          productId: orderItemId,
+          amount: amount,
+        })
+
+        if (data.order_item) {
+          const index = this.orderItems.findIndex(
+            (item) => item && item._id === orderItemId
+          )
+
+          if (index !== -1) {
+            this.currentOrder.items[index] = data.order_item
+          }
+        }
+
+        if (data.order) {
+          this.currentOrder.order = data.order
+        }
+
+        await this.getOrder(this.activeOrderId)
+      } catch (e) {
+        this.error = `Ошибка при изменении количества товара: ${e.message}`
+      } finally {
+        this.isLoading = false
+      }
+    },
+
     clearOrder() {
       this.currentOrder = null
       localStorage.removeItem('activeOrderId')

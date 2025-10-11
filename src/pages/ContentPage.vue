@@ -31,7 +31,7 @@ onMounted(async () => {
     <MainFooter
       v-if="showFooter"
       :total-price="orderStore.totalPrice"
-      :payed-summ="orderStore.discount"
+      :payed-summ="orderStore.payed_summ"
       :discount="orderStore.discount"
     />
   </div>

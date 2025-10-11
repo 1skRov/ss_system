@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, inject, computed } from 'vue'
+import { ref, inject, computed } from 'vue'
 import NumPanel from './NumPanel.vue'
 import DiscountModal from './DiscountModal.vue'
 
@@ -42,9 +42,9 @@ const closeModal = () => {
       <div class="flex w-full justify-between items-center">
         <p class="m-0 text-sm">Скидка</p>
         <button
-          @click="openModal"
-          class="rounded-lg px-2 py-1.5 text-white font-medium"
           style="background: var(--color-gray)"
+          class="rounded-lg px-2 py-1.5 text-white font-medium"
+          @click="openModal"
         >
           Добавить
         </button>
