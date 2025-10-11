@@ -1,9 +1,11 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useFilialStore } from '@/stores/filialStore'
 import { useOrderStore } from '@/stores/orderStore'
-import Alert from './UiComponents/AlertMsg.vue'
+import Alert from '@/components/UiComponents/AlertMsg.vue'
 
+const router = useRouter()
 const filialStore = useFilialStore()
 const orderStore = useOrderStore()
 
@@ -59,11 +61,9 @@ function fullName(u) {
 }
 
 async function ensureOptionalsLoaded() {
-  if (filialStore.needsSelection) {
-    if (!filialStore.employees.length) await filialStore.fetchEmployees(0)
-    if (!filialStore.clients.length) await filialStore.fetchClients()
-    filialStore.checkExistingSelection()
-  }
+  if (!filialStore.employees.length) await filialStore.fetchEmployees(0)
+  if (!filialStore.clients.length) await filialStore.fetchClients()
+  filialStore.checkExistingSelection()
 }
 
 async function confirmSelection() {
@@ -90,6 +90,7 @@ async function confirmSelection() {
   try {
     const placeId = Number(localSelectedFilialId.value)
     await orderStore.createOrder(placeId)
+    router.push('/')
   } catch (error) {
     alert.value = {
       bg: 'error',
@@ -101,11 +102,7 @@ async function confirmSelection() {
 </script>
 
 <template>
-  <div
-    v-if="filialStore.needsSelection"
-    class="fixed inset-0 z-50 flex items-center justify-center"
-  >
-    <div class="absolute inset-0 bg-black/80"></div>
+  <div class="flex items-center justify-center w-full h-full">
     <div class="mt-4">
       <Alert
         v-if="alert"
@@ -116,10 +113,8 @@ async function confirmSelection() {
         class="absolute top-0 left-0 right-0 w-1/2 mx-auto"
       />
     </div>
-    <div class="relative w-full max-w-2xl mx-4 rounded-lg bg-white px-6 py-5">
-      <h3 class="text-xl font-semibold">
-        Выберите филиал и кассу, чтобы продолжить
-      </h3>
+    <div class="w-full max-w-2xl mx-4 rounded-lg p-5 border border-gray-300">
+      <h3 class="modal-title">Выберите филиал и кассу, чтобы продолжить</h3>
 
       <div class="mt-5 grid grid-cols-2 gap-4">
         <div class="w-full">

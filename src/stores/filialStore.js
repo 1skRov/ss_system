@@ -8,8 +8,6 @@ export const useFilialStore = defineStore('filial', {
     employees: [],
     clients: [],
     error: null,
-    needsSelection: false,
-
     selectedFilialId: null,
     selectedKassaId: null,
     selectedEmployeeId: null,
@@ -76,7 +74,6 @@ export const useFilialStore = defineStore('filial', {
     setFilialAndKassa(filialId, kassaId) {
       this.selectedFilialId = filialId
       this.selectedKassaId = kassaId
-      this.needsSelection = false
       localStorage.setItem('selectedFilialId', String(filialId))
       localStorage.setItem('selectedKassaId', String(kassaId))
     },
@@ -99,9 +96,7 @@ export const useFilialStore = defineStore('filial', {
       const empId = localStorage.getItem('selectedEmployeeId')
       const clientId = localStorage.getItem('selectedClientId')
 
-      if (!filialId || !kassaId) {
-        this.needsSelection = true
-      } else {
+      if (filialId && kassaId) {
         const hasFilial = this.filials.some(
           (f) => String(f._id) === String(filialId)
         )
@@ -113,10 +108,11 @@ export const useFilialStore = defineStore('filial', {
         if (hasFilial && hasKassa) {
           this.selectedFilialId = Number(filialId)
           this.selectedKassaId = Number(kassaId)
-          this.needsSelection = false
         } else {
           this.resetSelection()
         }
+      } else {
+        this.resetSelection()
       }
 
       if (this.employees.length && empId) {
@@ -141,7 +137,6 @@ export const useFilialStore = defineStore('filial', {
       this.selectedKassaId = null
       this.selectedEmployeeId = null
       this.selectedClientId = null
-      this.needsSelection = true
 
       localStorage.removeItem('selectedFilialId')
       localStorage.removeItem('selectedKassaId')

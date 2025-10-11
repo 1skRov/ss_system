@@ -1,130 +1,10 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { useOrderStore } from '@/stores/orderStore'
 import EditModal from '@/components/EditModal.vue'
 import NumPanel from '@/components/NumPanel.vue'
 
 const orderStore = useOrderStore()
-
-const rows = ref([
-  {
-    id: 1,
-    name: 'Круассан с шоколадом',
-    qty: 2,
-    price: 350,
-    discount: 0.1,
-    total: 630,
-    checked: false,
-  },
-  {
-    id: 2,
-    name: 'Слойка с яблоком',
-    qty: 1,
-    price: 280,
-    discount: 0,
-    total: 280,
-    checked: false,
-  },
-  {
-    id: 3,
-    name: 'Пирожок с мясом',
-    qty: 3,
-    price: 200,
-    discount: 0.05,
-    total: 570,
-    checked: false,
-  },
-  {
-    id: 4,
-    name: 'Булочка с изюмом',
-    qty: 4,
-    price: 150,
-    discount: 0,
-    total: 600,
-    checked: false,
-  },
-  {
-    id: 5,
-    name: 'Хачапури по-аджарски',
-    qty: 1,
-    price: 450,
-    discount: 0.15,
-    total: 383,
-    checked: false,
-  },
-  {
-    id: 6,
-    name: 'Самса с курицей',
-    qty: 2,
-    price: 180,
-    discount: 0,
-    total: 360,
-    checked: false,
-  },
-  {
-    id: 7,
-    name: 'Чебурек домашний',
-    qty: 1,
-    price: 250,
-    discount: 0.2,
-    total: 200,
-    checked: false,
-  },
-  {
-    id: 8,
-    name: 'Пицца-слайс Маргарита',
-    qty: 2,
-    price: 320,
-    discount: 0,
-    total: 640,
-    checked: false,
-  },
-  {
-    id: 9,
-    name: 'Штрудель яблочный',
-    qty: 1,
-    price: 380,
-    discount: 0.1,
-    total: 342,
-    checked: false,
-  },
-  {
-    id: 10,
-    name: 'Беляш с картошкой',
-    qty: 3,
-    price: 160,
-    discount: 0.05,
-    total: 456,
-    checked: false,
-  },
-  {
-    id: 11,
-    name: 'Эклер заварной',
-    qty: 2,
-    price: 220,
-    discount: 0,
-    total: 440,
-    checked: false,
-  },
-  {
-    id: 12,
-    name: 'Пончик глазированный',
-    qty: 5,
-    price: 120,
-    discount: 0.1,
-    total: 540,
-    checked: false,
-  },
-  {
-    id: 13,
-    name: 'Кекс шоколадный',
-    qty: 1,
-    price: 300,
-    discount: 0,
-    total: 300,
-    checked: false,
-  },
-])
 
 const selectAll = ref(false)
 const showModal = ref(false)
@@ -134,6 +14,32 @@ const modalData = ref({
   price: '',
   discount: '',
   total: '',
+})
+
+const rows = computed(() => {
+  return orderStore.orderItems.map((item) => {
+    const price = item.sale_cost || 0
+    const qty = item.amount || 0
+    const discount = item.discount || 0
+    const total = price * qty - (price * qty * discount) / 100
+
+    return {
+      id: item._id,
+      name: item.title || 'Без названия',
+      qty: qty,
+      price: price,
+      discount: discount,
+      total: total,
+      checked: false,
+    }
+  })
+})
+
+onMounted(async () => {
+  const activeOrderId = orderStore.activeOrderId
+  if (activeOrderId) {
+    await orderStore.getOrder(activeOrderId)
+  }
 })
 
 watch(selectAll, (value) => {
@@ -181,7 +87,16 @@ const removeProduct = async (orderItemId) => {
 
 <template>
   <article class="border border-gray-300 rounded-lg overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-300">
+    <div v-if="orderStore.isLoading" class="text-center py-8">
+      Загрузка заказа...
+    </div>
+    <div v-else-if="orderStore.error" class="text-center py-8 text-red-500">
+      {{ orderStore.error }}
+    </div>
+    <div v-else-if="rows.length === 0" class="text-center py-8 text-gray-500">
+      Корзина пуста. Добавьте товары из каталога.
+    </div>
+    <table v-else class="min-w-full divide-y divide-gray-300">
       <thead class="bg-gray-100">
         <tr>
           <th scope="col" class="w-12 text-center">

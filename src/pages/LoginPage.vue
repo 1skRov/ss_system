@@ -1,15 +1,15 @@
 <script setup>
-import { ref, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import LoginKeyboard from '@/components/LoginKeyboard.vue'
 import { useAuthStore } from '@/stores/authStore'
-import { useFilialStore } from '@/stores/filialStore'
+
+import LoginKeyboard from '@/components/LoginKeyboard.vue'
 import InputComponent from '@/components/UiComponents/InputComponent.vue'
+
 import UserIcon from '@/assets/icons/UserIcon.vue'
 import LockClosedIcon from '@/assets/icons/LockClosedIcon.vue'
 
 const authStore = useAuthStore()
-const filialStore = useFilialStore()
 const router = useRouter()
 
 const login = ref('')
@@ -17,25 +17,14 @@ const password = ref('')
 const focusedField = ref(null) // 'login' | 'password' | null
 const isLoading = ref(false)
 
-const alert = ref({ show: false, text: '', bg: 'bg-yellow-400' })
-const showAlert = (text, bg = 'bg-yellow-400', duration = 3000) => {
-  alert.value = { show: true, text, bg }
-  if (duration) setTimeout(() => (alert.value.show = false), duration)
-}
-
 const handleLogin = async () => {
   if (isLoading.value) return
   isLoading.value = true
   try {
     const success = await authStore.login(login.value, password.value)
     if (success) {
-      try {
-        await filialStore.fetchPlaces()
-      } catch {}
-      showAlert('Успешный вход', 'bg-green-500', 1200)
-      router.push('/')
+      router.push('/select-filial')
     } else {
-      showAlert(authStore.error || 'Неверный логин или пароль', 'bg-red-500')
       password.value = ''
     }
   } finally {
@@ -61,8 +50,15 @@ const handleClear = () => {
   <div class="flex flex-col w-full h-full">
     <div class="flex flex-col items-center justify-center flex-1">
       <div class="flex flex-col w-full">
-        <p class="text-blue-600 font-bold text-3xl text-center">SSS</p>
-        <p class="text-xs text-blue-600 text-center">Вход в систему</p>
+        <p
+          class="text-2xl font-bold text-center"
+          style="color: var(--color-navy-blue)"
+        >
+          SSS
+        </p>
+        <p class="text-base text-center" style="color: var(--color-gray)">
+          Вход в систему
+        </p>
       </div>
 
       <div class="flex flex-col gap-3 pt-5 w-full max-w-md">
@@ -109,14 +105,4 @@ const handleClear = () => {
   </div>
 </template>
 
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.15s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
+<style scoped></style>

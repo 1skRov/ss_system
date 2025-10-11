@@ -39,7 +39,6 @@ export const useOrderStore = defineStore('order', {
       const placeId = filialStore.selectedKassaId
       if (!placeId) {
         this.error = 'Касса не выбрана. Невозможно создать заказ.'
-        filialStore.needsSelection = true
         return null
       }
 

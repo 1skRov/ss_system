@@ -2,9 +2,11 @@
 import { ref } from 'vue'
 
 const active = ref('tenge')
+const emit = defineEmits(['change'])
 
 const toggle = (mode) => {
   active.value = mode
+  emit('change', mode)
 }
 </script>
 

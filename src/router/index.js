@@ -33,6 +33,12 @@ const routes = [
     name: 'Login',
     component: () => import('@/pages/LoginPage.vue'),
   },
+  {
+    path: '/select-filial',
+    name: 'Filial',
+    component: () => import('@/pages/FilialSelection.vue'),
+    meta: { requiresAuth: true },
+  },
 ]
 
 const router = createRouter({

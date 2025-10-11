@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import NumPanel from './NumPanel.vue'
 import DiscountModal from './DiscountModal.vue'
 import QuickItemsModal from './QuickItemsModal.vue'
@@ -8,26 +8,38 @@ import PayModal from './PayModal.vue'
 const showModal = ref(false)
 const showQuickItems = ref(false)
 const showPayModal = ref(false)
+const activeInput = ref(null)
+const discountValue = ref('')
 
 const openModal = () => {
   showModal.value = true
 }
+
 const openQuickItems = () => {
   showQuickItems.value = true
 }
+
 const openPayModal = () => {
   showPayModal.value = true
 }
 
 const closeModal = () => {
   showModal.value = false
+  activeInput.value = null
 }
 
 const closeQuickItems = () => {
   showQuickItems.value = false
 }
+
 const closePayModal = () => {
   showPayModal.value = false
+}
+
+const handleNumPanelInput = (value) => {
+  if (activeInput.value === 'discount') {
+    discountValue.value = value
+  }
 }
 </script>
 <template>
@@ -71,11 +83,20 @@ const closePayModal = () => {
   </footer>
   <div
     v-if="showModal"
-    class="fixed inset-0 flex items-center gap-5 justify-center bg-black/70 z-50"
+    class="fixed inset-0 flex items-center justify-center bg-black/70 z-50"
     @click.self="closeModal"
   >
-    <DiscountModal @close="closeModal" />
-    <NumPanel />
+    <div
+      class="flex items-center justify-center gap-5 bg-white w-[90vw] h-[90vh] rounded-lg p-5"
+    >
+      <DiscountModal
+        :order-total="12345"
+        v-model:discount-value="discountValue"
+        @focus-input="(input) => (activeInput = input)"
+        @close="closeModal"
+      />
+      <NumPanel v-model="discountValue" @input="handleNumPanelInput" />
+    </div>
   </div>
   <div
     v-if="showQuickItems"
