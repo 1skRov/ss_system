@@ -12,11 +12,13 @@ export const useOrderStore = defineStore('order', {
   getters: {
     orderItems: (state) => state.currentOrder?.items || [],
     totalPrice: (state) => {
-      if (!state.currentOrder?.items) return 0
-      return state.currentOrder.items.reduce(
-        (total, item) => total + item.price * item.amount,
-        0
-      )
+      return state.currentOrder?.order?.price || 0
+    },
+    discount: (state) => {
+      return state.currentOrder?.order?.discount || 0
+    },
+    payed_summ: (state) => {
+      return state.currentOrder?.order?.payed_summ || 0
     },
     activeOrderId: (state) => state.currentOrder?.id || null,
   },

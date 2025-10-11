@@ -1,9 +1,24 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 import NumPanel from './NumPanel.vue'
 import DiscountModal from './DiscountModal.vue'
 import QuickItemsModal from './QuickItemsModal.vue'
 import PayModal from './PayModal.vue'
+
+const props = defineProps({
+  totalPrice: {
+    type: Number,
+    default: 0,
+  },
+  payedSumm: {
+    type: Number,
+    default: 0,
+  },
+  discount: {
+    type: Number,
+    default: 0,
+  },
+})
 
 const showModal = ref(false)
 const showQuickItems = ref(false)
@@ -57,15 +72,15 @@ const handleNumPanelInput = (value) => {
       >
         <div class="item">
           <p class="label">Итого</p>
-          <p class="value">123</p>
+          <p class="value">{{ props.totalPrice }}</p>
         </div>
         <div class="item">
           <p class="label">Внесено</p>
-          <p class="value">123</p>
+          <p class="value">{{ props.payedSumm }}</p>
         </div>
         <div class="item">
           <p class="label">Сдача</p>
-          <p class="value">123</p>
+          <p class="value">{{ 0 }}</p>
         </div>
         <div class="item">
           <p class="label">Скидка</p>
@@ -91,7 +106,6 @@ const handleNumPanelInput = (value) => {
     >
       <DiscountModal
         :order-total="12345"
-        v-model:discount-value="discountValue"
         @focus-input="(input) => (activeInput = input)"
         @close="closeModal"
       />

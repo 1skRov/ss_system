@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, watch, computed, onMounted } from 'vue'
+import { inject, ref, watch, computed } from 'vue'
 import { useOrderStore } from '@/stores/orderStore'
 import EditModal from '@/components/EditModal.vue'
 import NumPanel from '@/components/NumPanel.vue'
@@ -19,18 +19,13 @@ const modalData = ref({
 
 const rows = computed(() => {
   return orderData.items.value.map((item) => {
-    const price = item.sale_cost || 0
-    const qty = item.amount || 0
-    const discount = item.discount || 0
-    const total = price * qty - (price * qty * discount) / 100
-
     return {
       id: item._id,
-      name: item.title || 'Без названия',
-      qty: qty,
-      price: price,
-      discount: discount,
-      total: total,
+      name: item.good.title || 'Без названия',
+      qty: item.amount || 0,
+      price: item.good.sale_cost || 0,
+      discount: item.discount || 0,
+      total: item.cost,
       checked: false,
     }
   })
@@ -52,6 +47,7 @@ watch(
 const openModal = (row) => {
   showModal.value = true
   modalData.value = {
+    name: row.name,
     qty: row.qty.toString(),
     price: row.price.toString(),
     discount: (row.discount * 100).toString(),
@@ -99,9 +95,9 @@ const removeProduct = async (orderItemId) => {
           <th scope="col" class="w-12 text-center">
             <input
               id="hs-table-checkbox-all"
+              v-model="selectAll"
               type="checkbox"
               class="rounded-sm w-5 h-5"
-              v-model="selectAll"
             />
           </th>
           <th scope="col" class="text-left">Название</th>
@@ -120,9 +116,9 @@ const removeProduct = async (orderItemId) => {
           <td class="flex items-center justify-center">
             <input
               :id="`row-${row.id}`"
+              v-model="row.checked"
               type="checkbox"
               class="rounded-sm w-5 h-5"
-              v-model="row.checked"
               @click.stop
             />
           </td>
