@@ -1,9 +1,12 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, inject, computed } from 'vue'
 import NumPanel from './NumPanel.vue'
 import DiscountModal from './DiscountModal.vue'
 
 const showModal = ref(false)
+const orderData = inject('orderData')
+const orderItems = computed(() => orderData.items.value)
+const totalPrice = computed(() => orderData.totalPrice.value)
 
 const openModal = () => {
   showModal.value = true
@@ -19,14 +22,13 @@ const closeModal = () => {
   >
     <p class="m-0 mb-2 text-base font-medium">Заказ №2</p>
     <div class="side-body flex flex-col gap-3 mb-3">
-      <div class="item py-1.5">
+      <div v-for="item in orderItems" :key="item._id" class="item py-1.5">
         <p class="w-full truncate text-base text-gray-800">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Incidunt,
-          in.
+          {{ item.title }}
         </p>
         <div class="flex items-center justify-between text-lg">
-          <p>2 x 12300 ₸</p>
-          <p class="font-semibold">24600 ₸</p>
+          <p>{{ item.amount }} x {{ item.sale_cost }} ₸</p>
+          <p class="font-semibold">{{ item.amount * item.sale_cost }} ₸</p>
         </div>
       </div>
     </div>
@@ -35,7 +37,7 @@ const closeModal = () => {
         class="flex w-full justify-between items-center font-bold text-lg mt-3"
       >
         <p class="m-0">Итого</p>
-        <p class="m-0 text-right">1200</p>
+        <p class="m-0 text-right">{{ totalPrice }} ₸</p>
       </div>
       <div class="flex w-full justify-between items-center">
         <p class="m-0 text-sm">Скидка</p>
