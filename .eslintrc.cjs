@@ -18,6 +18,6 @@ module.exports = {
   ],
   rules: {
     'prettier/prettier': 'warn', // Ошибки Prettier будут 'предупреждениями'
-    // Сюда можно добавить свои правила ESLint
+    'vue/multi-word-component-names': 'off',
   },
 }

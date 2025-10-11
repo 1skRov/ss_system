@@ -19,10 +19,7 @@ provide('orderData', {
 })
 
 onMounted(async () => {
-  const activeOrderId = orderStore.activeOrderId
-  if (activeOrderId) {
-    await orderStore.getOrder(activeOrderId)
-  }
+  await orderStore.ensureOrderExists()
 })
 </script>
 
