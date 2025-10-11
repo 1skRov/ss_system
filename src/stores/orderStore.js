@@ -56,7 +56,7 @@ export const useOrderStore = defineStore('order', {
         if (!orderId) {
           throw new Error('Не удалось получить ID нового заказа')
         }
-        this.currentOrder = { id: orderId, items: [] }
+        this.currentOrder = { id: orderId, items: [], order: data.order }
         localStorage.setItem('activeOrderId', orderId.toString())
         return orderId
       } catch (e) {
@@ -75,6 +75,7 @@ export const useOrderStore = defineStore('order', {
         this.currentOrder = {
           id: data.order._id,
           items: data.order_items || [],
+          order: data.order,
         }
         localStorage.setItem('activeOrderId', this.currentOrder.id.toString())
       } catch (e) {
@@ -106,6 +107,9 @@ export const useOrderStore = defineStore('order', {
             (item) => item.good_id === product._id
           )
           this.currentOrder.items[index] = data.order_item
+          if (data.order) {
+            this.currentOrder.order = data.order
+          }
         } else {
           const { data } = await orderService.addProductToOrder({
             orderId,
@@ -113,6 +117,9 @@ export const useOrderStore = defineStore('order', {
             count,
           })
           this.currentOrder.items.push(data.order_item)
+          if (data.order) {
+            this.currentOrder.order = data.order
+          }
         }
       } catch (e) {
         this.error = `Ошибка при добавлении товара: ${e.message}`
