@@ -21,11 +21,12 @@ const routes = [
         component: () => import('@/pages/CatalogPage.vue'),
         meta: { requiresAuth: true },
       },
-      // {
-      //   path: 'deferred-products',
-      //   name: 'DeferredProducts',
-      //   component: () => import('@/pages/DeferredProducts.vue'),
-      // }
+      {
+        path: 'deferred-products',
+        name: 'DeferredProducts',
+        component: () => import('@/pages/DeferredProducts.vue'),
+        meta: { requiresAuth: true },
+      },
     ],
   },
   {

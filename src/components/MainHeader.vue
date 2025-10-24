@@ -1,9 +1,6 @@
 <template>
   <header class="flex items-center justify-between px-2 py-1">
-    <div
-      @click="openModal"
-      class="search w-12 h-11 rounded-lg flex items-center justify-center text-white"
-    >
+    <div class="search" @click="toggleSearch">
       <MagnifyingGLassIcon />
     </div>
 
@@ -23,39 +20,48 @@
     </div>
 
     <button
-      @click="handleLogout"
       class="flex items-center gap-3 h-11 text-white"
+      @click="handleLogout"
     >
       <LogoutIcon />
-      <span class="mx-1">Jane Doe</span>
+      <span class="mx-1">Выйти</span>
     </button>
   </header>
+  <!-- <div
+    v-if="showSearch"
+    class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center"
+    @click.self="toggleSearch"
+  >
+    <div class="w-[90%] max-w-2xl bg-white rounded-lg p-6">
+      <SearchInput />
+    </div>
+  </div> -->
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+
 import CatalogIcon from '@/assets/icons/Catalog.vue'
 import ListIcon from '@/assets/icons/List.vue'
 import LogoutIcon from '@/assets/icons/LogoutIcon.vue'
 import MagnifyingGLassIcon from '@/assets/icons/MagnifyingGLassIcon.vue'
 import BarsDownIcon from '@/assets/icons/BarsArrowDownIcon.vue'
+import SearchInput from '@/components/SearchInput.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const showSearch = ref(false)
 
 function handleLogout() {
   router.push('/login')
   authStore.logout()
 }
+
+function toggleSearch() {
+  showSearch.value = !showSearch.value
+}
 </script>
 
-<style scoped>
-header {
-  background-color: var(--color-navy-blue);
-}
-.search {
-  background-color: var(--color-gray);
-}
-</style>
+<style scoped></style>
