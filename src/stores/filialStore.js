@@ -46,6 +46,7 @@ export const useFilialStore = defineStore('filial', {
         this.kassas = data?.places || []
       } catch (e) {
         this.error = e?.message || 'Произошла ошибка при получении филиалов.'
+        console.error(this.error)
         this.filials = []
         this.kassas = []
       }
@@ -57,6 +58,7 @@ export const useFilialStore = defineStore('filial', {
         this.employees = data?.items ?? []
       } catch (e) {
         this.error = e?.message || 'Ошибка при получении сотрудников.'
+        console.error(this.error)
         this.employees = []
       }
     },
@@ -67,27 +69,29 @@ export const useFilialStore = defineStore('filial', {
         this.clients = data?.items ?? []
       } catch (e) {
         this.error = e?.message || 'Ошибка при получении клиентов.'
+        console.error(this.error)
         this.clients = []
       }
     },
 
-    setFilialAndKassa(filialId, kassaId) {
+    setSelection(filialId, kassaId, employeeId, clientId) {
       this.selectedFilialId = filialId
       this.selectedKassaId = kassaId
-      localStorage.setItem('selectedFilialId', String(filialId))
-      localStorage.setItem('selectedKassaId', String(kassaId))
-    },
-
-    setEmployee(employeeId) {
-      this.selectedEmployeeId = employeeId
-      if (employeeId == null) localStorage.removeItem('selectedEmployeeId')
-      else localStorage.setItem('selectedEmployeeId', String(employeeId))
-    },
-
-    setClient(clientId) {
+      this.selectedEmployeeId = employeeId ?? null
       this.selectedClientId = clientId ?? null
-      if (clientId == null) localStorage.removeItem('selectedClientId')
-      else localStorage.setItem('selectedClientId', String(clientId))
+
+      if (filialId) localStorage.setItem('selectedFilialId', String(filialId))
+      else localStorage.removeItem('selectedFilialId')
+
+      if (kassaId) localStorage.setItem('selectedKassaId', String(kassaId))
+      else localStorage.removeItem('selectedKassaId')
+
+      if (employeeId)
+        localStorage.setItem('selectedEmployeeId', String(employeeId))
+      else localStorage.removeItem('selectedEmployeeId')
+
+      if (clientId) localStorage.setItem('selectedClientId', String(clientId))
+      else localStorage.removeItem('selectedClientId')
     },
 
     checkExistingSelection() {
@@ -97,38 +101,34 @@ export const useFilialStore = defineStore('filial', {
       const clientId = localStorage.getItem('selectedClientId')
 
       if (filialId && kassaId) {
-        const hasFilial = this.filials.some(
-          (f) => String(f._id) === String(filialId)
+        const isFilialValid = this.filials.some(
+          (f) => String(f._id) === filialId
         )
-        const hasKassa = this.kassas.some(
-          (k) =>
-            String(k._id) === String(kassaId) &&
-            String(k.stock_id) === String(filialId)
+        const isKassaValid = this.kassas.some(
+          (k) => String(k._id) === kassaId && String(k.stock_id) === filialId
         )
-        if (hasFilial && hasKassa) {
+
+        if (isFilialValid && isKassaValid) {
           this.selectedFilialId = Number(filialId)
           this.selectedKassaId = Number(kassaId)
         } else {
           this.resetSelection()
+          return
         }
       } else {
-        this.resetSelection()
+        return
       }
 
       if (this.employees.length && empId) {
-        const hasEmp = this.employees.some(
-          (e) => String(e._id) === String(empId)
-        )
-        if (hasEmp) this.selectedEmployeeId = Number(empId)
-        else localStorage.removeItem('selectedEmployeeId')
+        const hasEmp = this.employees.some((e) => String(e._id) === empId)
+        this.selectedEmployeeId = hasEmp ? Number(empId) : null
+        if (!hasEmp) localStorage.removeItem('selectedEmployeeId')
       }
 
       if (this.clients.length && clientId) {
-        const hasClient = this.clients.some(
-          (c) => String(c._id) === String(clientId)
-        )
-        if (hasClient) this.selectedClientId = Number(clientId)
-        else localStorage.removeItem('selectedClientId')
+        const hasClient = this.clients.some((c) => String(c._id) === clientId)
+        this.selectedClientId = hasClient ? Number(clientId) : null
+        if (!hasClient) localStorage.removeItem('selectedClientId')
       }
     },
 

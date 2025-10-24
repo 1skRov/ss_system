@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useFilialStore } from '@/stores/filialStore'
 import { useOrderStore } from '@/stores/orderStore'
@@ -9,30 +10,26 @@ const router = useRouter()
 const filialStore = useFilialStore()
 const orderStore = useOrderStore()
 
-const localSelectedFilialId = ref(null)
-const localSelectedKassaId = ref(null)
-const localSelectedEmployeeId = ref(null)
-const localSelectedClientId = ref(null)
+const {
+  selectedFilialId,
+  selectedKassaId,
+  selectedEmployeeId,
+  selectedClientId,
+} = storeToRefs(filialStore)
 
 const alert = ref(null)
 
 onMounted(async () => {
   await filialStore.initSelectionFlow()
 
-  if (filialStore.selectedFilialId)
-    localSelectedFilialId.value = Number(filialStore.selectedFilialId)
-  if (filialStore.selectedKassaId)
-    localSelectedKassaId.value = Number(filialStore.selectedKassaId)
-  if (filialStore.selectedEmployeeId)
-    localSelectedEmployeeId.value = Number(filialStore.selectedEmployeeId)
-  if (filialStore.selectedClientId)
-    localSelectedClientId.value = Number(filialStore.selectedClientId)
-
-  await ensureOptionalsLoaded()
+  if (!filialStore.employees.length) await filialStore.fetchEmployees(0)
+  if (!filialStore.clients.length) await filialStore.fetchClients()
 })
 
-watch(localSelectedFilialId, () => {
-  localSelectedKassaId.value = null
+watch(selectedFilialId, (newValue, oldValue) => {
+  if (oldValue !== null && newValue !== oldValue) {
+    selectedKassaId.value = null
+  }
 })
 
 watch(alert, (newValue) => {
@@ -44,13 +41,13 @@ watch(alert, (newValue) => {
 })
 
 const kassasForSelectedFilial = computed(() => {
-  if (localSelectedFilialId.value == null) return []
-  const fid = Number(localSelectedFilialId.value)
+  if (selectedFilialId.value == null) return []
+  const fid = Number(selectedFilialId.value)
   return filialStore.kassas.filter((k) => Number(k.stock_id) === fid)
 })
 
 const canConfirm = computed(
-  () => !!localSelectedFilialId.value && !!localSelectedKassaId.value
+  () => !!selectedFilialId.value && !!selectedKassaId.value
 )
 
 function fullName(u) {
@@ -58,12 +55,6 @@ function fullName(u) {
   const l = u?.last_name || ''
   const name = `${f} ${l}`.trim()
   return name || u?.phone || `ID ${u?._id}`
-}
-
-async function ensureOptionalsLoaded() {
-  if (!filialStore.employees.length) await filialStore.fetchEmployees(0)
-  if (!filialStore.clients.length) await filialStore.fetchClients()
-  filialStore.checkExistingSelection()
 }
 
 async function confirmSelection() {
@@ -76,19 +67,15 @@ async function confirmSelection() {
     return
   }
 
-  filialStore.setFilialAndKassa(
-    Number(localSelectedFilialId.value),
-    Number(localSelectedKassaId.value)
-  )
-  filialStore.setEmployee(
-    localSelectedEmployeeId.value ? Number(localSelectedEmployeeId.value) : null
-  )
-  filialStore.setClient(
-    localSelectedClientId.value ? Number(localSelectedClientId.value) : null
+  filialStore.setSelection(
+    Number(selectedFilialId.value),
+    Number(selectedKassaId.value),
+    selectedEmployeeId.value ? Number(selectedEmployeeId.value) : null,
+    selectedClientId.value ? Number(selectedClientId.value) : null
   )
 
   try {
-    const placeId = Number(localSelectedFilialId.value)
+    const placeId = Number(selectedFilialId.value)
     await orderStore.createOrder(placeId)
     router.push('/')
   } catch (error) {
@@ -109,23 +96,16 @@ async function confirmSelection() {
         :bg="alert.bg"
         :title="alert.title"
         :description="alert.description"
+        class="absolute top-0 right-0 w-[500px]"
         @close="alert = null"
-        class="absolute top-0 left-0 right-0 w-1/2 mx-auto"
       />
     </div>
     <div class="w-full max-w-2xl mx-4 rounded-lg p-5 border border-gray-300">
       <h3 class="modal-title">Выберите филиал и кассу, чтобы продолжить</h3>
-
       <div class="mt-5 grid grid-cols-2 gap-4">
         <div class="w-full">
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Филиал</label
-          >
-          <select
-            v-model="localSelectedFilialId"
-            class="filial-select"
-            autofocus
-          >
+          <label class="select-label">Филиал</label>
+          <select v-model="selectedFilialId" class="filial-select" autofocus>
             <option :value="null" disabled>Выберите филиал</option>
             <option
               v-for="filial in filialStore.filials"
@@ -138,12 +118,10 @@ async function confirmSelection() {
         </div>
 
         <div class="w-full">
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Касса</label
-          >
+          <label class="select-label">Касса</label>
           <select
-            v-model="localSelectedKassaId"
-            :disabled="!localSelectedFilialId"
+            v-model="selectedKassaId"
+            :disabled="!selectedFilialId"
             class="filial-select"
           >
             <option :value="null" disabled>Выберите кассу</option>
@@ -158,12 +136,10 @@ async function confirmSelection() {
         </div>
 
         <div class="w-full">
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Сотрудник (необязательно)</label
-          >
+          <label class="select-label">Сотрудник (необязательно)</label>
           <select
-            v-model="localSelectedEmployeeId"
-            :disabled="!localSelectedFilialId"
+            v-model="selectedEmployeeId"
+            :disabled="!selectedFilialId"
             class="filial-select"
           >
             <option :value="null">Без сотрудника</option>
@@ -178,12 +154,10 @@ async function confirmSelection() {
         </div>
 
         <div class="w-full">
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Клиент (необязательно)</label
-          >
+          <label class="select-label">Клиент (необязательно)</label>
           <select
-            v-model="localSelectedClientId"
-            :disabled="!localSelectedFilialId"
+            v-model="selectedClientId"
+            :disabled="!selectedFilialId"
             class="filial-select"
           >
             <option :value="null">Без клиента</option>
