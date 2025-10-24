@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/authStore'
 
 import LoginKeyboard from '@/components/LoginKeyboard.vue'
 import InputComponent from '@/components/UiComponents/InputComponent.vue'
+import AlertMessage from '@/components/UiComponents/AlertMsg.vue'
 
 import UserIcon from '@/assets/icons/UserIcon.vue'
 import LockClosedIcon from '@/assets/icons/LockClosedIcon.vue'
@@ -15,20 +16,13 @@ const router = useRouter()
 const login = ref('')
 const password = ref('')
 const focusedField = ref(null) // 'login' | 'password' | null
-const isLoading = ref(false)
 
 const handleLogin = async () => {
-  if (isLoading.value) return
-  isLoading.value = true
-  try {
-    const success = await authStore.login(login.value, password.value)
-    if (success) {
-      router.push('/select-filial')
-    } else {
-      password.value = ''
-    }
-  } finally {
-    isLoading.value = false
+  const success = await authStore.login(login.value, password.value)
+  if (success) {
+    router.push('/select-filial')
+  } else {
+    password.value = ''
   }
 }
 
@@ -47,9 +41,19 @@ const handleClear = () => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full h-full">
-    <div class="flex flex-col items-center justify-center flex-1">
-      <div class="flex flex-col w-full">
+  <div class="flex flex-col w-full h-full items-center justify-center">
+    <div v-if="authStore.error" class="absolute top-0 right-0 w-[500px]">
+      <AlertMessage
+        title="Ошибка авторизации"
+        :description="authStore.error"
+        bg="error"
+        @close="authStore.error = null"
+      ></AlertMessage>
+    </div>
+    <div
+      class="flex flex-col w-full items-center justify-center max-w-[500px] h-full"
+    >
+      <div>
         <p
           class="text-2xl font-bold text-center"
           style="color: var(--color-navy-blue)"
@@ -61,7 +65,7 @@ const handleClear = () => {
         </p>
       </div>
 
-      <div class="flex flex-col gap-3 pt-5 w-full max-w-md">
+      <div class="flex flex-col gap-3 pt-5 w-full">
         <div>
           <label class="block text-sm text-gray-500 mb-2">Логин</label>
           <InputComponent

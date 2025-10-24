@@ -48,9 +48,11 @@ body {
   @apply m-0 min-w-[320px] min-h-screen;
   font-size: 18px;
 }
+
 button {
   @apply active:scale-95 transition-transform;
 }
+
 header .navbar {
   @apply flex items-center gap-4;
 }
@@ -77,6 +79,7 @@ footer .panel {
   min-height: 150px;
   width: 400px;
 }
+
 .panel .item {
   @apply flex items-center w-full justify-between;
 }

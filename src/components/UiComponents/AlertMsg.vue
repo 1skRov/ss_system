@@ -1,17 +1,20 @@
 <script setup>
 import BellAlerts from '@/assets/icons/BellAlerts.vue'
-const props = defineProps({
+
+defineProps({
   bg: { type: String, default: 'info' }, // error | warning | info | success
   title: { type: String, required: true },
   description: { type: String, required: true },
 })
-const emit = defineEmits(['close'])
+defineEmits(['close'])
+
 const bgColor = {
   error: 'bg-red-400',
   warning: 'bg-yellow-400',
   info: 'bg-blue-400',
   success: 'bg-green-400',
 }
+
 const borderColor = {
   error: 'border-red-100',
   warning: 'border-yellow-100',
