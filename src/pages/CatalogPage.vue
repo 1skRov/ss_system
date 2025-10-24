@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { onMounted, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useCatalogStore } from '@/stores/catalogStore'
 
 import ProductCard from '@/components/ProductCard.vue'
@@ -7,19 +8,15 @@ import CatalogSidebar from '@/components/CatalogSidebar.vue'
 import TagIcon from '@/assets/icons/TagIcon.vue'
 
 const catalogStore = useCatalogStore()
+const { selectedCategory } = storeToRefs(catalogStore)
 const products = computed(() => catalogStore.products)
 const isLoadingProducts = computed(() => catalogStore.isLoadingProducts)
-const selectedCategory = ref(null)
 
 async function selectCategory(category) {
-  selectedCategory.value = category._id
-  await catalogStore.fetchProducts(category._id)
+  await catalogStore.setSelectedCategory(category._id)
 }
 onMounted(async () => {
-  await catalogStore.fetchCategories()
-  if (catalogStore.categories.length > 0) {
-    selectCategory(catalogStore.categories[0])
-  }
+  await catalogStore.initCatalog()
 })
 </script>
 
@@ -43,7 +40,10 @@ onMounted(async () => {
 
     <div class="flex flex-1 min-h-0 w-full mt-2">
       <div class="flex-1 min-w-0 overflow-y-auto pr-2">
-        <div class="flex flex-wrap w-full gap-3">
+        <div v-if="isLoadingProducts" class="text-center p-4">
+          Загрузка товаров...
+        </div>
+        <div v-else class="flex flex-wrap w-full gap-3">
           <ProductCard v-for="item in products" :key="item._id" :item="item" />
         </div>
       </div>

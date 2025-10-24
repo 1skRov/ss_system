@@ -9,24 +9,42 @@ export const useCatalogStore = defineStore('catalog', {
     error: null,
     isLoadingProducts: false,
     isSearching: false,
+    selectedCategory: null,
   }),
 
   actions: {
+    async initCatalog() {
+      if (this.categories.length === 0) {
+        await this.fetchCategories()
+      }
+      if (this.categories.length > 0 && this.selectedCategory === null) {
+        await this.setSelectedCategory(this.categories[0]._id)
+      }
+    },
     async fetchCategories() {
       this.isLoadingProducts = true
       this.error = null
       try {
         const response = await catalogService.getCategories()
         this.categories = response.data?.items || []
-        console.log('Categories fetched successfully:', this.categories)
       } catch (e) {
         this.error = e.message || 'Произошла ошибка при получении категорий.'
+        console.error(this.error)
         this.categories = []
       } finally {
         this.isLoadingProducts = false
       }
     },
+    async setSelectedCategory(categoryId) {
+      if (this.selectedCategory === categoryId) return
 
+      this.selectedCategory = categoryId
+      if (categoryId) {
+        await this.fetchProducts(categoryId)
+      } else {
+        this.products = []
+      }
+    },
     async fetchProducts(categoryId) {
       this.isLoadingProducts = true
       this.error = null
@@ -36,6 +54,7 @@ export const useCatalogStore = defineStore('catalog', {
         this.products = response.data?.items || []
       } catch (e) {
         this.error = e.message || 'Произошла ошибка при получении продуктов.'
+        console.error(this.error)
         this.products = []
       } finally {
         this.isLoadingProducts = false
