@@ -48,7 +48,7 @@ onMounted(async () => {
         </div>
       </div>
       <div class="w-[420px] shrink-0 overflow-y-hidden">
-        <CatalogSidebar />
+        <!-- <CatalogSidebar /> -->
       </div>
     </div>
   </div>

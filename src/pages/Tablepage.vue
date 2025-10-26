@@ -1,12 +1,10 @@
 <script setup>
-import { inject, ref, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useOrderStore } from '@/stores/orderStore'
 import EditModal from '@/components/EditModal.vue'
 import NumPanel from '@/components/NumPanel.vue'
 
 const orderStore = useOrderStore()
-const orderData = inject('orderData')
-
 const selectAll = ref(false)
 const showModal = ref(false)
 const activeInput = ref(null)
@@ -20,11 +18,14 @@ const modalData = ref({
 })
 
 const rows = computed(() => {
-  if (!orderData.items.value || !Array.isArray(orderData.items.value)) {
+  if (
+    !orderStore.orderItems.value ||
+    !Array.isArray(orderStore.orderItems.value)
+  ) {
     return []
   }
 
-  return orderData.items.value
+  return orderStore.orderItems.value
     .filter((item) => item && item._id && item.good)
     .map((item) => {
       return {
@@ -86,14 +87,11 @@ const removeProduct = async (orderItemId) => {
 
 <template>
   <article class="border border-gray-300 rounded-lg overflow-hidden">
-    <div v-if="orderData.isLoading.value" class="text-center py-8">
+    <div v-if="orderStore.isLoading" class="text-center py-8">
       Загрузка заказа...
     </div>
-    <div
-      v-else-if="orderData.error.value"
-      class="text-center py-8 text-red-500"
-    >
-      {{ orderData.error.value }}
+    <div v-else-if="orderStore.error" class="text-center py-8 text-red-500">
+      {{ orderStore.error }}
     </div>
     <div v-else-if="rows.length === 0" class="text-center py-8 text-gray-500">
       Корзина пуста. Добавьте товары из каталога.

@@ -72,6 +72,8 @@ export const useOrderStore = defineStore('order', {
       this.error = null
       try {
         const { data } = await orderService.getOrder(orderId)
+        console.log('add')
+
         this.currentOrder = {
           id: data.order._id,
           items: data.order_items || [],
@@ -93,36 +95,16 @@ export const useOrderStore = defineStore('order', {
         const orderId = await this.ensureOrderExists()
         if (!orderId) return
 
-        const existingItem = this.orderItems.find(
-          (item) => item.good_id === product._id
-        )
+        await orderService.addProductToOrder({
+          orderId,
+          productId: product._id,
+          count,
+        })
 
-        if (existingItem) {
-          const { data } = await orderService.addProductToOrder({
-            orderId,
-            productId: product._id,
-            count,
-          })
-          const index = this.orderItems.findIndex(
-            (item) => item.good_id === product._id
-          )
-          this.currentOrder.items[index] = data.order_item
-          if (data.order) {
-            this.currentOrder.order = data.order
-          }
-        } else {
-          const { data } = await orderService.addProductToOrder({
-            orderId,
-            productId: product._id,
-            count,
-          })
-          this.currentOrder.items.push(data.order_item)
-          if (data.order) {
-            this.currentOrder.order = data.order
-          }
-        }
+        await this.getOrder(orderId)
       } catch (e) {
         this.error = `Ошибка при добавлении товара: ${e.message}`
+        console.error(this.error)
       } finally {
         this.isLoading = false
       }
@@ -137,11 +119,10 @@ export const useOrderStore = defineStore('order', {
           orderId: this.activeOrderId,
           productId: orderItemId,
         })
-        this.currentOrder.items = this.currentOrder.items.filter(
-          (item) => item._id !== orderItemId
-        )
+        await this.getOrder(this.activeOrderId)
       } catch (e) {
         this.error = `Ошибка при удалении товара: ${e.message}`
+        console.error(this.error)
       } finally {
         this.isLoading = false
       }
@@ -152,29 +133,43 @@ export const useOrderStore = defineStore('order', {
       this.isLoading = true
       this.error = null
       try {
-        const { data } = await orderService.setItemAmount({
+        await orderService.setItemAmount({
           orderId: this.activeOrderId,
           productId: orderItemId,
           amount: amount,
         })
 
-        if (data.order_item) {
-          const index = this.orderItems.findIndex(
-            (item) => item && item._id === orderItemId
-          )
-
-          if (index !== -1) {
-            this.currentOrder.items[index] = data.order_item
-          }
-        }
-
-        if (data.order) {
-          this.currentOrder.order = data.order
-        }
-
         await this.getOrder(this.activeOrderId)
       } catch (e) {
         this.error = `Ошибка при изменении количества товара: ${e.message}`
+        console.error(this.error)
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    async setOrderDiscount({ discount, discountType = 'tenge' }) {
+      if (!this.activeOrderId) return
+      this.isLoading = true
+      this.error = null
+      try {
+        let discountValue = discount
+
+        if (discountType === 'percentage') {
+          const totalPrice = this.totalPrice
+          discountValue = (totalPrice * discount) / 100
+        }
+
+        await orderService.setDiscount({
+          orderId: this.activeOrderId,
+          discount: discountValue,
+        })
+
+        await this.getOrder(this.activeOrderId)
+      } catch (e) {
+        this.error = `Ошибка при установке скидки: ${e.message}`
+        console.error(this.error)
+        throw e
       } finally {
         this.isLoading = false
       }

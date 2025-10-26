@@ -1,25 +1,12 @@
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
+import { useOrderStore } from '@/stores/orderStore'
 import NumPanel from './NumPanel.vue'
 import DiscountModal from './DiscountModal.vue'
 import QuickItemsModal from './QuickItemsModal.vue'
 import PayModal from './PayModal.vue'
 
-const props = defineProps({
-  totalPrice: {
-    type: Number,
-    default: 0,
-  },
-  payedSumm: {
-    type: Number,
-    default: 0,
-  },
-  discount: {
-    type: Number,
-    default: 0,
-  },
-})
-
+const orderStore = useOrderStore()
 const showModal = ref(false)
 const showQuickItems = ref(false)
 const showPayModal = ref(false)
@@ -72,11 +59,11 @@ const handleNumPanelInput = (value) => {
       >
         <div class="item">
           <p class="label">Итого</p>
-          <p class="value">{{ props.totalPrice }}</p>
+          <p class="value">{{ orderStore.totalPrice }}</p>
         </div>
         <div class="item">
           <p class="label">Внесено</p>
-          <p class="value">{{ props.payedSumm }}</p>
+          <p class="value">{{ orderStore.payed_summ }}</p>
         </div>
         <div class="item">
           <p class="label">Сдача</p>
