@@ -4,8 +4,9 @@ import BackspaceIcon from '@/assets/icons/Backspaceicon.vue'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
-  decimalSeparator: { type: String, default: ',' },
-  allowMultipleSeparators: { type: Boolean, default: false },
+  decimalSeparator: { type: String, default: '.' },
+  maxValue: { type: Number, default: 9999999 },
+  maxDecimals: { type: Number, default: 2 },
 })
 const emit = defineEmits(['update:modelValue', 'input'])
 
@@ -17,18 +18,50 @@ const val = computed({
   },
 })
 
-const pressDigit = (d) => {
-  val.value = (val.value || '') + d
+const validateAndFormat = (newValue) => {
+  if (!newValue) return ''
+
+  const cleanValue = newValue.replace(
+    new RegExp(`[^0-9${props.decimalSeparator}]`, 'g'),
+    ''
+  )
+
+  const parts = cleanValue.split(props.decimalSeparator)
+  if (parts.length > 2) {
+    return parts[0] + props.decimalSeparator + parts.slice(1).join('')
+  }
+
+  if (parts.length === 2 && parts[1].length > props.maxDecimals) {
+    parts[1] = parts[1].slice(0, props.maxDecimals)
+    return parts.join(props.decimalSeparator)
+  }
+
+  const numericValue = parseFloat(
+    cleanValue.replace(props.decimalSeparator, '.')
+  )
+  if (!isNaN(numericValue) && numericValue > props.maxValue) {
+    return val.value
+  }
+
+  return cleanValue
+}
+
+const pressDigit = (digit) => {
+  const newValue = (val.value || '') + digit
+  val.value = validateAndFormat(newValue)
 }
 const pressSeparator = () => {
-  if (
-    !props.allowMultipleSeparators &&
-    val.value.includes(props.decimalSeparator)
-  )
+  if (val.value.includes(props.decimalSeparator)) return
+
+  if (!val.value) {
+    val.value = '0' + props.decimalSeparator
     return
-  val.value = (val.value || '') + props.decimalSeparator
+  }
+
+  val.value = val.value + props.decimalSeparator
 }
 const backspace = () => {
+  if (!val.value) return
   val.value = val.value.slice(0, -1)
 }
 const clearAll = () => {
@@ -57,8 +90,6 @@ const clearAll = () => {
           background: var(--color-gray);
         "
         @click="backspace"
-        aria-label="Удалить по одному"
-        title="Удалить по одному"
       >
         <BackspaceIcon />
       </button>
@@ -80,7 +111,6 @@ const clearAll = () => {
           font-size: 24px;
         "
         @click="clearAll"
-        aria-label="Очистить всё"
       >
         C
       </button>
