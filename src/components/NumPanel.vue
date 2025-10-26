@@ -8,13 +8,12 @@ const props = defineProps({
   maxValue: { type: Number, default: 9999999 },
   maxDecimals: { type: Number, default: 2 },
 })
-const emit = defineEmits(['update:modelValue', 'input'])
+const emit = defineEmits(['update:modelValue'])
 
 const val = computed({
   get: () => props.modelValue ?? '',
   set: (v) => {
     emit('update:modelValue', v)
-    emit('input', v)
   },
 })
 
@@ -49,6 +48,7 @@ const validateAndFormat = (newValue) => {
 const pressDigit = (digit) => {
   const newValue = (val.value || '') + digit
   val.value = validateAndFormat(newValue)
+  console.log('click')
 }
 const pressSeparator = () => {
   if (val.value.includes(props.decimalSeparator)) return

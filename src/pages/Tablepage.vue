@@ -64,12 +64,6 @@ const closeModal = () => {
   activeInput.value = null
 }
 
-const handleNumPanelInput = (value) => {
-  if (activeInput.value) {
-    modalData.value[activeInput.value] = value
-  }
-}
-
 const removeProduct = async (orderItemId) => {
   try {
     await orderStore.removeProduct(orderItemId)
@@ -170,10 +164,7 @@ onMounted(async () => {
           @focus-input="(input) => (activeInput = input)"
           @close="closeModal"
         />
-        <NumPanel
-          v-model="modalData[activeInput]"
-          @input="handleNumPanelInput"
-        />
+        <NumPanel v-model="modalData[activeInput]" />
       </div>
     </div>
   </article>

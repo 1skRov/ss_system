@@ -57,29 +57,16 @@ const closeModal = () => {
 const focusInput = (inputName) => {
   emit('focus-input', inputName)
 }
-const isLoading = ref(false)
 
 const applyChanges = async () => {
-  if (!props.modelValue?.orderItemId) {
-    console.error('Order item ID не найден')
-    return
-  }
+  const newAmount = parseFloat(qty.value) || 1
 
-  isLoading.value = true
-  try {
-    const newAmount = parseFloat(qty.value) || 1
+  await orderStore.updateItemAmount({
+    orderItemId: props.modelValue.orderItemId,
+    amount: newAmount,
+  })
 
-    await orderStore.updateItemAmount({
-      orderItemId: props.modelValue.orderItemId,
-      amount: newAmount,
-    })
-
-    closeModal()
-  } catch (error) {
-    console.error('Ошибка при применении изменений:', error)
-  } finally {
-    isLoading.value = false
-  }
+  closeModal()
 }
 </script>
 <template>
