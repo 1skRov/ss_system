@@ -11,15 +11,9 @@ export const useOrderStore = defineStore('order', {
 
   getters: {
     orderItems: (state) => state.currentOrder?.items || [],
-    totalPrice: (state) => {
-      return state.currentOrder?.order?.price || 0
-    },
-    discount: (state) => {
-      return state.currentOrder?.order?.discount || 0
-    },
-    payed_summ: (state) => {
-      return state.currentOrder?.order?.payed_summ || 0
-    },
+    totalPrice: (state) => state.currentOrder?.order?.price || 0,
+    discount: (state) => state.currentOrder?.order?.discount || 0,
+    payed_summ: (state) => state.currentOrder?.order?.payed_summ || 0,
     activeOrderId: (state) => state.currentOrder?.id || null,
   },
 
@@ -53,14 +47,30 @@ export const useOrderStore = defineStore('order', {
       try {
         const { data } = await orderService.createOrder(placeId)
         const orderId = data?.order?._id
+
         if (!orderId) {
           throw new Error('Не удалось получить ID нового заказа')
         }
-        this.currentOrder = { id: orderId, items: [], order: data.order }
-        localStorage.setItem('activeOrderId', orderId.toString())
+
+        const isNew = data?.is_new ?? true
+        console.log('isNew?', isNew)
+
+        if (isNew) {
+          this.currentOrder = {
+            id: orderId,
+            items: [],
+            order: data.order,
+          }
+          localStorage.setItem('activeOrderId', orderId.toString())
+        } else {
+          console.log('Заказ уже существует, загружаем полные данные...')
+          await this.getOrder(orderId)
+        }
+
         return orderId
       } catch (e) {
         this.error = `Ошибка при создании заказа: ${e.message}`
+        console.error(this.error)
         return null
       } finally {
         this.isLoading = false
@@ -72,7 +82,10 @@ export const useOrderStore = defineStore('order', {
       this.error = null
       try {
         const { data } = await orderService.getOrder(orderId)
-        console.log('add')
+
+        if (!data?.order?._id) {
+          throw new Error('Заказ не найден')
+        }
 
         this.currentOrder = {
           id: data.order._id,
@@ -82,6 +95,7 @@ export const useOrderStore = defineStore('order', {
         localStorage.setItem('activeOrderId', this.currentOrder.id.toString())
       } catch (e) {
         this.error = `Ошибка при загрузке заказа: ${e.message}`
+        console.error(this.error)
         this.clearOrder()
       } finally {
         this.isLoading = false
@@ -89,11 +103,12 @@ export const useOrderStore = defineStore('order', {
     },
 
     async addProduct(product, count = 1) {
-      this.isLoading = true
       this.error = null
       try {
         const orderId = await this.ensureOrderExists()
-        if (!orderId) return
+        if (!orderId) {
+          throw new Error('Не удалось получить ID заказа')
+        }
 
         await orderService.addProductToOrder({
           orderId,
@@ -111,8 +126,10 @@ export const useOrderStore = defineStore('order', {
     },
 
     async removeProduct(orderItemId) {
-      if (!this.activeOrderId) return
-      this.isLoading = true
+      if (!this.activeOrderId) {
+        console.error('Нет активного заказа')
+        return
+      }
       this.error = null
       try {
         await orderService.removeProductFromOrder({
@@ -129,7 +146,10 @@ export const useOrderStore = defineStore('order', {
     },
 
     async updateItemAmount({ orderItemId, amount }) {
-      if (!this.activeOrderId) return
+      if (!this.activeOrderId) {
+        console.error('Нет активного заказа')
+        return
+      }
       this.isLoading = true
       this.error = null
       try {

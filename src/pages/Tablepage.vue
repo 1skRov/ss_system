@@ -1,11 +1,13 @@
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useOrderStore } from '@/stores/orderStore'
 import EditModal from '@/components/EditModal.vue'
 import NumPanel from '@/components/NumPanel.vue'
 
 const orderStore = useOrderStore()
-const selectAll = ref(false)
+const { isLoading, error } = storeToRefs(orderStore)
+
 const showModal = ref(false)
 const activeInput = ref(null)
 const modalData = ref({
@@ -17,15 +19,14 @@ const modalData = ref({
   orderItemId: null,
 })
 
+const orderItems = computed(() => orderStore.orderItems)
+
 const rows = computed(() => {
-  if (
-    !orderStore.orderItems.value ||
-    !Array.isArray(orderStore.orderItems.value)
-  ) {
+  if (!Array.isArray(orderItems.value)) {
     return []
   }
 
-  return orderStore.orderItems.value
+  return orderItems.value
     .filter((item) => item && item._id && item.good)
     .map((item) => {
       return {
@@ -40,18 +41,11 @@ const rows = computed(() => {
     })
 })
 
+const selectAll = ref(false)
+
 watch(selectAll, (value) => {
   rows.value.forEach((row) => (row.checked = value))
 })
-
-watch(
-  rows,
-  (newRows) => {
-    const allChecked = newRows.every((row) => row.checked)
-    selectAll.value = allChecked
-  },
-  { deep: true }
-)
 
 const openModal = (row) => {
   modalData.value = {
@@ -83,15 +77,22 @@ const removeProduct = async (orderItemId) => {
     console.error('Ошибка при удалении продукта:', error.message)
   }
 }
+
+onMounted(async () => {
+  if (!orderStore.activeOrderId) {
+    await orderStore.ensureOrderExists()
+  }
+})
 </script>
 
 <template>
   <article class="border border-gray-300 rounded-lg overflow-hidden">
-    <div v-if="orderStore.isLoading" class="text-center py-8">
-      Загрузка заказа...
-    </div>
+    <div v-if="isLoading" class="text-center py-8">Загрузка заказа...</div>
     <div v-else-if="orderStore.error" class="text-center py-8 text-red-500">
       {{ orderStore.error }}
+    </div>
+    <div v-else-if="error" class="text-center py-8 text-red-500">
+      {{ error }}
     </div>
     <div v-else-if="rows.length === 0" class="text-center py-8 text-gray-500">
       Корзина пуста. Добавьте товары из каталога.
