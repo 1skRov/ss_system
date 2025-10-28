@@ -13,7 +13,7 @@ const toggle = (mode) => {
 <template>
   <div class="inline-flex bg-gray-100 rounded-lg p-1">
     <button
-      class="px-5 py-2 text-base font-medium rounded-md transition-all duration-150"
+      class="px-5 py-2.5 text-base font-medium rounded-md transition-all duration-150"
       :class="
         active === 'percentage'
           ? 'bg-white shadow-sm'
@@ -25,7 +25,7 @@ const toggle = (mode) => {
     </button>
 
     <button
-      class="px-5 py-2 text-base font-medium rounded-md transition-all duration-150"
+      class="px-5 py-2.5 text-base font-medium rounded-md transition-all duration-150"
       :class="
         active === 'tenge'
           ? 'bg-white shadow-sm text-gray-900'

@@ -84,7 +84,7 @@ const applyChanges = async () => {
 
       <div class="w-full">
         <span class="input-label">Скидка товара</span>
-        <div class="flex justify-between items-center w-full">
+        <div class="flex gap-3 items-center w-full">
           <input
             v-model="discount"
             placeholder="Введите скидку товара"
