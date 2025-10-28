@@ -31,6 +31,12 @@ class OrderService {
       amount,
     })
   }
+  setDiscount({ orderId, discount }) {
+    return http.post(`/mobile/orders/${orderId}`, {
+      action: 'set_discount',
+      discount,
+    })
+  }
 }
 
 export default new OrderService()

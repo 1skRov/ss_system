@@ -92,13 +92,13 @@ footer .panel {
 }
 
 .panel .item {
-  @apply flex items-center w-full justify-between;
+  @apply flex items-center w-full justify-between text-xl;
 }
 .item .label {
   @apply font-medium;
 }
 .item .value {
-  @apply font-bold text-xl;
+  @apply font-bold;
 }
 
 table th {

@@ -11,7 +11,8 @@ export const useOrderStore = defineStore('order', {
 
   getters: {
     orderItems: (state) => state.currentOrder?.items || [],
-    totalPrice: (state) => state.currentOrder?.order?.price || 0,
+    totalPrice: (state) => state.currentOrder?.order?.orig_price || 0,
+    priceWithDiscount: (state) => state.currentOrder?.order?.price || 0,
     discount: (state) => state.currentOrder?.order?.discount || 0,
     payed_summ: (state) => state.currentOrder?.order?.payed_summ || 0,
     activeOrderId: (state) => state.currentOrder?.id || null,
@@ -161,20 +162,13 @@ export const useOrderStore = defineStore('order', {
       }
     },
 
-    async setOrderDiscount({ discount, discountType = 'tenge' }) {
+    async setOrderDiscount(discount) {
       if (!this.activeOrderId) return
       this.error = null
       try {
-        let discountValue = discount
-
-        if (discountType === 'percentage') {
-          const totalPrice = this.totalPrice
-          discountValue = (totalPrice * discount) / 100
-        }
-
         await orderService.setDiscount({
           orderId: this.activeOrderId,
-          discount: discountValue,
+          discount: discount,
         })
 
         await this.getOrder(this.activeOrderId)

@@ -11,7 +11,7 @@ const showModal = ref(false)
 const showQuickItems = ref(false)
 const showPayModal = ref(false)
 const activeInput = ref(null)
-const discountValue = ref('')
+const discountValue = ref('0')
 
 const openModal = () => {
   showModal.value = true
@@ -38,10 +38,8 @@ const closePayModal = () => {
   showPayModal.value = false
 }
 
-const handleNumPanelInput = (value) => {
-  if (activeInput.value === 'discount') {
-    discountValue.value = value
-  }
+const setDiscount = async (discount) => {
+  orderStore.setOrderDiscount(discount)
 }
 </script>
 <template>
@@ -51,7 +49,7 @@ const handleNumPanelInput = (value) => {
         Быстрые товары
       </button>
       <button class="footer-btns">Добавить в отложку</button>
-      <button class="footer-btns">Закрыть заказ</button>
+      <button class="footer-btns">Другие действия</button>
     </div>
     <div class="flex gap-3">
       <div
@@ -59,7 +57,16 @@ const handleNumPanelInput = (value) => {
       >
         <div class="item">
           <p class="label">Итого</p>
-          <p class="value">{{ orderStore.totalPrice }}</p>
+          <p class="value flex gap-2">
+            <span
+              v-if="orderStore.discount && orderStore.discount > 0"
+              class="text-orange-500"
+              >{{ orderStore.priceWithDiscount }}</span
+            >
+            <span :class="{ hasDiscount: orderStore.discount > 0 }">{{
+              orderStore.totalPrice
+            }}</span>
+          </p>
         </div>
         <div class="item">
           <p class="label">Внесено</p>
@@ -67,10 +74,10 @@ const handleNumPanelInput = (value) => {
         </div>
         <div class="item">
           <p class="label">Сдача</p>
-          <p class="value">{{ 0 }}</p>
+          <p class="value">0</p>
         </div>
         <div class="item">
-          <p class="label">Скидка</p>
+          <p class="label">Скидка({{ orderStore.discount }} %)</p>
           <button class="dis-btn" @click="openModal">добавить</button>
         </div>
       </div>
@@ -92,11 +99,14 @@ const handleNumPanelInput = (value) => {
       class="flex items-center justify-center gap-5 bg-white w-[90vw] h-[90vh] rounded-lg p-5"
     >
       <DiscountModal
-        :order-total="12345"
+        v-model="discountValue"
+        :order-total="orderStore.totalPrice"
+        :order-with-price="orderStore.priceWithDiscount"
         @focus-input="(input) => (activeInput = input)"
         @close="closeModal"
+        @add-discount="setDiscount"
       />
-      <NumPanel v-model="discountValue" @input="handleNumPanelInput" />
+      <NumPanel v-model="discountValue" />
     </div>
   </div>
   <div
@@ -114,4 +124,10 @@ const handleNumPanelInput = (value) => {
     <PayModal @close="closePayModal" />
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+.hasDiscount {
+  text-decoration: line-through;
+  color: var(--color-gray);
+  font-weight: 500 !important;
+}
+</style>

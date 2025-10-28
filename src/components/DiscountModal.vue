@@ -1,24 +1,24 @@
 <script setup>
 import { ref, computed } from 'vue'
-import InputComponent from './UiComponents/InputComponent.vue'
 import ToggleButtons from './UiComponents/ToggleButtons.vue'
 
 const props = defineProps({
-  orderTotal: { type: Number, default: 12345 },
+  orderTotal: { type: Number, default: 0 },
+  orderWithPrice: { type: Number, default: 0 },
+  modelValue: { type: [String, Number], default: '0' },
 })
-const emit = defineEmits(['close', 'focus-input'])
+const emit = defineEmits([
+  'close',
+  'focus-input',
+  'add-discount',
+  'update:modelValue',
+])
 
-const discountValue = ref(null)
 const discountType = ref('tenge')
 const activeInput = ref(null)
-
-const totalWithDiscount = computed(() => {
-  const discount = parseFloat(discountValue.value) || 0
-  if (discountType.value === 'percentage') {
-    return props.orderTotal - (props.orderTotal * discount) / 100
-  } else {
-    return props.orderTotal - discount
-  }
+const localDiscountValue = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value),
 })
 
 const closeModal = () => {
@@ -33,47 +33,36 @@ const focusInput = (inputName) => {
 const handleDiscountTypeChange = (type) => {
   discountType.value = type
 }
+
+const applyDiscount = async () => {
+  emit('add-discount', parseFloat(props.modelValue))
+  closeModal()
+}
 </script>
 <template>
   <div class="rounded-lg p-3 w-120 border border-gray-300">
     <h2 class="modal-title">Добавить скидку на заказ</h2>
-    <div class="flex flex-col gap-4">
-      <p
-        class="text-sm flex items-center justify-between border-0 border-b border-gray-200"
-      >
-        Итоговая стоимость заказа:
-        <span class="font-semibold text-xl ml-3">{{ orderTotal }} ₸</span>
-      </p>
-      <div>
-        <span class="input-label">Скидка на заказ</span>
-        <div class="flex justify-between items-center w-full">
-          <InputComponent
-            v-model="discountValue"
-            placeholder="Введите скидку на заказ"
-            @focus="focusInput('discount')"
-          />
-          <ToggleButtons @change="handleDiscountTypeChange" />
-        </div>
-      </div>
-      <div class="flex items-center justify-end">
-        <button
-          class="text-white px-4 py-3 rounded-lg"
-          style="background-color: var(--color-gray)"
-        >
-          Применить
-        </button>
-      </div>
-      <div
-        class="text-sm flex items-center justify-between border-0 border-b border-gray-200"
-      >
-        Итог с учетом скидки
-        <p class="font-semibold text-xl text-yellow-500">
-          {{ totalWithDiscount.toFixed(2) }} ₸
-        </p>
-      </div>
+    <div
+      class="flex flex-col gap-2 border-0 border-b border-gray-300 text-xl pb-2"
+    >
+      <p>Итоговая стоимость заказа:</p>
+      <p class="font-semibold">{{ orderTotal }} ₸</p>
     </div>
-
-    <div class="flex items-center justify-end gap-5 mt-4">
+    <div
+      class="flex flex-col gap-2 border-0 border-b border-gray-300 text-xl mt-2 pb-2"
+    >
+      <p>Итоговая стоимость заказа со скидкой:</p>
+      <p class="font-semibold text-yellow-600">{{ orderWithPrice }} ₸</p>
+    </div>
+    <div class="flex gap-3 items-center w-full my-3">
+      <input
+        v-model="localDiscountValue"
+        placeholder="Введите скидку на заказ"
+        @focus="focusInput('discount')"
+      />
+      <ToggleButtons @change="handleDiscountTypeChange" />
+    </div>
+    <div class="flex items-center justify-end gap-5">
       <button
         class="text-white px-4 py-3 rounded-lg"
         style="background-color: var(--color-black)"
@@ -84,9 +73,9 @@ const handleDiscountTypeChange = (type) => {
       <button
         class="text-white px-4 py-3 rounded-lg"
         style="background-color: var(--color-green)"
-        @click="closeModal"
+        @click="applyDiscount"
       >
-        Оплатить
+        Применить
       </button>
     </div>
   </div>

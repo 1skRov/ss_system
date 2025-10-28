@@ -64,7 +64,7 @@ const backspace = () => {
   val.value = val.value.slice(0, -1)
 }
 const clearAll = () => {
-  val.value = ''
+  val.value = '0'
 }
 </script>
 
