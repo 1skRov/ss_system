@@ -1,12 +1,10 @@
 <script setup>
 import { ref, watch, computed, onMounted, reactive } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useOrderStore } from '@/stores/orderStore'
 import EditModal from '@/components/EditModal.vue'
 import NumPanel from '@/components/NumPanel.vue'
 
 const orderStore = useOrderStore()
-const { isLoading } = storeToRefs(orderStore)
 
 const showModal = ref(false)
 const activeInput = ref(null)

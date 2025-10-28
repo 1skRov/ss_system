@@ -1,7 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useOrderStore } from '@/stores/orderStore'
-import InputComponent from './UiComponents/InputComponent.vue'
 import ToggleButtons from './UiComponents/ToggleButtons.vue'
 
 const orderStore = useOrderStore()
@@ -10,14 +9,6 @@ const props = defineProps({
   modelValue: {
     type: Object,
     required: true,
-    default: () => ({
-      qty: '',
-      price: '',
-      discount: '',
-      total: '',
-      name: '',
-      orderItemId: null,
-    }),
   },
 })
 const emit = defineEmits(['update:modelValue', 'focus-input', 'close'])
@@ -75,7 +66,7 @@ const applyChanges = async () => {
     <div class="flex flex-col gap-3">
       <div>
         <span class="input-label">Количество товара</span>
-        <InputComponent
+        <input
           v-model="qty"
           placeholder="Введите количество товара"
           @focus="focusInput('qty')"
@@ -84,7 +75,7 @@ const applyChanges = async () => {
 
       <div>
         <span class="input-label">Цена товара</span>
-        <InputComponent
+        <input
           v-model="price"
           placeholder="Введите цену товара"
           @focus="focusInput('price')"
@@ -94,7 +85,7 @@ const applyChanges = async () => {
       <div class="w-full">
         <span class="input-label">Скидка товара</span>
         <div class="flex justify-between items-center w-full">
-          <InputComponent
+          <input
             v-model="discount"
             placeholder="Введите скидку товара"
             @focus="focusInput('discount')"
@@ -104,7 +95,7 @@ const applyChanges = async () => {
       </div>
       <div>
         <span class="input-label">Итоговая стоимость товара</span>
-        <InputComponent
+        <input
           v-model="total"
           placeholder="Введите итоговую стоимость товара"
           @focus="focusInput('total')"
@@ -116,7 +107,6 @@ const applyChanges = async () => {
       <button
         class="text-white px-4 py-3 rounded-lg"
         style="background-color: var(--color-black)"
-        :disabled="isLoading"
         @click="closeModal"
       >
         Отмена
@@ -124,10 +114,9 @@ const applyChanges = async () => {
       <button
         class="text-white px-4 py-3 rounded-lg"
         style="background-color: var(--color-green)"
-        :disabled="isLoading"
         @click="applyChanges"
       >
-        {{ isLoading ? 'Применение...' : 'Применить' }}
+        Применить
       </button>
     </div>
   </div>

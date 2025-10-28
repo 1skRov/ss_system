@@ -3,7 +3,7 @@ import { useAttrs } from 'vue'
 
 defineOptions({ inheritAttrs: false })
 const attrs = useAttrs()
-const props = defineProps({
+defineProps({
   modelValue: String,
   placeholder: { type: String, default: '' },
   inputType: { type: String, default: 'text' },

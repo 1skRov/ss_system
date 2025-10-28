@@ -53,6 +53,10 @@ button {
   @apply active:scale-95 transition-transform;
 }
 
+input {
+  @apply block w-full placeholder-gray-400/70 rounded-lg px-5 py-2.5 text-gray-800 focus:outline-none focus:ring bg-white border border-gray-200 focus:border-black/40;
+}
+
 header {
   background-color: var(--color-navy-blue);
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onBeforeUnmount } from 'vue'
 import GlobeIcon from '@/assets/icons/GlobeIcon.vue'
 import ArrowLongUpIcon from '@/assets/icons/ArrowLongUpIcon.vue'
 import Backspaceicon from '@/assets/icons/Backspaceicon.vue'
@@ -80,6 +80,11 @@ function onUp() {
   holdTimer = null
   repeatTimer = null
 }
+
+onBeforeUnmount(() => {
+  clearTimeout(holdTimer)
+  clearInterval(repeatTimer)
+})
 </script>
 
 <template>

@@ -21,7 +21,7 @@ const validateAndFormat = (newValue) => {
   if (!newValue) return ''
 
   const cleanValue = newValue.replace(
-    new RegExp(`[^0-9${props.decimalSeparator}]`, 'g'),
+    new RegExp(`[^0-9${props.decimalSeparator.replace('.', '\\.')}]`, 'g'),
     ''
   )
 
