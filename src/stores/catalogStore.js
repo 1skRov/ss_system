@@ -10,7 +10,14 @@ export const useCatalogStore = defineStore('catalog', {
     isLoadingProducts: false,
     isSearching: false,
     selectedCategory: null,
+    productsLimit: 20,
+    productsTotal: 0,
+    productsCurrentPage: 1,
   }),
+
+  getters: {
+    totalPages: (state) => Math.ceil(state.productsTotal / state.productsLimit),
+  },
 
   actions: {
     async initCatalog() {
@@ -39,15 +46,19 @@ export const useCatalogStore = defineStore('catalog', {
       if (this.selectedCategory === categoryId) return
 
       this.selectedCategory = categoryId
+      this.productsCurrentPage = 1
       if (categoryId) {
         await this.loadCategoryProducts(categoryId)
       } else {
         this.products = []
       }
     },
-    async loadCategoryProducts({ categoryId, limit = 20, offset = 0 }) {
+    async loadCategoryProducts({ categoryId, page = 1 }) {
       this.isLoadingProducts = true
       this.error = null
+      const limit = this.productsLimit
+      const offset = (page - 1) * limit
+      this.productsCurrentPage = page
       this.products = []
       try {
         const response = await catalogService.searchProducts({
@@ -55,6 +66,7 @@ export const useCatalogStore = defineStore('catalog', {
           limit,
           offset,
         })
+        this.productsTotal = response.data?.total || 0
         this.products = response.data?.items || []
       } catch (e) {
         this.error = e.message || 'Произошла ошибка при получении продуктов.'
@@ -62,6 +74,20 @@ export const useCatalogStore = defineStore('catalog', {
         this.products = []
       } finally {
         this.isLoadingProducts = false
+      }
+    },
+
+    async changeProductsPage(page) {
+      if (
+        page < 1 ||
+        page > this.totalPages ||
+        page === this.productsCurrentPage
+      )
+        return
+
+      const categoryId = this.selectedCategory
+      if (categoryId) {
+        await this.loadCategoryProducts({ categoryId, page })
       }
     },
 
