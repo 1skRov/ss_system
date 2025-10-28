@@ -1,12 +1,12 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed, onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useOrderStore } from '@/stores/orderStore'
 import EditModal from '@/components/EditModal.vue'
 import NumPanel from '@/components/NumPanel.vue'
 
 const orderStore = useOrderStore()
-const { isLoading, error } = storeToRefs(orderStore)
+const { isLoading } = storeToRefs(orderStore)
 
 const showModal = ref(false)
 const activeInput = ref(null)
@@ -18,7 +18,7 @@ const modalData = ref({
   name: '',
   orderItemId: null,
 })
-
+const checkedState = reactive({})
 const orderItems = computed(() => orderStore.orderItems)
 
 const rows = computed(() => {
@@ -29,14 +29,18 @@ const rows = computed(() => {
   return orderItems.value
     .filter((item) => item && item._id && item.good)
     .map((item) => {
+      const rowId = item._id.toString()
+      if (checkedState[rowId] === undefined) {
+        checkedState[rowId] = false
+      }
       return {
-        id: item._id,
+        id: rowId,
         name: item.good.title || 'Без названия',
         qty: item.amount || 0,
         price: item.good.sale_cost || 0,
         discount: item.discount || 0,
         total: item.cost || 0,
-        checked: false,
+        checked: checkedState[rowId],
       }
     })
 })
@@ -44,7 +48,7 @@ const rows = computed(() => {
 const selectAll = ref(false)
 
 watch(selectAll, (value) => {
-  rows.value.forEach((row) => (row.checked = value))
+  rows.value.forEach((row) => (checkedState[row.id] = value))
 })
 
 const openModal = (row) => {
@@ -67,6 +71,7 @@ const closeModal = () => {
 const removeProduct = async (orderItemId) => {
   try {
     await orderStore.removeProduct(orderItemId)
+    delete checkedState[orderItemId.toString()]
   } catch (error) {
     console.error('Ошибка при удалении продукта:', error.message)
   }
@@ -81,12 +86,8 @@ onMounted(async () => {
 
 <template>
   <article class="border border-gray-300 rounded-lg overflow-hidden">
-    <div v-if="isLoading" class="text-center py-8">Загрузка заказа...</div>
-    <div v-else-if="orderStore.error" class="text-center py-8 text-red-500">
+    <div v-if="orderStore.error" class="text-center py-8 text-red-500">
       {{ orderStore.error }}
-    </div>
-    <div v-else-if="error" class="text-center py-8 text-red-500">
-      {{ error }}
     </div>
     <div v-else-if="rows.length === 0" class="text-center py-8 text-gray-500">
       Корзина пуста. Добавьте товары из каталога.

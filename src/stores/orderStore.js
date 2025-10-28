@@ -120,8 +120,6 @@ export const useOrderStore = defineStore('order', {
       } catch (e) {
         this.error = `Ошибка при добавлении товара: ${e.message}`
         console.error(this.error)
-      } finally {
-        this.isLoading = false
       }
     },
 
@@ -140,8 +138,6 @@ export const useOrderStore = defineStore('order', {
       } catch (e) {
         this.error = `Ошибка при удалении товара: ${e.message}`
         console.error(this.error)
-      } finally {
-        this.isLoading = false
       }
     },
 
@@ -150,7 +146,6 @@ export const useOrderStore = defineStore('order', {
         console.error('Нет активного заказа')
         return
       }
-      this.isLoading = true
       this.error = null
       try {
         await orderService.setItemAmount({
@@ -163,14 +158,11 @@ export const useOrderStore = defineStore('order', {
       } catch (e) {
         this.error = `Ошибка при изменении количества товара: ${e.message}`
         console.error(this.error)
-      } finally {
-        this.isLoading = false
       }
     },
 
     async setOrderDiscount({ discount, discountType = 'tenge' }) {
       if (!this.activeOrderId) return
-      this.isLoading = true
       this.error = null
       try {
         let discountValue = discount
@@ -190,8 +182,6 @@ export const useOrderStore = defineStore('order', {
         this.error = `Ошибка при установке скидки: ${e.message}`
         console.error(this.error)
         throw e
-      } finally {
-        this.isLoading = false
       }
     },
 
