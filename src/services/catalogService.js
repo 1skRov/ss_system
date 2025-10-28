@@ -5,10 +5,6 @@ class CatalogService {
     return http.post('/mobile/categories')
   }
 
-  getProducts(category) {
-    return http.post('/mobile/search', { q: `cat:${category}` })
-  }
-
   searchProducts({ search = null, categoryId = null, limit = 10, offset = 0 }) {
     let q = null
 

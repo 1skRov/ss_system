@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const active = ref('tenge')
+const active = ref('percentage')
 const emit = defineEmits(['change'])
 
 const toggle = (mode) => {

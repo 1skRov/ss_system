@@ -40,17 +40,21 @@ export const useCatalogStore = defineStore('catalog', {
 
       this.selectedCategory = categoryId
       if (categoryId) {
-        await this.fetchProducts(categoryId)
+        await this.loadCategoryProducts(categoryId)
       } else {
         this.products = []
       }
     },
-    async fetchProducts(categoryId) {
+    async loadCategoryProducts({ categoryId, limit = 20, offset = 0 }) {
       this.isLoadingProducts = true
       this.error = null
       this.products = []
       try {
-        const response = await catalogService.getProducts(categoryId)
+        const response = await catalogService.searchProducts({
+          categoryId: categoryId,
+          limit,
+          offset,
+        })
         this.products = response.data?.items || []
       } catch (e) {
         this.error = e.message || 'Произошла ошибка при получении продуктов.'
