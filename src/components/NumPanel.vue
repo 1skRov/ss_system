@@ -48,7 +48,6 @@ const validateAndFormat = (newValue) => {
 const pressDigit = (digit) => {
   const newValue = (val.value || '') + digit
   val.value = validateAndFormat(newValue)
-  console.log('click')
 }
 const pressSeparator = () => {
   if (val.value.includes(props.decimalSeparator)) return
@@ -78,9 +77,15 @@ const clearAll = () => {
         grid-auto-rows: 76px;
       "
     >
-      <button class="num-key" @click="pressDigit('7')">7</button>
-      <button class="num-key" @click="pressDigit('8')">8</button>
-      <button class="num-key" @click="pressDigit('9')">9</button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('7')">
+        7
+      </button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('8')">
+        8
+      </button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('9')">
+        9
+      </button>
 
       <button
         class="num-key text-white"
@@ -89,18 +94,30 @@ const clearAll = () => {
           grid-column: 4 / 4;
           background: var(--color-gray);
         "
-        @click="backspace"
+        @pointerdown.stop.prevent="backspace"
       >
         <BackspaceIcon />
       </button>
 
-      <button class="num-key" @click="pressDigit('4')">4</button>
-      <button class="num-key" @click="pressDigit('5')">5</button>
-      <button class="num-key" @click="pressDigit('6')">6</button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('4')">
+        4
+      </button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('5')">
+        5
+      </button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('6')">
+        6
+      </button>
 
-      <button class="num-key" @click="pressDigit('1')">1</button>
-      <button class="num-key" @click="pressDigit('2')">2</button>
-      <button class="num-key" @click="pressDigit('3')">3</button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('1')">
+        1
+      </button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('2')">
+        2
+      </button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('3')">
+        3
+      </button>
 
       <button
         class="num-key text-red-600 font-bold"
@@ -110,15 +127,17 @@ const clearAll = () => {
           background: var(--color-navy-blue);
           font-size: 24px;
         "
-        @click="clearAll"
+        @pointerdown.stop.prevent="clearAll"
       >
         C
       </button>
 
-      <button class="num-key" @click="pressSeparator">
+      <button class="num-key" @pointerdown.stop.prevent="pressSeparator">
         {{ decimalSeparator }}
       </button>
-      <button class="num-key" @click="pressDigit('0')">0</button>
+      <button class="num-key" @pointerdown.stop.prevent="pressDigit('0')">
+        0
+      </button>
       <div></div>
     </div>
   </div>
