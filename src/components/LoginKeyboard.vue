@@ -4,7 +4,10 @@ import GlobeIcon from '@/assets/icons/GlobeIcon.vue'
 import ArrowLongUpIcon from '@/assets/icons/ArrowLongUpIcon.vue'
 import Backspaceicon from '@/assets/icons/Backspaceicon.vue'
 
-const emit = defineEmits(['key-press', 'clear', 'submit'])
+const emit = defineEmits(['key-press', 'clear', 'submit', 'update:modelValue'])
+const props = defineProps({
+  modelValue: { type: String, default: '' },
+})
 
 const currentLanguage = ref('ru')
 const isCaps = ref(false)
@@ -46,30 +49,46 @@ let repeatTimer = null
 const REPEAT_DELAY = 300
 const REPEAT_RATE = 60
 
-function fire(payload) {
+function handleKey(payload) {
+  let newValue = props.modelValue
+
   switch (payload) {
+    case 'BACKSPACE':
+      newValue = props.modelValue.slice(0, -1)
+      emit('update:modelValue', newValue)
+      emit('key-press', payload)
+      break
+    case 'CLEAR':
+      newValue = ''
+      emit('update:modelValue', newValue)
+      emit('clear')
+      break
+
     case 'TOGGLE_LANG':
       currentLanguage.value = currentLanguage.value === 'ru' ? 'en' : 'ru'
       break
     case 'TOGGLE_CAPS':
       isCaps.value = !isCaps.value
       break
-    case 'CLEAR':
-      emit('clear')
-      break
     case 'SUBMIT':
       emit('submit')
       break
+
     default:
-      emit('key-press', payload)
+      if (payload.length === 1 || payload === ' ') {
+        newValue = props.modelValue + payload
+        emit('update:modelValue', newValue)
+        emit('key-press', payload)
+      }
   }
 }
 function onDown(payload) {
   pressedKey.value = payload
-  fire(payload)
+  handleKey(payload)
+
   if (payload === 'BACKSPACE') {
     holdTimer = setTimeout(() => {
-      repeatTimer = setInterval(() => fire('BACKSPACE'), REPEAT_RATE)
+      repeatTimer = setInterval(() => handleKey('BACKSPACE'), REPEAT_RATE)
     }, REPEAT_DELAY)
   }
 }

@@ -27,15 +27,15 @@
       <span class="mx-1">Выйти</span>
     </button>
   </header>
-  <!-- <div
+  <div
     v-if="showSearch"
     class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center"
     @click.self="toggleSearch"
   >
-    <div class="w-[90%] max-w-2xl bg-white rounded-lg p-6">
-      <SearchInput />
+    <div class="w-[95%] h-screen bg-white rounded-lg">
+      <SearchInput @close-search="toggleSearch" />
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script setup>
