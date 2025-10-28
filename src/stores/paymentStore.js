@@ -21,5 +21,22 @@ export const usePaymentStore = defineStore('payment', {
         this.isLoading = false
       }
     },
+
+    async closeOrderAsPaid(orderId, paymentInfo) {
+      this.isLoading = true
+      this.error = null
+      try {
+        const response = await paymentService.closeOrderAsPaid(
+          orderId,
+          paymentInfo
+        )
+        return response.data._success
+      } catch (e) {
+        this.error = e.message || 'Ошибка при оплате заказа.'
+        return false
+      } finally {
+        this.isLoading = false
+      }
+    },
   },
 })
