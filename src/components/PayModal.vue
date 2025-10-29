@@ -1,8 +1,10 @@
 <script setup>
+import { ref } from 'vue'
 import NumPanel from './NumPanel.vue'
 import TogglePaymentTypeButtons from './UiComponents/TogglePaymentTypeButtons.vue'
 import InputComponent from './UiComponents/InputComponent.vue'
-import { ref } from 'vue'
+
+import { usePaymentStore } from '@/stores/paymentStore'
 
 const selectedPaymentType = ref(null)
 const emit = defineEmits(['close'])
@@ -51,9 +53,9 @@ const handlePaymentTypeSelect = (paymentTypeId) => {
     </div>
     <div class="flex gap-3">
       <button
-        @click="closeModal"
         class="py-5 px-8 rounded-md text-white font-medium w-[200px]"
         style="background: var(--color-black)"
+        @click="closeModal"
       >
         Отмена
       </button>
